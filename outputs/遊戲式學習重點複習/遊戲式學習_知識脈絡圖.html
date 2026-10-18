@@ -37,6 +37,29 @@
 
 .sources summary{cursor:pointer;min-height:44px;display:list-item;align-content:center}.sources[open] summary{font-weight:700}
 .tf-keyword{color:#b42318;font-weight:750}
+
+/* Focus the review on the question and its explanation. */
+.tf-extra{margin-top:20px;border-top:1px solid var(--line);padding-top:8px}
+.tf-extra>summary,.tf-help>summary{cursor:pointer;min-height:44px;padding:10px 0;color:var(--muted);font-size:14px}
+.tf-extra .course-point{border-left:0;padding-left:0}.tf-extra .course-example{background:none;padding:0;border-radius:0}
+.tf-layout #tf-card .tf-extra [data-review-node]{background:none;color:var(--blue);border:1px solid var(--line)}
+.extra-retry{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:16px}.extra-retry small{font-size:12px;color:var(--muted)}
+.flashcard-result{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}.flashcard-result h3,.flashcard-result.wrong h3{font-size:17px;color:var(--ink);margin:0}.flashcard-result p{font-size:13px}
+.tf-card .mastery-note{background:none;padding:0;margin:8px 0 22px;font-size:12px}
+.tf-card.is-flashcard{border-top:1px solid var(--line)}
+.tf-card .answer-reason{padding-bottom:0;border-bottom:0;margin-bottom:22px}
+.tf-card .card-actions{margin-top:20px;padding-top:0;border-top:0}
+.tf-stats{display:flex;flex-wrap:wrap;gap:8px 20px;margin:16px 0 10px}.tf-stats>span{display:flex;align-items:baseline;gap:6px;border:0;padding:0;font-size:12px}.tf-stats strong{font-size:16px}
+.tf-panel[data-mode="practice"] .tf-mode-bar [data-action="continue"]{display:none}
+.tf-panel .tf-top>div>p{display:none}
+@media(max-width:800px){
+ .quiz-active .header p,.quiz-active .header-links{display:none}.quiz-active .header{padding:16px 20px 10px}.quiz-active .header h1{font-size:22px}
+ .tf-top h2{font-size:20px}.tf-mode-bar{margin-top:12px}.tf-mode-bar button{flex:initial;padding:8px 12px;min-height:44px}
+ .tf-stats{gap:8px 14px}.tf-stats strong{font-size:15px}
+ .tf-card.is-flashcard{padding:20px}.tf-card .card-actions .card-primary{flex-basis:0;flex-grow:2}.tf-card .card-actions button{min-height:44px}
+ .tf-card .flashcard-result h3{font-size:17px}.tf-card .tf-meta{margin-bottom:14px}
+ .tf-help{margin-top:8px}.tf-side-footer{margin-top:16px}
+}
 </style>
 </head>
 <body>
@@ -124,7 +147,7 @@ draw();setView(matchMedia('(max-width:800px)').matches?'list':'map');select(byId
 <div class="tf-top"><div><h2 tabindex="-1" id="tf-mode-label">100 題中等難度練習</h2><p>情境判斷・概念比較・設計應用</p></div><button type="button" class="tf-back" id="tf-to-map">回知識脈絡圖</button></div>
 <div class="tf-mode-bar"><button type="button" data-action="continue">繼續題目</button><button type="button" data-action="book">我的錯題本</button><button type="button" id="tf-round-resume" data-action="round" hidden>接續本輪</button></div><p id="tf-migration" class="tf-migration" hidden></p><div class="tf-stats" id="tf-stats" aria-live="polite"></div><progress id="tf-progress" class="tf-progress" max="100" value="0" aria-label="作答進度"></progress>
 <div id="tf-complete" class="tf-complete" hidden></div>
-<div class="tf-layout"><div class="tf-main"><div id="tf-card" class="tf-card" tabindex="-1" aria-label="題目與詳解"></div><div class="tf-nav"><button type="button" id="tf-prev">上一題</button><span id="tf-position" class="status"></span><button type="button" id="tf-next">下一題</button></div><p class="tf-hint">答後卡片包含詳解、核心觀念與例子。單題重答保留錯題紀錄；完成整輪後才更新熟悉次數。</p></div><aside class="tf-side" aria-label="題目導覽"><details id="tf-outline" open><summary>題目導覽 <span id="tf-outline-count">100 題</span></summary><div class="tf-filters"><button type="button" data-tf-filter="all" aria-pressed="true">全部 100 題</button><button type="button" data-tf-filter="unanswered" aria-pressed="false">未作答</button><button type="button" data-tf-filter="wrong" aria-pressed="false">錯題本</button></div><div id="tf-grid" class="tf-grid"></div><p class="tf-legend">✓ 答對　✗ 答錯　○ 未答</p></details><div class="tf-side-footer"><div id="tf-priorities" class="tf-priorities"></div><p id="tf-save" class="tf-save">進度會儲存在目前瀏覽器。更換裝置或搬動檔案後，可能無法沿用。</p><button type="button" id="tf-reset" class="tf-reset">清除全部作答紀錄</button></div></aside></div>
+<div class="tf-layout"><div class="tf-main"><div id="tf-card" class="tf-card" tabindex="-1" aria-label="題目與詳解"></div><div class="tf-nav"><button type="button" id="tf-prev">上一題</button><span id="tf-position" class="status"></span><button type="button" id="tf-next">下一題</button></div></div><aside class="tf-side" aria-label="題目導覽"><details id="tf-outline" open><summary>題目導覽 <span id="tf-outline-count">100 題</span></summary><div class="tf-filters"><button type="button" data-tf-filter="all" aria-pressed="true">全部 100 題</button><button type="button" data-tf-filter="unanswered" aria-pressed="false">未作答</button><button type="button" data-tf-filter="wrong" aria-pressed="false">錯題本</button></div><div id="tf-grid" class="tf-grid"></div><p class="tf-legend">✓ 答對　✗ 答錯　○ 未答</p></details><div class="tf-side-footer"><details class="tf-help"><summary>複習方式與進度管理</summary><div id="tf-priorities" class="tf-priorities"></div><button type="button" id="tf-reset" class="tf-reset">清除全部作答紀錄</button></details><p id="tf-save" class="tf-save">進度會儲存在目前瀏覽器。更換裝置或搬動檔案後，可能無法沿用。</p></div></aside></div>
 </section>
 <script>
 'use strict';
@@ -420,12 +443,12 @@ function tfSave(){
 }
 function tfFocus(){const target=tfCard.querySelector('[data-card-focus]')||tfCard;target.focus({preventScroll:true});tfCard.scrollIntoView({block:'start',behavior:'instant'});}
 function tfOpen(){
- document.querySelector('.workspace').hidden=true;tfPanel.hidden=false;tfReturn.hidden=true;tfEntry.setAttribute('aria-pressed','true');document.getElementById('map-entry').setAttribute('aria-pressed','false');document.querySelector('.skip-link').href='#tf-card';
+ document.body.classList.add('quiz-active');document.querySelector('.workspace').hidden=true;tfPanel.hidden=false;tfReturn.hidden=true;tfEntry.setAttribute('aria-pressed','true');document.getElementById('map-entry').setAttribute('aria-pressed','false');document.querySelector('.skip-link').href='#tf-card';
  if(!tfEntered){tfEntered=true;const pending=tfMistakeIds(),mastered=tfMistakeIds('mastered');if(pending.length||mastered.length){tfRecapIds=[...pending,...mastered];tfRecapIndex=0;tfMode='recap';}}
  tfRender();tfFocus();
 }
 function tfClose(reviewNode){
- tfPanel.hidden=true;document.querySelector('.workspace').hidden=false;tfEntry.setAttribute('aria-pressed','false');document.getElementById('map-entry').setAttribute('aria-pressed','true');document.querySelector('.skip-link').href='#reader';
+ document.body.classList.remove('quiz-active');tfPanel.hidden=true;document.querySelector('.workspace').hidden=false;tfEntry.setAttribute('aria-pressed','false');document.getElementById('map-entry').setAttribute('aria-pressed','true');document.querySelector('.skip-link').href='#reader';
  const text=tfMode==='recap'?'返回課程卡':tfMode==='book'?'返回錯題本':`返回第 ${tfCurrent} 題`;
  const back=document.getElementById('reader-return');back.hidden=false;back.textContent=text;tfReturn.hidden=false;tfReturn.textContent=text;
  if(reviewNode)select(reviewNode);else{window.scrollTo({top:0,behavior:'instant'});document.getElementById('map-entry').focus({preventScroll:true});}
@@ -465,6 +488,9 @@ function tfRestartQuestion(id){
 }
 function tfCourse(n){return `<section class="course-point"><h4>核心觀念</h4><p>${n.summary}</p></section><section class="course-example"><h4>用例子記住</h4><p>${tfExamples[n.id]}</p><small>依課程概念整理的應用例</small></section>`;}
 function tfLinks(n){return `<div class="tf-review-actions"><button type="button" data-review-node="${n.id}">閱讀「${n.title}」完整內容</button><a href="遊戲式學習_重點複習講義.html#p${n.page}" target="_blank" rel="noopener">講義第 ${n.page} 頁</a><a href="遊戲式學習_重點複習講義.pdf#page=${n.page}" target="_blank" rel="noopener">PDF 對應頁</a></div><p class="tf-source">原講義依據：${n.src.map(([k,p])=>`${k} 第 ${p} 頁`).join('；')}。完整來源名稱見概念閱讀區。</p>`;}
+function tfExtra(q,n,retry=false){
+ return `<details class="tf-extra"><summary>複習觀念、例子與講義</summary>${tfCourse(n)}${tfLinks(n)}${retry?`<div class="extra-retry"><button type="button" data-retry-id="${q.id}">${tfRoundActive()?'接續未完成的錯題輪次':'重答本題'}</button><small>單題重答保留錯題，不累計熟悉輪次。</small></div>`:''}</details>`;
+}
 function tfRoundSummary(){const r=tfState.round,correct=r.ids.filter(id=>r.responses[id]===tfQuestions[id-1].answer).length;return `<section class="round-complete"><h4>第 ${r.id} 輪完成</h4><p>本輪答對 ${correct} / ${r.ids.length} 題。完整輪次已記入；已熟悉 ${tfMistakeIds('mastered').length} 題，待複習 ${tfMistakeIds().length} 題。</p><button type="button" data-action="round" ${tfMistakeIds().length?'':'disabled'}>開始下一輪</button><button type="button" data-action="book">查看錯題本</button></section>`;}
 function tfRenderQuestion(){
  if(!tfQueue.length){tfCard.innerHTML='<h3 data-card-focus tabindex="-1">目前沒有未作答題目</h3><p>可以檢查錯題，或回顧全部題目。</p><button data-action="book">打開錯題本</button><button data-action="all">查看全部題目</button>';return;}
@@ -475,8 +501,8 @@ function tfRenderQuestion(){
  if(!done){tfCard.classList.remove('is-flashcard');tfCard.innerHTML=`${meta}<h3 class="tf-statement" data-card-focus tabindex="-1">${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</h3><div class="tf-choices" role="group" aria-label="選擇是或非"><button type="button" data-tf-answer="true">是<small>這個敘述正確</small></button><button type="button" data-tf-answer="false">非<small>這個敘述錯誤</small></button></div><p class="tf-hint">${isRound?'先憑記憶作答，再看課程卡。同一題每輪只計一次。':'作答後會切換到複習卡，答對、答錯都能重溫觀念。'}${tfDraft===q.id?' 單題重練不計入熟悉輪次。':''}</p>`;return;}
  tfCard.classList.add('is-flashcard');
  const pos=tfQueue.indexOf(q.id),next=isRound?tfQueue.find(id=>!tfOwn(r.responses,id)):tfQueue[pos+1];
- const progress=m?m.streak>=2?'已熟悉 · 紀錄保留在錯題本':`已收進錯題本 · 連續答對 ${m.streak} / 2 輪`:'這個觀念答對了，再用例子加深印象。';
- tfCard.innerHTML=`${meta}<div class="flashcard-result ${bad?'wrong':''}"><h3 data-card-focus tabindex="-1">${bad?'答錯了，一起釐清':'答對了，再記一次'}</h3><p>你的答案：${answer?'是':'非'}　正確答案：${q.answer?'是':'非'}</p></div><p class="mastery-note">${progress}${isRound&&!r.applied?'；本輪完成後更新輪次。':''}</p><section class="answer-reason"><div class="answered-question"><h4>題目</h4><p>${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</p></div><h4>本題為什麼？</h4><p>${tfEmphasize(q.explanation,tfHighlights[q.id-1][1])}</p></section>${tfCourse(n)}${tfLinks(n)}<div class="card-actions">${next?`<button type="button" class="card-primary" data-next-id="${next}">${isRound?'本輪下一題':'下一題'}</button>`:''}${!isRound?`<button type="button" data-retry-id="${q.id}">${tfRoundActive()?'接續未完成的錯題輪次':'重答本題'}</button>`:''}<button type="button" data-action="book">查看錯題本</button></div>${isRound&&r.applied?tfRoundSummary():''}`;
+ const progress=m?m.streak>=2?'已熟悉 · 紀錄保留在錯題本':`已收進錯題本 · 連續答對 ${m.streak} / 2 輪`:'已答對';
+ tfCard.innerHTML=`${meta}<div class="flashcard-result ${bad?'wrong':''}"><h3 data-card-focus tabindex="-1">${bad?'答錯':'答對'}</h3><p>你的答案：${answer?'是':'非'}　正確答案：${q.answer?'是':'非'}</p></div><p class="mastery-note">${progress}${isRound&&!r.applied?' · 整輪完成後計次':''}</p><section class="answer-reason"><div class="answered-question"><h4>題目</h4><p>${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</p></div><h4>本題為什麼？</h4><p>${tfEmphasize(q.explanation,tfHighlights[q.id-1][1])}</p></section><div class="card-actions">${pos>0?`<button type="button" data-go-id="${tfQueue[pos-1]}">上一題</button>`:''}${next?`<button type="button" class="card-primary" data-next-id="${next}">${isRound?'本輪下一題':'下一題'}</button>`:!isRound?'<button type="button" class="card-primary" data-action="book">查看錯題本</button>':''}</div>${isRound&&r.applied?tfRoundSummary():''}${tfExtra(q,n,!isRound)}`;
 }
 function tfRenderBook(){
  tfCard.classList.remove('is-flashcard');const ids=tfMistakeIds(tfBookTab),pending=tfMistakeIds().length,mastered=tfMistakeIds('mastered').length;
@@ -486,7 +512,7 @@ function tfRenderBook(){
 function tfShowRecap(id){tfRecapIds=tfMistakeIds('all');if(!tfRecapIds.length)return;tfRecapIndex=Math.max(0,tfRecapIds.indexOf(id));tfMode='recap';tfRender();tfFocus();}
 function tfRenderRecap(){
  tfCard.classList.add('is-flashcard');const id=tfRecapIds[tfRecapIndex],q=tfQuestions[id-1],n=byId[q.node],m=tfState.mistakes[id];
- tfCard.innerHTML=`<div class="tf-meta"><span class="question-number">課程卡 ${tfRecapIndex+1} / ${tfRecapIds.length}</span><span>來自第 ${id} 題</span></div><h3 class="recap-title" data-card-focus tabindex="-1">再記一次：${n.title}</h3><p class="mastery-note">${m.streak>=2?'已熟悉，仍可回顧':`待複習 · 連續答對 ${m.streak} / 2 輪`}。看卡片不計入答對輪次。</p><section class="answer-reason"><div class="answered-question"><h4>題目</h4><p>${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</p><p>正確答案：${q.answer?'是':'非'}</p></div><h4>本題為什麼？</h4><p>${tfEmphasize(q.explanation,tfHighlights[q.id-1][1])}</p></section>${tfCourse(n)}${tfLinks(n)}<div class="card-actions"><button data-action="recap-prev" ${tfRecapIndex===0?'disabled':''}>上一張</button>${tfRecapIndex<tfRecapIds.length-1?'<button class="card-primary" data-action="recap-next">下一張課程卡</button>':'<button class="card-primary" data-action="book">課程卡看完了</button>'}<button data-action="continue">${tfAllAnswered()?'回到題目':'繼續新題'}</button></div>${tfAllAnswered()&&(tfMistakeIds().length||tfRoundActive())?`<button class="recap-start" data-action="round">${tfRoundActive()?'接續未完成的錯題輪次':'開始錯題作答'}</button>`:''}`;
+ tfCard.innerHTML=`<div class="tf-meta"><span class="question-number">課程卡 ${tfRecapIndex+1} / ${tfRecapIds.length}</span><span>來自第 ${id} 題</span></div><h3 class="recap-title" data-card-focus tabindex="-1">再記一次：${n.title}</h3><p class="mastery-note">${m.streak>=2?'已熟悉，仍可回顧':`待複習 · 連續答對 ${m.streak} / 2 輪`}。看卡片不計入答對輪次。</p><section class="answer-reason"><div class="answered-question"><h4>題目</h4><p>${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</p><p>正確答案：${q.answer?'是':'非'}</p></div><h4>本題為什麼？</h4><p>${tfEmphasize(q.explanation,tfHighlights[q.id-1][1])}</p></section><div class="card-actions"><button data-action="recap-prev" ${tfRecapIndex===0?'disabled':''}>上一張</button>${tfRecapIndex<tfRecapIds.length-1?'<button class="card-primary" data-action="recap-next">下一張課程卡</button>':'<button class="card-primary" data-action="book">課程卡看完了</button>'}<button data-action="continue">${tfAllAnswered()?'回到題目':'繼續新題'}</button></div>${tfAllAnswered()&&(tfMistakeIds().length||tfRoundActive())?`<button class="recap-start" data-action="round">${tfRoundActive()?'接續未完成的錯題輪次':'開始錯題作答'}</button>`:''}${tfExtra(q,n)}`;
 }
 function tfRender(){
  const answered=tfIds.filter(tfHas).length,pending=tfMistakeIds().length,mastered=tfMistakeIds('mastered').length;
@@ -499,8 +525,10 @@ function tfRender(){
  if(!tfOutline.hidden)for(const id of tfQueue){const b=document.createElement('button'),round=tfMode==='review',done=round?tfOwn(tfState.round.responses,id):tfHas(id),bad=done&&(round?tfState.round.responses[id]!==tfQuestions[id-1].answer:tfWrong(id));b.type='button';b.className=done?(bad?'wrong':'correct'):'';b.setAttribute('aria-current',String(id===tfCurrent));b.setAttribute('aria-label',`第 ${id} 題，${done?(bad?'答錯':'答對'):'未作答'}`);b.innerHTML=`${id}<span aria-hidden="true">${done?(bad?'✗':'✓'):'○'}</span>`;b.dataset.goId=id;grid.append(b);}
  const pos=tfQueue.indexOf(tfCurrent);document.getElementById('tf-prev').disabled=pos<=0;document.getElementById('tf-next').disabled=pos<0||pos>=tfQueue.length-1;document.getElementById('tf-position').textContent=tfQueue.length?`${pos+1} / ${tfQueue.length}${tfMode==='review'?'（本輪錯題）':''}`:'無符合題目';
  const r=tfState.round;document.getElementById('tf-round-resume').hidden=!tfRoundActive()||tfMode==='review';
- document.getElementById('tf-priorities').innerHTML=`<h3>錯題會怎麼複習？</h3><p>完成 100 題後集中重練。每輪各答一次，連續兩輪答對標為已熟悉。</p><button data-action="book">打開錯題本（${pending} 題待複習）</button>`;
+ document.getElementById('tf-priorities').innerHTML=`<h3>錯題會怎麼複習？</h3><p>完成 100 題後集中重練。每輪各答一次，連續兩輪答對標為已熟悉。</p>`;
  if(tfMode==='book')tfRenderBook();else if(tfMode==='recap')tfRenderRecap();else tfRenderQuestion();
+ tfPanel.dataset.mode=tfMode;
+ document.querySelector('.tf-nav').hidden=tfMode==='book'||tfMode==='recap'||tfCard.classList.contains('is-flashcard');
  document.getElementById('tf-mode-label').textContent=tfMode==='review'?`錯題複習 · 第 ${r.id} 輪`:tfMode==='recap'?'先溫習，再挑戰':tfMode==='book'?'留住每一次需要再想的觀念':'100 題中等難度練習';
 }
 // Delegation keeps replaced cards keyboard-operable without accumulating handlers.
