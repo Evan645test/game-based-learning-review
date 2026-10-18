@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>遊戲式學習｜知識脈絡圖</title>
+<title>遊戲式學習｜學習心智圖</title>
 
 <style>
 /* Offline study interface: shared tokens, map, reader and practice. */
@@ -60,20 +60,50 @@
  .tf-card .flashcard-result h3{font-size:17px}.tf-card .tf-meta{margin-bottom:14px}
  .tf-help{margin-top:8px}.tf-side-footer{margin-top:16px}
 }
+
+/* Mind map: category branches are separate from concept relationships. */
+.workspace{grid-template-columns:minmax(0,1fr) 360px}
+.map-panel{padding:24px}.map-heading{margin-bottom:18px}.map-heading h2{font-size:24px}
+.map-panel .tools{flex-direction:row-reverse;flex-wrap:nowrap;gap:12px}.map-panel .search{max-width:none;min-width:0}
+.map-options{position:relative;flex:none}.map-options>summary{list-style:disclosure-closed;cursor:pointer;font-size:13px;padding:10px 12px;min-height:46px;color:var(--muted)}.map-options[open]>summary{list-style:disclosure-open}
+.map-options>.segmented{position:absolute;top:100%;right:0;z-index:11;box-shadow:0 6px 16px #20384b12;border:1px solid var(--line)}
+.canvas{height:clamp(540px,68vh,820px);background-image:none;background-color:var(--paper)}
+.canvas .zoom{left:50%;transform:translateX(-50%)}
+.mindmap-link{fill:none;stroke-linecap:round}.main-link{stroke-width:3}.leaf-link{stroke-width:1.5;opacity:.6}
+.mindmap-root rect{fill:var(--ink);stroke:var(--ink)}.root-title{fill:white;font-size:25px;font-weight:700}.root-sub{fill:#d3e1ec;font-size:15px}
+.mindmap-root,.mindmap-branch{cursor:pointer}.mindmap-branch rect{fill:var(--paper);stroke-width:1.7}.mindmap-branch.current rect{fill:#f2f6fa;stroke-width:2.5}
+.branch-title{font-size:20px;font-weight:700}.branch-sub,.branch-toggle{font-size:15px;fill:var(--muted)}
+.mindmap-root:focus-visible,.mindmap-branch:focus-visible{outline:none}.mindmap-root:focus-visible rect,.mindmap-branch:focus-visible rect{stroke:var(--focus);stroke-width:4}
+.node .name{font-size:20px;font-weight:600}.node .sub{font-size:13px}.node .shape{stroke:#c5d3df;stroke-width:1.1;fill:var(--paper)}.node.selected .shape{fill:var(--selected);stroke:var(--blue);stroke-width:2.5}.node:hover .shape{stroke:var(--blue);stroke-width:2}.node.dim{opacity:.5}
+.concept-group h3{font-size:17px}.concept-group h3 small{display:block;font-size:12px;font-weight:400;color:var(--muted)}
+.workspace #reader .reader-tools{display:flex}.reader #reader-overview{display:inline-flex;align-items:center;color:var(--blue)}
+.reader-map-return{display:block;width:100%;min-height:48px;padding:12px 16px;border:1px solid var(--line);border-radius:6px;background:var(--selected);color:var(--blue);font-size:15px;font-weight:600}.reader-map-return:hover{border-color:var(--blue)}
+@media print{.reader-map-return{display:none!important}}
+.mobile-mindmap{padding:8px 0}.mobile-root{position:relative;margin:4px auto 28px;width:230px;max-width:100%;text-align:center;padding:14px 20px;background:var(--ink);color:white;border-radius:32px}.mobile-root strong{display:block;font-size:20px}.mobile-root span{font-size:12px;color:#d3e1ec}.mobile-root:after{content:'';position:absolute;left:50%;top:100%;height:28px;border-left:1px solid var(--line)}
+.mobile-branches{position:relative;margin-left:12px;padding-left:20px;border-left:1px solid var(--line)}
+.mobile-branch{position:relative;margin-bottom:14px}.mobile-branch:before{content:'';position:absolute;top:37px;left:-20px;width:20px;border-top:1px solid var(--line)}
+.mobile-branch-button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:12px 16px;min-height:76px}.mobile-branch-button strong{font-size:18px;color:var(--branch-color);display:block}.mobile-branch-button small{font-size:12px;color:var(--muted);display:block}.mobile-branch-button .branch-toggle{font-size:22px;color:var(--muted)}.mobile-branch-button[aria-expanded=true]{border-color:var(--branch-color);background:var(--paper)}
+.mobile-leaves{margin:6px 0 10px 16px;border-left:1px solid var(--line);padding:4px 0 0 14px}
+.mobile-leaf{position:relative;display:block;text-align:left;width:100%;min-height:64px;margin:0 0 6px;padding:10px 12px;background:var(--paper);border:1px solid transparent;border-radius:7px}.mobile-leaf:before{content:'';position:absolute;left:-15px;top:30px;width:14px;border-top:1px solid var(--line)}.mobile-leaf strong{display:block;font-size:16px;font-weight:600}.mobile-leaf small{display:block;font-size:12px;color:var(--muted)}.mobile-leaf.selected{border-color:var(--blue);background:var(--selected)}.mobile-leaf.dim{background:var(--bg);color:var(--muted)}
+@media(min-width:1600px){.workspace{grid-template-columns:minmax(0,1fr) 400px}.canvas{height:72vh}}
+@media(min-width:801px) and (max-width:1100px){.workspace{display:block}.reader{position:static;height:auto;border-left:0;border-top:1px solid var(--line)}.canvas{height:660px}.map-heading{flex-direction:row}.reading-progress{width:auto;display:block}}
+@media(max-width:800px){.workspace{display:block}.map-panel{padding:22px 20px}.map-heading{gap:10px}.map-heading h2{font-size:22px}.map-heading p{display:none}.reading-progress{width:100%}.map-panel .search{flex-basis:auto}.map-toolbar{margin-top:12px}.map-toolbar .hint{max-width:43%;font-size:11px}.map-options>summary{padding:10px 6px}.map-options .segmented{flex-wrap:wrap;width:160px}.map-options .segmented button{width:100%}.reader{position:static;height:auto}.legend{margin-top:12px}}
+@media print{.canvas{height:600px}.mobile-branch-button,.mobile-leaf{break-inside:avoid}}
 </style>
 </head>
 <body>
 <a class="skip-link" href="#reader">跳到概念內容</a>
 <header class="header"><div><h1><svg class="brand-mark" viewBox="0 0 40 40" aria-hidden="true"><path d="M10 10H30V30H10Z M10 10L30 30" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="10" cy="10" r="5" fill="currentColor"/><circle cx="30" cy="10" r="5" fill="#176d62"/><circle cx="30" cy="30" r="5" fill="#866018"/><circle cx="10" cy="30" r="5" fill="#705285"/></svg>遊戲式學習</h1><p>從學習目標，走到遊戲設計、AI 回饋與研究證據。</p></div><div class="header-links"><a href="遊戲式學習_重點複習講義.html" target="_blank" rel="noopener">閱讀完整講義</a><a href="遊戲式學習_重點複習講義.pdf" target="_blank" rel="noopener">開啟 PDF</a></div></header>
-<nav class="study-nav" aria-label="複習模式"><div class="study-tabs"><button type="button" id="map-entry" aria-pressed="true">知識脈絡圖 <span>16 個概念</span></button></div><span class="nav-note">閱讀概念，再用題目檢查理解</span></nav>
-<div class="workspace"><section class="map-panel" aria-label="概念地圖">
-<div class="map-heading"><div><h2>把概念連成理解</h2><p>從四個面向，建立遊戲式學習的整體脈絡。</p></div><div class="reading-progress"><span id="reading-count">已開啟 1 / 16</span><progress id="reading-progress" max="16" value="1" aria-label="本次已開啟概念"></progress></div></div><nav class="learning-path" aria-label="四個知識面向"></nav><div class="tools"><div class="segmented" aria-label="複習方向"><button type="button" data-mode="all" aria-pressed="true">全部脈絡</button><button type="button" data-mode="design" aria-pressed="false">教學設計</button><button type="button" data-mode="research" aria-pressed="false">研究設計</button></div><div class="search"><label class="sr-only" for="search">搜尋概念或關鍵字</label><input id="search" type="search" placeholder="搜尋：心流、依變項、合作…" autocomplete="off" aria-controls="search-results" aria-expanded="false"><button class="clear-search" type="button" aria-label="清除搜尋" hidden>×</button><div class="search-results" id="search-results" hidden></div></div></div>
-<div class="map-toolbar"><div class="view-switch" aria-label="檢視方式"><button type="button" data-view="map" aria-pressed="true">脈絡圖</button><button type="button" data-view="list" aria-pressed="false">概念清單</button></div><span class="hint">點選閱讀 · 拖曳移動 · 按鈕縮放</span></div>
-<div class="canvas"><svg id="map" viewBox="0 0 1100 800" role="group" aria-label="16 個概念節點；可用 Tab 選取並按 Enter 閱讀"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#a7bac8"/></marker><marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#345e7d"/></marker></defs><g id="lanes"></g><g id="edges"></g><g id="labels"></g><g id="nodes"></g></svg><div class="zoom" aria-label="圖面縮放"><button type="button" id="zoom-out" aria-label="縮小">−</button><span id="zoom-value">100%</span><button type="button" id="zoom-in" aria-label="放大">＋</button><button type="button" class="fit" id="fit">全圖</button></div></div>
-<div class="concept-list" hidden></div><div class="legend"><span><i class="line-key"></i>主要脈絡</span><span><i class="line-key dash"></i>選取概念的跨區連結</span><span class="status" id="status"></span><a class="jump-detail" href="#reader">閱讀概念內容</a></div>
+<nav class="study-nav" aria-label="複習模式"><div class="study-tabs"><button type="button" id="map-entry" aria-pressed="true">學習心智圖 <span>16 個概念</span></button></div><span class="nav-note">閱讀概念，再用題目檢查理解</span></nav>
+<div class="workspace"><section class="map-panel" aria-label="學習心智圖">
+<div class="map-heading"><div><h2>從四個問題開始</h2><p>一個主題，四條理解路徑。</p></div><div class="reading-progress"><span id="reading-count">已開啟 0 / 16</span><progress id="reading-progress" max="16" value="0" aria-label="本次已開啟概念"></progress></div></div><div class="tools"><details class="map-options"><summary>聚焦主題</summary><div class="segmented" aria-label="複習方向"><button type="button" data-mode="all" aria-pressed="true">全部脈絡</button><button type="button" data-mode="design" aria-pressed="false">教學設計</button><button type="button" data-mode="research" aria-pressed="false">研究設計</button></div></details><div class="search"><label class="sr-only" for="search">搜尋概念或關鍵字</label><input id="search" type="search" placeholder="搜尋：心流、依變項、合作…" autocomplete="off" aria-controls="search-results" aria-expanded="false"><button class="clear-search" type="button" aria-label="清除搜尋" hidden>×</button><div class="search-results" id="search-results" hidden></div></div></div>
+<div class="map-toolbar"><div class="view-switch" aria-label="檢視方式"><button type="button" data-view="map" aria-pressed="true">心智圖</button><button type="button" data-view="list" aria-pressed="false">概念清單</button></div><span class="hint">點選閱讀 · 拖曳移動 · 按鈕縮放</span></div>
+<div class="canvas"><svg id="map" viewBox="0 0 1200 820" role="group" aria-label="遊戲式學習心智圖；中心連向四大主枝，下接16個概念。Tab選取，Enter閱讀；方向鍵在父子與同層節點間移動。"><g id="tree-links" aria-hidden="true"></g><g id="tree-branches"></g><g id="nodes"></g></svg><div class="zoom" aria-label="圖面縮放"><button type="button" id="zoom-out" aria-label="縮小">−</button><span id="zoom-value">100%</span><button type="button" id="zoom-in" aria-label="放大">＋</button><button type="button" class="fit" id="fit">全圖</button></div></div>
+<div class="mobile-mindmap" hidden><div class="mobile-root"><strong>遊戲式學習</strong><span>四個問題 · 16 個概念</span></div><div class="mobile-branches"></div></div>
+<div class="concept-list" hidden></div><div class="legend"><span class="status" id="status"></span><a class="jump-detail" href="#reader">閱讀概念內容</a></div>
 
 <noscript><p>此知識脈絡圖需要啟用 JavaScript。也可以直接開啟上方的完整講義閱讀。</p></noscript>
-</section><aside class="reader" id="reader" aria-label="概念閱讀區"><div class="reader-tools"><button type="button" id="reader-overview">回到概念總覽</button><button type="button" id="reader-return" hidden>返回練習</button></div><div id="detail"></div></aside></div>
+</section><aside class="reader" id="reader" aria-label="概念閱讀區"><div class="reader-tools"><button type="button" id="reader-overview">回到心智圖</button><button type="button" id="reader-return" hidden>返回練習</button></div><div id="detail"></div></aside></div>
 <div class="sr-only" role="status" aria-live="polite" id="announcement"></div>
 <script>
 'use strict';
@@ -108,43 +138,146 @@ const edges=[
 const byId=Object.fromEntries(concepts.map(n=>[n.id,n]));
 const svg=document.getElementById('map'),reader=document.getElementById('reader'),detail=document.getElementById('detail');
 const NS='http://www.w3.org/2000/svg';
-let selected='core',mode='all',view='map',zoom=1,box={x:0,y:0,w:1100,h:800},drag=null,suppressClick=false;
-const visited=new Set();
+const mapMobile=matchMedia('(max-width:800px)');
+const branchQuestions=['學什麼？','怎麼設計？','如何幫助學習？','怎麼知道有效？'];
+const branchPositions=[{x:260,y:190,side:-1},{x:260,y:560,side:-1},{x:745,y:190,side:1},{x:745,y:560,side:1}];
+let selected='core',mode='all',view='map',zoom=1,box={x:0,y:0,w:1200,h:820},drag=null,suppressClick=false,mobileBranch=null;
+const expandedBranches=new Set([0,1,2,3]),visited=new Set();
 const designIds=new Set(['core','goals','ksa','learner','mechanics','integration','scaffolding','social','feedback','srl','theory','transfer','assessment']);
 const researchIds=new Set(['goals','theory','srl','transfer','assessment','operational','variables','research']);
-function el(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e}
-function position(n){return{x:35+n.g*275,y:142+n.r*160,w:205,h:82}}
-function draw(){
- const lanes=document.getElementById('lanes');
- groups.forEach((g,i)=>{const b=document.createElement('button');b.type='button';b.dataset.group=i;b.style.setProperty('--group-color',g.color);b.innerHTML=`<span class="path-title">${g.name}</span><small>${g.sub}</small>`;b.addEventListener('click',()=>select(concepts.find(n=>n.g===i).id));document.querySelector('.learning-path').append(b);const section=document.createElement('section');section.className='concept-group';section.dataset.group=i;section.innerHTML=`<h3 style="--group-color:${g.color}">${g.name}</h3>`;document.querySelector('.concept-list').append(section);});groups.forEach((g,i)=>{lanes.append(el('rect',{x:17+i*275,y:104,width:241,height:637,rx:18,class:'lane-bg'}));lanes.append(el('text',{x:35+i*275,y:49,class:'lane-title'},g.name));lanes.append(el('text',{x:35+i*275,y:76,class:'lane-sub'},g.sub));lanes.append(el('line',{x1:35+i*275,y1:92,x2:240+i*275,y2:92,stroke:g.color,'stroke-width':3}));});
- edges.forEach(([from,to,label,cross],i)=>{const a=position(byId[from]),b=position(byId[to]);let d,lx,ly;if(a.x===b.x){d=`M${a.x+a.w/2} ${a.y+a.h+5} L${b.x+b.w/2} ${b.y-8}`;lx=a.x+a.w/2+10;ly=(a.y+a.h+b.y)/2+4}else{const sx=a.x+a.w+5,sy=a.y+a.h/2,tx=b.x-8,ty=b.y+b.h/2;const mid=(sx+tx)/2;d=`M${sx} ${sy} C${mid} ${sy},${mid} ${ty},${tx} ${ty}`;lx=mid;ly=(sy+ty)/2-10;}document.getElementById('edges').append(el('path',{id:`edge-${i}`,d,class:`edge${cross?' cross':''}`}));document.getElementById('labels').append(el('text',{id:`label-${i}`,x:lx,y:ly,class:`edge-label${cross?' cross':''}`,'text-anchor':a.x===b.x?'start':'middle'},label));});
- concepts.forEach((n,i)=>{const p=position(n),g=el('g',{class:'node',id:`node-${n.id}`,role:'button',tabindex:0,'aria-label':`${n.title}：${n.sub}`,'aria-pressed':'false','data-id':n.id,transform:`translate(${p.x},${p.y})`});g.append(el('rect',{class:'shape',width:p.w,height:p.h,rx:11}));g.append(el('line',{class:'accent',x1:13,y1:19,x2:13,y2:63,stroke:groups[n.g].color}));g.append(el('text',{class:'name',x:26,y:34},n.title));g.append(el('text',{class:'sub',x:26,y:58},n.sub));g.addEventListener('click',()=>{if(!suppressClick)select(n.id);});g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();select(n.id);}if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)){e.preventDefault();const dc=e.key==='ArrowLeft'?-1:e.key==='ArrowRight'?1:0,dr=e.key==='ArrowUp'?-1:e.key==='ArrowDown'?1:0;const next=concepts.find(v=>v.g===n.g+dc&&v.r===n.r+dr);if(next)document.getElementById(`node-${next.id}`).focus();}});document.getElementById('nodes').append(g);const btn=document.createElement('button');btn.type='button';btn.dataset.id=n.id;btn.style.setProperty('--node-color',groups[n.g].color);btn.innerHTML=`<strong>${n.title}</strong><small>${n.sub}</small>`;btn.addEventListener('click',()=>select(n.id));document.querySelector(`.concept-group[data-group="${n.g}"]`).append(btn);});
+function el(tag,attrs={},text){const e=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;return e;}
+function position(n){const b=branchPositions[n.g];return{x:b.side<0?22:963,y:(n.g%2===0?75:445)+n.r*80,w:215,h:62};}
+function mapFocus(id){
+ const target=document.getElementById(id);if(!target)return;
+ if(target instanceof SVGElement){
+  const bounds=target.getBoundingClientRect(),frame=svg.getBoundingClientRect();
+  if(bounds.left<frame.left||bounds.right>frame.right||bounds.top<frame.top||bounds.bottom>frame.bottom){
+   const point=svgPoint({clientX:bounds.left+bounds.width/2,clientY:bounds.top+bounds.height/2});
+   if(point){box.x=point.x-box.w/2;box.y=point.y-box.h/2;updateBox();}
+  }
+ }
+ target.focus({preventScroll:true});
 }
-function allowed(id){return mode==='all'||(mode==='design'?designIds:researchIds).has(id)}
-function highlight(){document.querySelectorAll('.learning-path button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.group)===byId[selected].g)));const near=new Set([selected]);edges.forEach(([a,b])=>{if(a===selected)near.add(b);if(b===selected)near.add(a)});concepts.forEach(n=>{const active=mode==='all'||allowed(n.id)||n.id===selected;const node=document.getElementById(`node-${n.id}`);node.classList.toggle('selected',n.id===selected);node.classList.toggle('related',near.has(n.id)&&n.id!==selected);node.classList.toggle('dim',!active);node.setAttribute('aria-pressed',String(n.id===selected));const btn=document.querySelector(`.concept-list [data-id="${n.id}"]`);btn.classList.toggle('selected',n.id===selected);btn.classList.toggle('visited',visited.has(n.id));btn.classList.toggle('dim',!allowed(n.id));btn.setAttribute('aria-pressed',String(n.id===selected));});edges.forEach(([a,b,label,cross],i)=>{const active=a===selected||b===selected;for(const prefix of ['edge','label']){const e=document.getElementById(`${prefix}-${i}`);e.classList.toggle('active',active);e.classList.toggle('show',Boolean(cross&&active));e.classList.toggle('dim',!active&&(mode==='all'||!allowed(a)||!allowed(b)));}});}
-function select(id,updateHash=true){if(!byId[id])id='core';selected=id;visited.add(id);const n=byId[id],idx=concepts.findIndex(v=>v.id===id);reader.style.setProperty('--node-color',groups[n.g].color);const sources=n.src.map(([key,pages])=>`${key}｜${sourceNames[key]}<br>PDF 第 ${pages} 頁`).join('<br>');const adjacent=edges.filter(e=>e[0]===id||e[1]===id);const related=adjacent.map(([a,b,label])=>{const other=a===id?b:a;return `<button type="button" data-related="${other}"><span>${byId[other].title}</span><small>${a===id?'延伸：':'連回：'}${label}</small></button>`}).join('');detail.innerHTML=`<div class="chapter">${groups[n.g].name} ／ ${idx+1} / ${concepts.length}</div><h2 tabindex="-1">${n.title}</h2><p class="summary">${n.summary}</p>${n.body}<div class="links-row"><a href="遊戲式學習_重點複習講義.html#p${n.page}" target="_blank" rel="noopener">講義第 ${n.page} 頁</a><a href="遊戲式學習_重點複習講義.pdf#page=${n.page}" target="_blank" rel="noopener">PDF 對應頁</a></div><div class="quiz"><strong>想一想</strong><p>${n.q}</p><details><summary>查看參考回答</summary><p>${n.a}</p></details></div><section class="related"><h3>相關連結</h3>${related}</section><details class="sources"><summary>資料來源</summary><p>${sources}</p></details><div class="reader-nav"><button type="button" data-step="-1" ${idx===0?'disabled':''}>前一個概念</button><button type="button" data-step="1" ${idx===concepts.length-1?'disabled':''}>下一個概念</button></div>`;detail.querySelectorAll('[data-related]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.related)));detail.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{const next=concepts[idx+Number(b.dataset.step)];if(next)select(next.id)}));reader.scrollTop=0;highlight();document.getElementById('reading-count').textContent=`本次已開啟 ${visited.size} / 16`;document.getElementById('reading-progress').value=visited.size;document.getElementById('status').textContent=`已開啟 ${visited.size} / ${concepts.length} 個概念`;document.getElementById('announcement').textContent=`已選取「${n.title}」，內容顯示於閱讀區。`;if(updateHash){try{history.replaceState(null,'',`#${id}`)}catch{}const heading=detail.querySelector('h2');heading.focus({preventScroll:true});heading.scrollIntoView({block:'start',behavior:'instant'});}}
-function setMode(value){mode=value;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));highlight();}
-function setView(value){view=value;document.querySelector('.canvas').hidden=view!=='map';document.querySelector('.concept-list').hidden=view!=='list';document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));document.querySelector('.map-toolbar .hint').textContent=view==='map'?'點選閱讀 · 拖曳移動 · 按鈕縮放':'選取概念後，往下或右側閱讀';}
+function branchExpanded(i){return mapMobile.matches?mobileBranch===i:expandedBranches.has(i);}
+function syncBranches(){
+ groups.forEach((g,i)=>{
+  const expanded=branchExpanded(i),branch=document.getElementById(`branch-${i}`),mobile=document.getElementById(`mobile-branch-${i}`);
+  branch.setAttribute('aria-expanded',String(expanded));mobile.setAttribute('aria-expanded',String(expanded));
+  document.getElementById(`branch-leaves-${i}`).setAttribute('aria-hidden',String(!expanded));
+  document.getElementById(`branch-leaves-${i}`).toggleAttribute('hidden',!expanded);
+  document.getElementById(`mobile-leaves-${i}`).hidden=!expanded;
+  branch.querySelector('.branch-toggle').textContent=expanded?'−':'＋';mobile.querySelector('.branch-toggle').textContent=expanded?'−':'＋';
+ });
+}
+function ensureBranch(i){if(mapMobile.matches)mobileBranch=i;else expandedBranches.add(i);syncBranches();}
+function toggleBranch(i){
+ const wasOpen=branchExpanded(i);
+ if(mapMobile.matches)mobileBranch=wasOpen?null:i;else if(wasOpen)expandedBranches.delete(i);else expandedBranches.add(i);
+ syncBranches();
+ if(mapMobile.matches){const target=document.getElementById(`mobile-branch-${i}`);target.focus({preventScroll:true});target.scrollIntoView({block:'nearest',behavior:'instant'});}
+ document.getElementById('announcement').textContent=`${branchQuestions[i]}${wasOpen?'已收合':'已展開'}。`;
+}
+function activateSvg(node,action){node.addEventListener('click',()=>{if(!suppressClick)action();});node.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();action();}});}
+function branchKeys(e,i,mobile=false){
+ const prefix=mobile?'mobile-branch-':'branch-';
+ if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();mapFocus(prefix+((i+(e.key==='ArrowDown'?1:3))%4));}
+ if(e.key==='Home'||e.key==='End'){e.preventDefault();mapFocus(prefix+(e.key==='Home'?0:3));}
+ if(e.key==='ArrowRight'){e.preventDefault();ensureBranch(i);mapFocus((mobile?'mobile-node-':'node-')+concepts.find(n=>n.g===i).id);}
+ if(e.key==='ArrowLeft'){e.preventDefault();if(branchExpanded(i))toggleBranch(i);else if(!mobile)mapFocus('mindmap-root');}
+}
+function leafKeys(e,n,mobile=false){
+ const siblings=concepts.filter(v=>v.g===n.g),index=siblings.findIndex(v=>v.id===n.id),prefix=mobile?'mobile-node-':'node-';
+ if(e.key==='ArrowLeft'){e.preventDefault();mapFocus((mobile?'mobile-branch-':'branch-')+n.g);}
+ if(e.key==='ArrowUp'||e.key==='ArrowDown'){e.preventDefault();mapFocus(prefix+siblings[(index+(e.key==='ArrowDown'?1:3))%4].id);}
+ if(e.key==='Home'||e.key==='End'){e.preventDefault();mapFocus(prefix+siblings[e.key==='Home'?0:3].id);}
+}
+function draw(){
+ const links=document.getElementById('tree-links'),branches=document.getElementById('tree-branches'),nodes=document.getElementById('nodes');
+ const root=el('g',{id:'mindmap-root',class:'mindmap-root',role:'button',tabindex:0,'aria-label':'遊戲式學習，展開所有主枝並顯示全圖',transform:'translate(490,365)'});
+ root.append(el('rect',{width:220,height:90,rx:45}));root.append(el('text',{x:110,y:39,'text-anchor':'middle',class:'root-title'},'遊戲式學習'));root.append(el('text',{x:110,y:64,'text-anchor':'middle',class:'root-sub'},'四個問題 · 16 個概念'));
+ activateSvg(root,()=>{groups.forEach((g,i)=>expandedBranches.add(i));syncBranches();reset();});
+ root.addEventListener('keydown',e=>{if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();mapFocus('branch-0');}});branches.append(root);
+ groups.forEach((g,i)=>{
+  const p=branchPositions[i],left=p.side<0,rootX=left?490:710,endX=left?p.x+195:p.x,centerY=p.y+40;
+  links.append(el('path',{d:`M${rootX} 410 C${left?435:765} 410,${left?490:710} ${centerY},${endX} ${centerY}`,stroke:g.color,class:'mindmap-link main-link'}));
+  const branch=el('g',{id:`branch-${i}`,class:'mindmap-branch',role:'button',tabindex:0,'aria-expanded':'true','aria-controls':`branch-leaves-${i}`,'aria-label':`${branchQuestions[i]} ${g.name}，展開或收合四個概念`,transform:`translate(${p.x},${p.y})`});
+  branch.append(el('rect',{width:195,height:80,rx:14,stroke:g.color}));branch.append(el('text',{x:16,y:31,class:'branch-title',fill:g.color},branchQuestions[i]));branch.append(el('text',{x:16,y:57,class:'branch-sub'},g.name));branch.append(el('text',{x:174,y:57,class:'branch-toggle','text-anchor':'middle'},'−'));
+  activateSvg(branch,()=>toggleBranch(i));branch.addEventListener('keydown',e=>branchKeys(e,i));branches.append(branch);
+  const leafGroup=el('g',{id:`branch-leaves-${i}`,role:'group','aria-label':`${g.name}的概念`});nodes.append(leafGroup);
+  const section=document.createElement('section');section.className='concept-group';section.dataset.group=i;section.innerHTML=`<h3 style="--group-color:${g.color}">${branchQuestions[i]} <small>${g.name}</small></h3>`;document.querySelector('.concept-list').append(section);
+  const mobileSection=document.createElement('section');mobileSection.className='mobile-branch';mobileSection.style.setProperty('--branch-color',g.color);
+  mobileSection.innerHTML=`<button type="button" id="mobile-branch-${i}" class="mobile-branch-button" aria-expanded="false" aria-controls="mobile-leaves-${i}"><span><strong>${branchQuestions[i]}</strong><small>${g.name} · 4 個概念</small></span><span class="branch-toggle" aria-hidden="true">＋</span></button><div id="mobile-leaves-${i}" class="mobile-leaves" role="group" aria-labelledby="mobile-branch-${i}" hidden></div>`;
+  document.querySelector('.mobile-branches').append(mobileSection);
+  const mobileButton=document.getElementById(`mobile-branch-${i}`);mobileButton.addEventListener('click',()=>toggleBranch(i));mobileButton.addEventListener('keydown',e=>branchKeys(e,i,true));
+  concepts.filter(n=>n.g===i).forEach(n=>{
+   const pos=position(n),startX=left?p.x:p.x+195,targetX=left?pos.x+pos.w:pos.x,mid=(startX+targetX)/2;
+   leafGroup.append(el('path',{d:`M${startX} ${centerY} C${mid} ${centerY},${mid} ${pos.y+31},${targetX} ${pos.y+31}`,class:'mindmap-link leaf-link',stroke:g.color}));
+   const node=el('g',{class:'node',id:`node-${n.id}`,role:'button',tabindex:0,'aria-label':`${n.title}：${n.sub}`,'aria-pressed':'false','data-id':n.id,transform:`translate(${pos.x},${pos.y})`});
+   node.append(el('rect',{class:'shape',width:pos.w,height:pos.h,rx:8}));node.append(el('text',{class:'name',x:13,y:26},n.title));node.append(el('text',{class:'sub',x:13,y:48},n.sub));
+   activateSvg(node,()=>select(n.id));node.addEventListener('keydown',e=>leafKeys(e,n));leafGroup.append(node);
+   for(const mobile of [false,true]){
+    const button=document.createElement('button');button.type='button';button.dataset.id=n.id;button.style.setProperty('--node-color',g.color);button.innerHTML=`<strong>${n.title}</strong><small>${n.sub}</small>`;
+    if(mobile){button.id=`mobile-node-${n.id}`;button.className='mobile-leaf';button.addEventListener('keydown',e=>leafKeys(e,n,true));}
+    button.addEventListener('click',()=>select(n.id));(mobile?document.getElementById(`mobile-leaves-${i}`):section).append(button);
+   }
+  });
+ });syncBranches();
+}
+function allowed(id){return mode==='all'||(mode==='design'?designIds:researchIds).has(id);}
+function highlight(){
+ concepts.forEach(n=>{
+  const active=allowed(n.id)||n.id===selected;
+  document.querySelectorAll(`[data-id="${n.id}"]`).forEach(node=>{node.classList.toggle('selected',n.id===selected&&visited.has(n.id));node.classList.toggle('visited',visited.has(n.id));node.classList.toggle('dim',!active);node.setAttribute('aria-pressed',String(n.id===selected&&visited.has(n.id)));});
+ });
+ groups.forEach((g,i)=>{const current=byId[selected].g===i&&visited.size>0;document.getElementById(`branch-${i}`).classList.toggle('current',current);document.getElementById(`mobile-branch-${i}`).classList.toggle('current',current);});
+}
+function select(id,updateHash=true){if(!byId[id])id='core';selected=id;visited.add(id);reader.hidden=false;ensureBranch(byId[id].g);const n=byId[id],idx=concepts.findIndex(v=>v.id===id);reader.style.setProperty('--node-color',groups[n.g].color);const sources=n.src.map(([key,pages])=>`${key}｜${sourceNames[key]}<br>PDF 第 ${pages} 頁`).join('<br>');const adjacent=edges.filter(e=>e[0]===id||e[1]===id);const related=adjacent.map(([a,b,label])=>{const other=a===id?b:a;return `<button type="button" data-related="${other}"><span>${byId[other].title}</span><small>${a===id?'延伸：':'連回：'}${label}</small></button>`}).join('');detail.innerHTML=`<div class="chapter">${groups[n.g].name} ／ ${idx+1} / ${concepts.length}</div><h2 tabindex="-1">${n.title}</h2><p class="summary">${n.summary}</p>${n.body}<div class="links-row"><a href="遊戲式學習_重點複習講義.html#p${n.page}" target="_blank" rel="noopener">講義第 ${n.page} 頁</a><a href="遊戲式學習_重點複習講義.pdf#page=${n.page}" target="_blank" rel="noopener">PDF 對應頁</a></div><div class="quiz"><strong>想一想</strong><p>${n.q}</p><details><summary>查看參考回答</summary><p>${n.a}</p></details></div><section class="related"><h3>相關概念</h3>${related}</section><details class="sources"><summary>資料來源</summary><p>${sources}</p></details><div class="reader-nav"><button type="button" data-step="-1" ${idx===0?'disabled':''}>前一個概念</button><button type="button" data-step="1" ${idx===concepts.length-1?'disabled':''}>下一個概念</button></div><button type="button" class="reader-map-return">回到心智圖</button>`;detail.querySelector('.reader-map-return').addEventListener('click',returnToMindmap);detail.querySelectorAll('[data-related]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.related)));detail.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{const next=concepts[idx+Number(b.dataset.step)];if(next)select(next.id)}));reader.scrollTop=0;highlight();document.getElementById('reading-count').textContent=`本次已開啟 ${visited.size} / 16`;document.getElementById('reading-progress').value=visited.size;document.getElementById('status').textContent=`已開啟 ${visited.size} / ${concepts.length} 個概念`;document.getElementById('announcement').textContent=`已選取「${n.title}」，內容顯示於閱讀區。`;if(updateHash){try{history.replaceState(null,'',`#${id}`)}catch{}const heading=detail.querySelector('h2');heading.focus({preventScroll:true});heading.scrollIntoView({block:'start',behavior:'instant'});}}
+function setMode(value){mode=value;document.querySelector('.map-options summary').textContent=value==='all'?'聚焦主題':value==='design'?'聚焦：教學設計':'聚焦：研究設計';document.querySelectorAll('.segmented [data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));highlight();}
+function setView(value){
+ view=value==='list'?'list':'map';
+ document.querySelector('.canvas').hidden=view!=='map'||mapMobile.matches;
+ document.querySelector('.mobile-mindmap').hidden=view!=='map'||!mapMobile.matches;
+ document.querySelector('.concept-list').hidden=view!=='list';
+ document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+ document.querySelector('.map-toolbar .hint').textContent=view==='list'?'選取概念閱讀':mapMobile.matches?'點主枝展開 · 點概念閱讀':'點主枝收合 · 點概念閱讀';
+}
 function updateBox(){svg.setAttribute('viewBox',`${box.x} ${box.y} ${box.w} ${box.h}`);document.getElementById('zoom-value').textContent=`${Math.round(zoom*100)}%`;}
-function zoomTo(next,anchor){const z=Math.max(.65,Math.min(3.5,next));const w=1100/z,h=800/z,c=anchor||{x:box.x+box.w/2,y:box.y+box.h/2};const rx=(c.x-box.x)/box.w,ry=(c.y-box.y)/box.h;box={x:c.x-w*rx,y:c.y-h*ry,w,h};zoom=z;updateBox();}
-function reset(){box={x:0,y:0,w:1100,h:800};zoom=1;updateBox()}
+function zoomTo(next,anchor){const z=Math.max(.65,Math.min(3.5,next));const w=1200/z,h=820/z,c=anchor||{x:box.x+box.w/2,y:box.y+box.h/2};const rx=(c.x-box.x)/box.w,ry=(c.y-box.y)/box.h;box={x:c.x-w*rx,y:c.y-h*ry,w,h};zoom=z;updateBox();}
+function reset(){box={x:0,y:0,w:1200,h:820};zoom=1;updateBox()}
 function svgPoint(e){const matrix=svg.getScreenCTM();if(!matrix)return null;return new DOMPoint(e.clientX,e.clientY).matrixTransform(matrix.inverse())}
 svg.addEventListener('pointerdown',e=>{if(e.button!==0)return;const p=svgPoint(e);if(!p)return;drag={pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,worldX:p.x,worldY:p.y,origin:{...box},moved:false};suppressClick=false;});
 svg.addEventListener('pointermove',e=>{if(!drag||drag.pointerId!==e.pointerId)return;if(!drag.moved&&Math.hypot(e.clientX-drag.startX,e.clientY-drag.startY)>6){drag.moved=true;svg.setPointerCapture(e.pointerId);svg.classList.add('panning');}if(!drag.moved)return;const matrix=svg.getScreenCTM();if(!matrix)return;const scale=matrix.a;box.x=drag.origin.x-(e.clientX-drag.startX)/scale;box.y=drag.origin.y-(e.clientY-drag.startY)/scale;updateBox();});
 function endDrag(e){if(!drag||drag.pointerId!==e.pointerId)return;suppressClick=drag.moved;if(svg.hasPointerCapture(e.pointerId))svg.releasePointerCapture(e.pointerId);drag=null;svg.classList.remove('panning');setTimeout(()=>{suppressClick=false},0)}svg.addEventListener('pointerup',endDrag);svg.addEventListener('pointercancel',endDrag);svg.addEventListener('pointerleave',e=>{if(drag&&!drag.moved)endDrag(e)});
 svg.addEventListener('wheel',e=>{if(e.ctrlKey||e.metaKey){e.preventDefault();zoomTo(zoom*(e.deltaY<0?1.1:.9),svgPoint(e));}},{passive:false});
 document.getElementById('zoom-in').addEventListener('click',()=>zoomTo(zoom*1.2));document.getElementById('zoom-out').addEventListener('click',()=>zoomTo(zoom/1.2));document.getElementById('fit').addEventListener('click',reset);
-document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+document.querySelectorAll('.segmented [data-mode]').forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.mode)));document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
 const search=document.getElementById('search'),results=document.getElementById('search-results'),clear=document.querySelector('.clear-search');
 function closeSearch(){results.hidden=true;search.setAttribute('aria-expanded','false')}
 function doSearch(){const q=search.value.trim().toLocaleLowerCase();clear.hidden=!q;results.replaceChildren();if(!q){closeSearch();return}const found=concepts.filter(n=>(n.title+' '+n.sub+' '+n.summary+' '+n.body.replace(/<[^>]+>/g,' ')).toLocaleLowerCase().includes(q));results.hidden=false;search.setAttribute('aria-expanded','true');if(!found.length){const p=document.createElement('p');p.textContent='找不到這個詞。可試「目標」「AI」「依變項」或「合作」。';results.append(p);return}found.forEach(n=>{const b=document.createElement('button');b.type='button';const name=document.createElement('span'),sub=document.createElement('small');name.textContent=n.title;sub.textContent=n.sub;b.append(name,sub);b.addEventListener('click',()=>{select(n.id);closeSearch();});results.append(b);});}
 search.addEventListener('input',doSearch);search.addEventListener('keydown',e=>{if(e.key==='Escape')closeSearch();if(e.key==='ArrowDown'){e.preventDefault();results.querySelector('button')?.focus();}if(e.key==='Enter'){const b=results.querySelector('button');if(b){e.preventDefault();b.click();}}});results.addEventListener('keydown',e=>{const bs=[...results.querySelectorAll('button')],i=bs.indexOf(document.activeElement);if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const step=e.key==='ArrowDown'?1:-1;bs[(i+step+bs.length)%bs.length]?.focus();}if(e.key==='Escape'){closeSearch();search.focus();}});clear.addEventListener('click',()=>{search.value='';doSearch();search.focus()});document.addEventListener('click',e=>{if(!e.target.closest('.search'))closeSearch()});window.addEventListener('hashchange',()=>select(location.hash.slice(1),false));
-document.getElementById('reader-overview').addEventListener('click',()=>{const target=view==='list'?document.querySelector(`.concept-list [data-id="${selected}"]`):document.getElementById(`node-${selected}`);target.focus({preventScroll:true});target.scrollIntoView({block:'center'});});
-draw();setView(matchMedia('(max-width:800px)').matches?'list':'map');select(byId[location.hash.slice(1)]?location.hash.slice(1):'core',false);
+function returnToMindmap(){
+ setView('map');
+ ensureBranch(byId[selected].g);
+ const target=view==='list'?document.querySelector(`.concept-list [data-id="${selected}"]`):mapMobile.matches?document.getElementById(`mobile-branch-${byId[selected].g}`):document.getElementById(`node-${selected}`);
+ if(!mapMobile.matches&&view==='map')reset();
+ target.focus({preventScroll:true});target.scrollIntoView({block:'center',behavior:'instant'});
+}
+document.getElementById('reader-overview').addEventListener('click',returnToMindmap);
+mapMobile.addEventListener('change',()=>{
+ if(mapMobile.matches)mobileBranch=visited.size?byId[selected].g:null;
+ else groups.forEach((g,i)=>expandedBranches.add(i));
+ syncBranches();setView(view);reset();
+ if(!mapMobile.matches&&!visited.size)select('core',false);
+});
+draw();setView('map');
+const initialConcept=location.hash.slice(1);
+if(byId[initialConcept]||!mapMobile.matches)select(byId[initialConcept]?initialConcept:'core',false);
+else{reader.hidden=true;highlight();document.getElementById('status').textContent='選一個問題開始閱讀';}
+
 </script>
 
 <section id="tf-panel" class="tf-panel" hidden aria-label="100 題是非題練習">
-<div class="tf-top"><div><h2 tabindex="-1" id="tf-mode-label">100 題中等難度練習</h2><p>情境判斷・概念比較・設計應用</p></div><button type="button" class="tf-back" id="tf-to-map">回知識脈絡圖</button></div>
+<div class="tf-top"><div><h2 tabindex="-1" id="tf-mode-label">100 題中等難度練習</h2><p>情境判斷・概念比較・設計應用</p></div><button type="button" class="tf-back" id="tf-to-map">回心智圖</button></div>
 <div class="tf-mode-bar"><button type="button" data-action="continue">繼續題目</button><button type="button" data-action="book">我的錯題本</button><button type="button" id="tf-round-resume" data-action="round" hidden>接續本輪</button></div><p id="tf-migration" class="tf-migration" hidden></p><div class="tf-stats" id="tf-stats" aria-live="polite"></div><progress id="tf-progress" class="tf-progress" max="100" value="0" aria-label="作答進度"></progress>
 <div id="tf-complete" class="tf-complete" hidden></div>
 <div class="tf-layout"><div class="tf-main"><div id="tf-card" class="tf-card" tabindex="-1" aria-label="題目與詳解"></div><div class="tf-nav"><button type="button" id="tf-prev">上一題</button><span id="tf-position" class="status"></span><button type="button" id="tf-next">下一題</button></div></div><aside class="tf-side" aria-label="題目導覽"><details id="tf-outline" open><summary>題目導覽 <span id="tf-outline-count">100 題</span></summary><div class="tf-filters"><button type="button" data-tf-filter="all" aria-pressed="true">全部 100 題</button><button type="button" data-tf-filter="unanswered" aria-pressed="false">未作答</button><button type="button" data-tf-filter="wrong" aria-pressed="false">錯題本</button></div><div id="tf-grid" class="tf-grid"></div><p class="tf-legend">✓ 答對　✗ 答錯　○ 未答</p></details><div class="tf-side-footer"><details class="tf-help"><summary>複習方式與進度管理</summary><div id="tf-priorities" class="tf-priorities"></div><button type="button" id="tf-reset" class="tf-reset">清除全部作答紀錄</button></details><p id="tf-save" class="tf-save">進度會儲存在目前瀏覽器。更換裝置或搬動檔案後，可能無法沿用。</p></div></aside></div>
