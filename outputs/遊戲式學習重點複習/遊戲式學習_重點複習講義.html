@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>人工智慧融入遊戲式學習｜重點複習講義</title>
+<style>
+:root{--ink:#203331;--green:#256358;--soft:#edf4f0;--gold:#9d6c25;--line:#cddbd4;--muted:#526460}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#e5eae7;color:var(--ink);font-family:"PingFang TC","Noto Sans CJK TC","Microsoft JhengHei",sans-serif;font-size:11.2pt;line-height:1.65;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.toolbar{max-width:210mm;margin:18px auto;display:flex;justify-content:space-between;align-items:center;padding:0 8px;font-size:13px;gap:12px}.toolbar button{border:0;background:var(--green);color:white;padding:9px 18px;border-radius:5px;cursor:pointer;font:inherit}.toolbar a{color:var(--green);text-decoration:none;margin-right:12px}
+.page{background:#fff;width:210mm;height:297mm;margin:20px auto;padding:13mm 15mm 11mm;display:flex;flex-direction:column;box-shadow:0 3px 16px #1b332214;break-after:page;page-break-after:always}.page:last-child{break-after:auto;page-break-after:auto}.running{display:flex;justify-content:space-between;gap:14px;border-top:3px solid var(--green);padding-top:6px;margin-bottom:12px;font-size:9pt;color:var(--muted);letter-spacing:.08em}.content{flex:1;min-height:0}.footer{display:flex;justify-content:space-between;gap:15px;border-top:1px solid var(--line);padding-top:6px;margin-top:9px;font-size:8.3pt;color:var(--muted);line-height:1.5}.footer .num{white-space:nowrap}
+.eyebrow{font-size:10pt;color:var(--green);font-weight:700;letter-spacing:.12em;margin:0 0 5px}h1{font-size:27pt;line-height:1.3;margin:0 0 10px;font-weight:750;letter-spacing:.02em}h2{font-size:21pt;line-height:1.35;margin:0 0 13px;font-weight:700}h3{font-size:12.7pt;margin:16px 0 6px;color:var(--green);line-height:1.45}p{margin:7px 0}strong{font-weight:700}.lead{font-size:12pt;line-height:1.8;color:#3a524c}.box{background:var(--soft);border-left:3px solid var(--green);padding:10px 13px;margin:12px 0}.note{background:#fbf7ee;border-left:3px solid var(--gold);padding:9px 12px;font-size:10.4pt;margin:12px 0}.box p:first-child,.note p:first-child{margin-top:0}.box p:last-child,.note p:last-child{margin-bottom:0}.label{font-size:9pt;font-weight:700;letter-spacing:.07em;color:var(--gold)}
+table{border-collapse:collapse;width:100%;font-size:10.5pt;margin:8px 0 12px;line-height:1.6;table-layout:fixed}th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:var(--soft);color:var(--green);font-weight:700}tr{break-inside:avoid}thead{display:table-header-group}.small{font-size:9.8pt;line-height:1.6}.tiny{font-size:8.6pt;line-height:1.5}.muted{color:var(--muted)}.flow{padding:12px 14px;border:1px solid var(--line);border-radius:4px;line-height:1.9;text-align:center;font-weight:650;font-size:11.5pt;margin:12px 0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.tile{border:1px solid var(--line);padding:8px 11px;font-size:10.5pt}.tile b{color:var(--green);margin-right:8px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.pill{display:inline-block;color:var(--green);background:var(--soft);font-size:9pt;padding:2px 7px;margin-right:5px}ul,ol{margin:6px 0;padding-left:1.5em}li{margin:4px 0}.question{margin:12px 0 16px}.question p{margin:0 0 5px}.answer-space{height:32px;border-bottom:1px solid #ccd6d0}.answer-space.double{height:54px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 26px,#d8dfdb 26px,#d8dfdb 27px);border:0}.answer{font-size:10.3pt;line-height:1.6;margin:7px 0}.answer b{color:var(--green)}.source-list{font-size:8.6pt;line-height:1.5}.source-list p{margin:5px 0}.contents{list-style:none;padding:0;margin:12px 0}.contents li{display:flex;justify-content:space-between;border-bottom:1px dotted var(--line);padding:4px 0;font-size:10.5pt}.contents a{color:inherit;text-decoration:none}.codeword{font-family:ui-monospace,monospace;font-size:.9em}a{color:var(--green)}
+#p5 th,#p5 td{padding-top:6px;padding-bottom:6px}#p5 h3{margin-top:13px}
+#p9 .question{margin:10px 0 12px}#p9 .answer-space.double{height:40px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 19px,#d8dfdb 19px,#d8dfdb 20px)}
+@page{size:A4;margin:0}
+@media print{body{background:white}.toolbar{display:none}.page{margin:0;box-shadow:none}a{color:inherit;text-decoration:none}}
+@media screen and (max-width:820px){body{font-size:16px}.page{width:calc(100% - 24px);height:auto;min-height:0;padding:22px;margin:12px}.content{min-height:auto}.toolbar{padding:0 16px;flex-wrap:wrap}.running{font-size:11px}h1{font-size:30px}h2{font-size:26px}table{font-size:13px}.two{grid-template-columns:1fr}.footer{margin-top:22px}.grid{gap:6px}.tile{font-size:13px}.source-list{overflow-wrap:anywhere}}
+</style>
+</head>
+<body>
+<nav class="toolbar" aria-label="講義工具"><div><a href="#p1">概念</a><a href="#p2">設計</a><a href="#p6">研究</a><a href="#p9">自我測驗</a><a href="遊戲式學習_知識脈絡圖.html">知識脈絡圖</a></div><button type="button" onclick="window.print()">列印／另存 PDF</button></nav>
+
+<section class="page" id="p1"><header class="running"><span>人工智慧融入遊戲式學習</span><span>重點複習講義 · 2026.10.18</span></header><main class="content">
+<p class="eyebrow">01 / 核心概念</p><h1>讓遊戲行為<br>成為學習行為</h1>
+<p class="lead">本講義依四份課堂資料整合，適合課後複習、課堂問答與研究構想準備。原文重複內容已合併，新增例子與解讀提醒另行標示。</p>
+<div class="box"><strong>整份講義的主線</strong><p>學生要學會什麼 → 遊戲中必須做什麼 → 如何得到回饋與修正 → 用什麼證據判斷學會了。</p></div>
+<h3>一、遊戲式學習的兩個核心元素</h3>
+<table><thead><tr><th style="width:26%">元素</th><th style="width:33%">功能</th><th>例子</th></tr></thead><tbody>
+<tr><td><strong>遊戲元素／機制</strong><br>Game Mechanics</td><td>規定玩家如何行動、互動、挑戰及獲得回饋。</td><td>任務、規則、關卡、角色、資源、合作、獎勵。</td></tr>
+<tr><td><strong>學習內容</strong><br>Learning Content</td><td>界定預期學會的知識、技能與態度。</td><td>概念理解、程式除錯、問題解決、責任感。</td></tr>
+<tr><td><strong>融合關係</strong></td><td>完成任務的操作與思考，對應目標能力。</td><td>撰寫與修正程式，才能讓機器人走出迷宮。</td></tr>
+</tbody></table>
+<h3>二、八項核心特色：記成四組</h3>
+<div class="grid"><div class="tile"><b>方向</b>明確目標與規則＋情境化導向</div><div class="tile"><b>進展</b>挑戰與回饋＋漸進式學習</div><div class="tile"><b>投入</b>動機與沉浸＋自主與探索</div><div class="tile"><b>互動</b>競爭與合作＋獎勵與成就</div></div>
+<p class="small muted">四組是本講義的記憶編排；八項特色沿用原講義。設計時依目標選擇，不必把每一種機制都加入。</p>
+<h3>三、複習路線</h3>
+<ul class="contents"><li><a href="#p2">目標與七步驟／內外生整合／KSA 設計</a><span>第 2–4 頁</span></li><li><a href="#p5">AI 回饋與學習理論</a><span>第 5 頁</span></li><li><a href="#p6">研究變項／操作型定義／研究問題</a><span>第 6–7 頁</span></li><li><a href="#p8">情意社交學習／設計檢核</a><span>第 8 頁</span></li><li><a href="#p9">自我測驗／參考解答／來源</a><span>第 9–10 頁</span></li></ul>
+</main><footer class="footer"><span>依據：A 第 1–2 頁；D 第 12–13、21 頁。來源代碼見第 10 頁。</span><span class="num">01 / 10</span></footer></section>
+
+<section class="page" id="p2"><header class="running"><span>從學習目標開始設計</span><span>設計方法</span></header><main class="content">
+<p class="eyebrow">02 / 目標與流程</p><h2>七個設計步驟，共用同一個目標</h2>
+<table><thead><tr><th style="width:28%">步驟</th><th style="width:37%">關鍵問題</th><th>應留下的設計結果</th></tr></thead><tbody>
+<tr><td><strong>1. 確立學習目標</strong></td><td>完成後，學生能做什麼？</td><td>可觀察的表現與達成標準。</td></tr>
+<tr><td><strong>2. 分析學習者特徵</strong></td><td>學生已會什麼？需要什麼支持？</td><td>先備知識、能力差異、興趣與數位操作需求。</td></tr>
+<tr><td><strong>3. 選擇核心機制</strong></td><td>什麼玩法能練習目標能力？</td><td>任務、規則、限制、互動及勝敗條件。</td></tr>
+<tr><td><strong>4. 嵌入學習內容</strong></td><td>玩家如何運用知識完成任務？</td><td>概念、技能與遊戲行動的對應。</td></tr>
+<tr><td><strong>5. 設計回饋與獎勵</strong></td><td>學生如何知道問題並調整？</td><td>回饋內容、提示時機與獎勵規則。</td></tr>
+<tr><td><strong>6. 測試與調整</strong></td><td>規則是否清楚？難度是否合適？</td><td>試玩觀察與修訂紀錄。</td></tr>
+<tr><td><strong>7. 評估學習成效</strong></td><td>有什麼證據顯示達成目標？</td><td>測驗、實作、歷程、反思或觀察資料。</td></tr>
+</tbody></table>
+<p><strong>第一步最關鍵：</strong>學習目標決定後續設計方向，也是最後評量的依據。流程可反覆修正；列在最後的評量，在設定目標時就應一併思考如何蒐集證據。</p>
+<h3>一、用 SMART 檢查目標</h3>
+<p><strong>S</strong>pecific 具體、<strong>M</strong>easurable 可衡量、<strong>A</strong>chievable 可達成、<strong>R</strong>elevant 相關、<strong>T</strong>ime-bound 有時限。</p>
+<div class="box"><span class="label">整理者補充例｜標準須依課程調整</span><p>完成本次 40 分鐘活動後，學生能在五個新情境中，正確選擇至少四個適當的混合物分離方法，並說明所依據的物質性質。</p></div>
+<h3>二、把教育語言轉成玩家任務</h3>
+<table><thead><tr><th>學習目標：預期能力</th><th>遊戲目標：玩家任務</th></tr></thead><tbody><tr><td>根據物質性質，規劃混合物分離流程。</td><td>在有限資源內，為基地完成指定物質的回收任務。</td></tr><tr><td>說明選擇依據，並根據結果修正方法。</td><td>判讀操作結果，找出失敗原因並調整下一次方案。</td></tr></tbody></table>
+<div class="note"><strong>複習提醒：</strong>遊戲目標與學習目標是不同層次的目標；兩者要對應。講義所稱「隱性學習目標」是融入玩法的設計方式，不表示必須對學生隱瞞學習目的。</div>
+</main><footer class="footer"><span>依據：A 第 18–19 頁；B 第 1–4 頁。評量前置思考與化學目標為整理補充。</span><span class="num">02 / 10</span></footer></section>
+
+<section class="page" id="p3"><header class="running"><span>讓知識進入遊戲規則</span><span>設計方法</span></header><main class="content">
+<p class="eyebrow">03 / 內生與外生整合</p><h2>觀察「知識」和「玩法」的連結</h2>
+<table><thead><tr><th style="width:20%">比較面向</th><th>外生整合</th><th>內生整合</th></tr></thead><tbody>
+<tr><td>結構</td><td>學習活動外附加獎勵或遊戲包裝。</td><td>知識的規律、限制或技能構成玩法。</td></tr>
+<tr><td>操作例子</td><td>答對一道題，角色獲得一次攻擊機會。</td><td>運用角度與力道判斷，決定物體的移動結果。</td></tr>
+<tr><td>替換學科</td><td>通常較容易更換題目而保留玩法。</td><td>更換學科常需要重新設計規則。</td></tr>
+<tr><td>設計優勢</td><td>容易加入既有教材，開發成本較低。</td><td>操作與學科思考緊密對應。</td></tr>
+<tr><td>應檢查的問題</td><td>學生是否只追求獎勵、猜題或速度？</td><td>學生能否說明概念，並在遊戲外應用？</td></tr>
+</tbody></table>
+<h3>一、內生整合的四個設計方法</h3>
+<p><strong>1. 因果映射：</strong>把學科規律轉成遊戲環境的運作規則，讓玩家從行動與後果理解因果關係。</p>
+<p><strong>2. 決策張力與資源限制：</strong>把學科中的權衡轉成策略選擇。例如玩家必須比較不同方案的成本、效率與結果。</p>
+<p><strong>3. 漸進進程與鷹架：</strong>逐步引入新概念，提供可理解的失敗回饋，使學生能修正策略後再挑戰。</p>
+<p><strong>4. 反思與抽象遷移：</strong>回顧遊戲歷程，說明所用概念，再安排新情境任務，檢查學生是否能運用。</p>
+<div class="flow">遊戲操作 → 看見後果 → 修正策略<br>↓<br>說明概念 → 連結學科語言 → 應用於新情境</div>
+<h3>二、三個融合檢查問題</h3>
+<ol><li>玩家哪一個行動，正在練習預期的知識、技能或態度？</li><li>如果更換學習內容，哪些核心規則也必須跟著改變？</li><li>玩家成功後，能否解釋原理，而不只是重複過關操作？</li></ol>
+<div class="note"><strong>解讀界線｜整理補充：</strong>內生與外生整合是分析設計的角度，不宜直接當成成效高低的結論。外生設計不一定無效，內生設計也不保證理解或遷移；必須看目標、實際設計與評量證據。</div>
+</main><footer class="footer"><span>依據：A 第 11、14–17 頁。名詞沿用課堂講義；比較表已合併重複內容。</span><span class="num">03 / 10</span></footer></section>
+
+<section class="page" id="p4"><header class="running"><span>知識、技能與態度</span><span>設計應用</span></header><main class="content">
+<p class="eyebrow">04 / KSA 與完整設計例</p><h2>不同學習目標，需要不同任務</h2>
+<table><thead><tr><th style="width:19%">目標類型</th><th style="width:42%">如何融入遊戲</th><th>應蒐集的學習證據</th></tr></thead><tbody>
+<tr><td><strong>知識 K</strong><br>Knowledge</td><td>把概念做成解謎線索、資源或環境規則；玩家需要理解概念才能作決策。</td><td>辨識、解釋、比較與新情境應用。</td></tr>
+<tr><td><strong>技能 S</strong><br>Skills</td><td>讓核心操作包含反覆練習、即時結果與策略修正。</td><td>操作正確性、獨立完成程度、錯誤修正。</td></tr>
+<tr><td><strong>態度 A</strong><br>Attitudes</td><td>透過角色立場、有後果的選擇、情感經驗與合作。</td><td>選擇理由、反思、互動表現與態度測量。</td></tr>
+</tbody></table>
+<p class="small"><strong>補充：</strong>KSA 是目標類型；Bloom 的記憶、理解、應用、分析、評鑑、創造是認知歷程層次。兩者不宜一一對號。合作可以涉及技能與態度；問題解決也不能一概歸為態度。</p>
+<h3>化學學習的設計連結</h3>
+<p><span class="pill">整理者補充例</span>遊戲主題：基地物資回收任務。以下用同一題材串起目標、任務、回饋與評量。</p>
+<table><thead><tr><th style="width:23%">設計項目</th><th>具體安排</th></tr></thead><tbody>
+<tr><td>核心目標</td><td>根據物質性質選擇分離方法，說明依據，並根據操作結果修正流程。</td></tr>
+<tr><td>關卡一：辨識</td><td>閱讀物質資料，辨認可作為分離依據的性質；說明哪些資訊與任務有關。</td></tr>
+<tr><td>關卡二：規劃</td><td>選擇並排序操作，預測各步驟會留下或取得什麼物質。</td></tr>
+<tr><td>整合關卡</td><td>面對新混合物與資源限制，規劃流程、比較方案，並解釋取捨。</td></tr>
+<tr><td>學習回饋</td><td>呈現每一步的結果，要求學生比較預測與實際結果，再給分層提示。</td></tr>
+<tr><td>評量方式</td><td>用新情境題與說明理由的評分規準，檢查方法選擇、概念依據及修正能力。</td></tr>
+</tbody></table>
+<div class="box"><strong>設計對齊檢查</strong><p>若目標是「說明理由」，任務就要讓學生表達理由，評量也要評理由品質。僅記錄闖關成功與總分，可能不足以判斷此目標是否達成。</p></div>
+<p class="small muted">附註：教學使用時，應依學生年級與先備知識選擇物質資料及操作範圍；本例是教學設計練習，不含實際實驗操作指示。</p>
+</main><footer class="footer"><span>依據：B 第 9–15 頁；A 第 13 頁。化學案例與分類辨析為整理補充。</span><span class="num">04 / 10</span></footer></section>
+
+<section class="page" id="p5"><header class="running"><span>從錯誤到自主修正</span><span>AI 回饋與理論</span></header><main class="content">
+<p class="eyebrow">05 / 回饋、難度與自我調節</p><h2>回饋要提供下一步的行動線索</h2>
+<div class="flow">挑戰 → 表現紀錄 → 判讀成功／失敗<br>成功：檢查精熟程度 → 安排適當的新挑戰<br>失敗：診斷原因 → 給予提示 → 調整策略 → 再挑戰</div>
+<p>獎勵能標示進展與成就；具有學習功能的回饋，則應幫助學生知道表現、問題與修正方向。AI 可協助分析作答或操作歷程，提供不同程度的引導。</p>
+<h3>一、把「答錯了」變成可使用的提示</h3>
+<table><thead><tr><th style="width:22%">回饋層次</th><th>以規劃任務為例的提示</th></tr></thead><tbody>
+<tr><td>指出結果</td><td>「這個流程未能達成回收目標。」</td></tr>
+<tr><td>引導自我檢查</td><td>「哪一步的結果和你的預測不同？」</td></tr>
+<tr><td>聚焦關鍵概念</td><td>「請比較這兩種物質的性質；你目前的操作利用了哪個差異？」</td></tr>
+<tr><td>安排再應用</td><td>「請調整一個步驟，預測改變後的結果，並說明理由。」</td></tr>
+</tbody></table>
+<p class="small">上表提示為整理者補充例。提示應隨需要提供；學生熟練後逐步減少支持，並檢查無提示時的表現。</p>
+<h3>二、最終目標：自我調節學習（SRL）</h3>
+<p>學生逐漸學會監控自己的表現、分析錯誤、調整策略及主動尋求協助。持續得到正確答案，不等於已具備自主修正能力。</p>
+<h3>三、把設計機制連回學習理論</h3>
+<table><thead><tr><th style="width:28%">理論</th><th>本課程的設計連結</th></tr></thead><tbody>
+<tr><td>建構主義</td><td>從操作、互動、先備知識與反思中建立理解。</td></tr>
+<tr><td>心流理論</td><td>讓挑戰與能力相互配合，持續調整難度。</td></tr>
+<tr><td>鷹架／最近發展區</td><td>提供適當支持，協助完成尚無法獨立完成的任務。</td></tr>
+<tr><td>自我決定理論</td><td>關注自主感、勝任感與關係感，設計選擇、進展與互動。</td></tr>
+<tr><td>情境學習／社會建構</td><td>在有意義的情境中應用知識，透過合作與討論形成理解。</td></tr>
+</tbody></table>
+<div class="note"><strong>解讀提醒：</strong>AI 診斷、適性難度與提示是待檢驗的介入設計。是否診斷正確、是否促進學習，都需要證據；加入 AI 本身不代表成效已提升。</div>
+</main><footer class="footer"><span>依據：D 第 14–19、22–23 頁；A 第 11 頁。理論為課堂連結整理。</span><span class="num">05 / 10</span></footer></section>
+
+<section class="page" id="p6"><header class="running"><span>從學習目標到研究測量</span><span>研究設計</span></header><main class="content">
+<p class="eyebrow">06 / 變項與操作型定義</p><h2>想測的能力，要轉成看得見的證據</h2>
+<div class="flow">學習目標 → 界定研究構念 → 決定測量方式與指標<br>例如：能解決問題 → 問題解決能力 → 新情境任務的規準評分</div>
+<table><thead><tr><th style="width:23%">名詞</th><th style="width:36%">意思</th><th>本講義研究例</th></tr></thead><tbody>
+<tr><td><strong>自變項 IV</strong></td><td>研究操控或比較的條件。</td><td>AI 診斷式提示／固定提示。</td></tr>
+<tr><td><strong>依變項 DV</strong></td><td>研究要觀察的結果。</td><td>問題解決表現、學習動機。</td></tr>
+<tr><td><strong>操作型定義</strong></td><td>明確規定如何觀察、測量及計分。</td><td>新情境任務中，依規準評定問題分析、方案理由與修正品質。</td></tr>
+<tr><td><strong>中介變項</strong></td><td>模型中用來說明介入如何影響結果的過程。</td><td>假設自我調節學習是提示影響問題解決表現的中介。</td></tr>
+</tbody></table>
+<h3>一、主要、次要與中介，不是固定身分</h3>
+<p><strong>主要依變項</strong>對應研究的核心目的；<strong>次要依變項</strong>是同時關注的其他結果。若研究目的就是改善學習動機，動機可以是主要依變項。</p>
+<p><strong>中介變項</strong>有特定的模型角色。例如「提示方式 → 自我調節學習 → 問題解決表現」是待檢驗的作用路徑。不能因為三者都有變化，就認定中介關係成立。</p>
+<h3>二、常見測量與其界線</h3>
+<table><thead><tr><th style="width:25%">想了解的成果</th><th style="width:36%">可考慮的資料</th><th>解讀時注意</th></tr></thead><tbody>
+<tr><td>概念理解</td><td>解釋題、概念應用題。</td><td>答對可能來自猜測；可搭配理由判讀。</td></tr>
+<tr><td>技能與遷移</td><td>新情境實作、無提示任務。</td><td>熟悉原遊戲，未必能處理新任務。</td></tr>
+<tr><td>學習動機</td><td>適合對象的量表、訪談。</td><td>自陳感受與實際行為不完全相同。</td></tr>
+<tr><td>學習歷程</td><td>提示使用、決策路徑、修改紀錄。</td><td>點擊次數本身不等於思考深度。</td></tr>
+</tbody></table>
+<div class="note"><strong>整理補充：</strong>「學習目標」「理論」「變項」「測量工具」需分清楚。學習動機、問題解決能力是可研究的構念；理論提供解釋關係的架構，工具則用來蒐集資料。</div>
+</main><footer class="footer"><span>依據：B 第 4–9 頁；C 第 18 頁。研究例及測量界線為整理補充。</span><span class="num">06 / 10</span></footer></section>
+
+<section class="page" id="p7"><header class="running"><span>把研究問題問清楚</span><span>研究設計</span></header><main class="content">
+<p class="eyebrow">07 / 探索、驗證與假設</p><h2>先決定想發現什麼、檢驗什麼</h2>
+<table><thead><tr><th style="width:20%">面向</th><th>探索性研究</th><th>驗證性研究</th></tr></thead><tbody>
+<tr><td>目的</td><td>發現現象、模式與可能的解釋。</td><td>檢驗已有理論或文獻支持的推論。</td></tr>
+<tr><td>問題例</td><td>學生失敗時，如何使用提示？出現哪些修正策略？</td><td>AI 診斷式提示是否提升問題解決表現？</td></tr>
+<tr><td>常見資料</td><td>訪談、觀察、歷程及探索性統計。</td><td>實驗或準實驗資料、量表與模型檢驗。</td></tr>
+<tr><td>產出</td><td>概念、可能關係、待驗證假設。</td><td>推論獲支持或未獲支持的證據。</td></tr>
+</tbody></table>
+<p class="small">研究類型由目的與設計決定，不能只看「如何／是否」，也不能直接等同質性／量化。文獻探討可協助建立架構，但不等於探索性研究。</p>
+<h3>一、兩種研究進路</h3>
+<div class="box"><p><strong>探索導向：</strong>發現問題 → 蒐集資料探索 → 建立概念或模型 → 提出假設 → 驗證。</p><p><strong>文獻導向：</strong>發現問題 → 整理既有理論與研究 → 建立架構與假設 → 蒐集資料驗證。</p></div>
+<p>研究不一定都要先進行探索。已有足夠理論與文獻時，可以形成明確假設後進入驗證；兩種取向也能互相補充。</p>
+<h3>二、把寬泛問題縮成可研究的比較</h3>
+<p>由「這個遊戲有沒有效？」縮小為：</p>
+<div class="box"><strong>研究問題示例｜整理者補充</strong><p>在相同學習內容與遊戲任務下，接受 AI 診斷式提示的學生，相較於接受固定提示的學生，是否有較佳的新情境問題解決表現？</p></div>
+<p><strong>對應假設：</strong>AI 診斷式提示組的新情境問題解決表現高於固定提示組。這是研究前提出的預期，尚未代表結果成立。</p>
+<h3>三、設計研究時的基本檢核</h3>
+<ul><li><strong>比較清楚：</strong>兩組究竟差在提示內容、提示時機，還是多個條件同時不同？</li><li><strong>背景可比較：</strong>記錄先備能力、學習時間及教師支持等可能影響結果的因素。</li><li><strong>測量對齊：</strong>若主張遷移，就要安排新情境；若主張保留，就要安排適當的延宕測量。</li><li><strong>解釋有界線：</strong>顯著差異不直接等於效果大；因果解釋需配合研究設計，不能只依相關或前後變化。</li></ul>
+</main><footer class="footer"><span>依據：D 第 29–42 頁；B 第 13–15 頁。基本檢核為整理者補充。</span><span class="num">07 / 10</span></footer></section>
+
+<section class="page" id="p8"><header class="running"><span>從遊戲經驗走向可帶走的能力</span><span>教學應用與檢核</span></header><main class="content">
+<p class="eyebrow">08 / 情意、社交與設計品質</p><h2>體驗之後，安排反思與遷移</h2>
+<h3>一、情意與社交學習的四個設計重點</h3>
+<table><thead><tr><th style="width:28%">設計原則</th><th>實作方向</th></tr></thead><tbody>
+<tr><td>角色代入</td><td>讓玩家從不同立場作決策，說明感受、理由與價值取捨。</td></tr>
+<tr><td>有意義的選擇</td><td>選擇會改變資源、關係或後續情境，讓玩家看見後果。</td></tr>
+<tr><td>相互依賴的合作</td><td>分配互補資訊、能力或角色，使溝通與協調成為完成任務的必要條件。</td></tr>
+<tr><td>可安全嘗試的空間</td><td>允許失敗、回顧與再試，讓學生能修正決策與互動方式。</td></tr>
+</tbody></table>
+<p><strong>教師的反思提問：</strong>「你為什麼這樣選？」「哪個資訊改變了你的判斷？」「合作卡在哪裡？」「換到生活中的類似情境，你會怎麼做？」</p>
+<p class="small">原講義把「體驗的建構」視為建構主義在遊戲情境中的實踐與延伸。本講義依此理解，不把它當成已獨立建立的新理論。</p>
+<h3>二、四個常見誤判</h3>
+<table><thead><tr><th style="width:37%">可能誤判</th><th>需要再檢查什麼</th></tr></thead><tbody>
+<tr><td>很投入，所以一定學得好。</td><td>投入與學習成果分別蒐集證據。</td></tr>
+<tr><td>拿高分，所以概念已理解。</td><td>分數是否混入速度、運氣、道具或他人協助？</td></tr>
+<tr><td>加排行榜，就能激勵每個人。</td><td>注意不同學生的焦慮、比較壓力與參與變化。</td></tr>
+<tr><td>遊戲一定降低認知負荷。</td><td>操作、畫面與任務要求是否增加額外負擔？</td></tr>
+</tbody></table>
+<h3>三、設計完成前的六項檢查</h3>
+<div class="grid"><div class="tile">□ 學習目標可觀察、可評量。</div><div class="tile">□ 核心任務對應預期能力。</div><div class="tile">□ 先備知識與支持需求已考慮。</div><div class="tile">□ 回饋提供可行的修正線索。</div><div class="tile">□ 有反思與新情境應用。</div><div class="tile">□ 成效判定不只依總分或喜好。</div></div>
+<div class="note"><strong>原講義作業規格備查：</strong>A 第 9–12 頁列有 2–3 個學習目標、至少 3 個關卡、5 種機制、1 個整合挑戰（Boss）、錯誤回饋、評量與融合說明，並要求 5–10 頁設計書。這是原文件中的課堂要求，不是本次複習新增作業；實際繳交仍依教師最新公告。</div>
+</main><footer class="footer"><span>依據：C 第 17–23 頁；A 第 9–12 頁；D 第 28、42 頁。檢核表為整合整理。</span><span class="num">08 / 10</span></footer></section>
+
+<section class="page" id="p9"><header class="running"><span>先作答，再對照解答</span><span>自我測驗</span></header><main class="content">
+<p class="eyebrow">09 / 概念與應用檢核</p><h2>用自己的話說明，而不只認得名詞</h2>
+<p class="small muted">建議用 10–15 分鐘完成。簡答題以概念與理由是否完整為準；參考解答在下一頁。</p>
+<div class="question"><p><strong>1. 核心概念</strong>　用一句話說明「遊戲機制與學習內容融合」，並舉出一個「操作就是學習」的例子。</p><div class="answer-space double"></div></div>
+<div class="question"><p><strong>2. 設計流程</strong>　寫出七個設計步驟，並說明為什麼「確立學習目標」最關鍵。</p><div class="answer-space double"></div></div>
+<div class="question"><p><strong>3. 設計判讀</strong>　甲：答對題目獲得金幣。乙：運用資源配置原則經營基地。兩者分別較接近哪種整合？這是否已能判斷哪個學習成效較好？</p><div class="answer-space double"></div></div>
+<div class="question"><p><strong>4. 改寫回饋</strong>　學生規劃任務失敗，系統只說「錯了，再試一次」。請改寫成兩個由淺入深的引導提示。</p><div class="answer-space double"></div></div>
+<div class="question"><p><strong>5. 研究變項</strong>　比較 AI 診斷式提示與固定提示對問題解決的影響。請指出自變項、主要依變項，並提出一項可行的操作型定義。</p><div class="answer-space double"></div></div>
+<div class="question"><p><strong>6. 判斷並修正</strong>　「學習動機只能是次要依變項；研究都必須先做探索性研究。」這句話有哪些問題？</p><div class="answer-space double"></div></div>
+<div class="question"><p><strong>7. 合作設計</strong>　如果目標是培養合作能力，只有「四個人同組」是否足夠？請提出一種任務機制與一項評量證據。</p><div class="answer-space double"></div></div>
+<div class="question"><p><strong>8. 成效與遷移</strong>　學生每關都成功、也說遊戲很好玩。若要判斷能否把能力帶到遊戲外，還需要什麼證據？</p><div class="answer-space double"></div></div>
+</main><footer class="footer"><span>題目依四份講義整合編寫；不預設為教師考題或正式評量。</span><span class="num">09 / 10</span></footer></section>
+
+<section class="page" id="p10"><header class="running"><span>對照答案與原始資料</span><span>參考解答與來源</span></header><main class="content">
+<p class="eyebrow">10 / 自我校正</p><h2>參考解答</h2>
+<div class="answer"><b>1｜核心融合：</b>玩家為了完成任務所做的操作與思考，同時練習目標能力。例如撰寫與除錯程式，控制機器人通過迷宮。</div>
+<div class="answer"><b>2｜七步驟：</b>確立目標、分析學習者、選擇核心機制、嵌入內容、設計回饋與獎勵、測試調整、評估成效。目標決定任務與評量方向。</div>
+<div class="answer"><b>3｜整合判讀：</b>甲較接近外生整合；乙在資源規律直接構成玩法時，較接近內生整合。僅依類型不能判定成效，仍須檢查實際學習證據。</div>
+<div class="answer"><b>4｜引導提示：</b>例如先問「哪一步的結果與預測不同？」再問「你選擇這個操作時，利用了哪些條件或性質？」重點是協助檢查與修正，而非只重複對錯訊息。</div>
+<div class="answer"><b>5｜變項與測量：</b>自變項是提示方式；主要依變項是問題解決表現。操作型定義可為新情境任務中，以固定規準評定問題分析、方案理由與修正品質的得分。</div>
+<div class="answer"><b>6｜兩個修正：</b>主要與次要依變項由研究目的決定，動機也能是主要依變項。已有充分理論與文獻時，可直接建立假設並設計驗證研究。</div>
+<div class="answer"><b>7｜合作機制：</b>同組不足以保證合作。可分配互補資訊，讓成員需要交換資訊才能決策；評量可觀察資訊分享、協調與共同修正的表現。</div>
+<div class="answer"><b>8｜遷移證據：</b>安排不同情境或遊戲外的任務，檢查能否獨立應用並說明理由。若關注保留，再安排適當的延宕測量。</div>
+<div class="box"><strong>離開講義前，應能說清楚：</strong><p class="small">學什麼 → 怎麼玩才能學 → 如何回饋 → 怎麼證明學會；以及研究中「改變什麼條件、觀察什麼結果、如何測量」。</p></div>
+<h3>原始講義與查讀位置</h3>
+<div class="source-list">
+<p><strong>A｜1151006 遊戲式學習_設計方法步驟.pdf</strong>（20 頁）<br>第 1–8 頁：核心元素與程式案例；第 9–12 頁：設計作業；第 13–17 頁：平衡與內外生整合；第 18–20 頁：設計流程。</p>
+<p><strong>B｜1151006 遊戲式學習_設定學習目標.pdf</strong>（15 頁）<br>第 1–4 頁：目標與設計；第 4–9 頁：研究變項與測量；第 9–15 頁：KSA 融入及研究問題。</p>
+<p><strong>C｜1_2_1遊戲式學習_設計方法步驟.pdf</strong>（23 頁）<br>前段與 A 多有重複；第 17–18 頁：延伸研究問題；第 19–23 頁：情意社交學習、體驗與建構主義。</p>
+<p><strong>D｜1-1遊戲式學習_介紹_上課講義 (1).pdf</strong>（43 頁）<br>第 12–23 頁：定義、特色、AI 回饋與理論；第 29–42 頁：探索、驗證與研究假設。</p>
+</div>
+<p class="tiny muted">來源均為使用者提供的黃正旭老師課堂講義。本文件為依原資料製作的複習整理版，非授課教師原稿。頁碼一律按 PDF 實際頁序計算，可能與投影片頁腳編號不同。新增化學例子、研究例及方法提醒標為「整理補充」；原文中的作業要求與研究假設均保留其原有性質，未當成新的操作指令或已證實結果。</p>
+</main><footer class="footer"><span>整理日期：2026-10-18 · 繁體中文重點複習版</span><span class="num">10 / 10</span></footer></section>
+</body>
+</html>

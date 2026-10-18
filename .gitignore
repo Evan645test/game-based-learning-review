@@ -1,0 +1,28 @@
+# 作業系統與暫存檔
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+~$*
+
+# 憑證與環境設定
+.env
+.env.*
+!.env.example
+*.key
+credentials.*
+secrets.*
+*service-account*.json
+
+# Agent 本機資料
+.codex/
+.claude/
+/AGENTS.md
+/:memory:.ses
+
+# 程式依賴與產出
+node_modules/
+dist/
+build/
+.cache/
+coverage/
