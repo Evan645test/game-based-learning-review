@@ -23,6 +23,20 @@
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 @media print{body{background:white}.header{padding:0 0 16px}.header-links,.study-nav,.map-panel,.reader-tools,.reader-nav,.related,.links-row,.tf-side,.tf-choices,.tf-nav,.tf-reset,.tf-retry,#tf-continue,#tf-outline,.skip-link{display:none!important}.workspace,.tf-layout{display:block}.reader{position:static;height:auto;overflow:visible;border:0;padding:16px 0}.tf-panel{padding:0}.tf-card{border:0;padding:0}.quiz details{display:block}@page{margin:18mm}}
 
+
+/* Answer cards and durable mistake notebook. */
+.preview-label{font-size:12px;font-weight:500;color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:3px 8px;white-space:nowrap;letter-spacing:0}
+.tf-mode-bar{display:flex;align-items:center;gap:10px;margin:20px 0 0;flex-wrap:wrap}.tf-mode-bar button{min-height:44px;padding:9px 16px;border:1px solid var(--line);border-radius:7px;background:white;font-size:14px}.tf-mode-bar button[data-action=book]{color:var(--blue);border-color:var(--blue)}
+.tf-migration{font-size:13px;line-height:1.7;padding:12px 16px;background:#fcf5e9;color:#684e16;border-left:3px solid var(--gold);border-radius:5px}
+.tf-layout #tf-card button:not([data-tf-answer]),.round-complete button{min-height:44px;padding:9px 15px;border:1px solid #a5b9ca;border-radius:7px;background:white;font-size:14px;line-height:1.6}.tf-layout #tf-card button:disabled{opacity:.5}.tf-layout #tf-card button.card-primary{background:var(--blue);color:white;border-color:var(--blue)}
+.tf-layout #tf-card .tf-review-actions button{background:var(--ink);color:white;border-color:var(--ink)}
+.tf-card.is-flashcard{border-top:4px solid var(--teal);padding-top:26px}.flashcard-result h3{font-size:25px;line-height:1.5;margin:0 0 8px;color:var(--teal)}.flashcard-result p{font-size:14px;margin:0;color:var(--muted)}.flashcard-result.wrong h3{color:var(--wrong)}.mastery-note{font-size:13px;padding:12px 14px;border-radius:6px;background:var(--bg);color:var(--muted);margin:20px 0}.answer-reason{border-bottom:1px solid var(--line);padding-bottom:22px;margin-bottom:24px}.answer-reason .answered-question{margin-bottom:24px}.answer-reason h4,.course-point h4,.course-example h4{font-size:16px;margin:0 0 8px}.answer-reason p,.course-point p,.course-example p{font-size:16px;line-height:1.9;margin:8px 0}.answer-reason details{margin-top:14px;font-size:14px}.answer-reason summary,.recap-answer summary{cursor:pointer;color:var(--blue);min-height:44px;padding:9px 0;font-size:14px}.answer-reason details p,.recap-answer p{font-size:14px;line-height:1.85}.course-point{border-left:3px solid var(--blue);padding-left:18px;margin:24px 0}.course-point h4{color:var(--blue)}.course-example{padding:18px 20px;border-radius:8px;background:var(--selected);margin:24px 0}.course-example small{font-size:12px;color:var(--muted)}.card-actions{display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:22px;margin-top:22px}.round-complete{margin-top:24px;padding:20px;background:var(--success-bg);border-left:3px solid var(--teal);border-radius:6px}.round-complete h4{font-size:18px;margin:0 0 8px}.round-complete p{font-size:15px;margin:8px 0 16px}.round-complete button{margin:0 8px 8px 0}.book-title,.recap-title{font-size:26px;line-height:1.5;margin:0 0 14px}.book-intro{font-size:15px;color:var(--muted);margin:0 0 22px}.book-tabs{display:flex;gap:10px}.tf-layout #tf-card .book-tabs button[aria-pressed=true]{background:var(--ink);color:white;border-color:var(--ink)}.book-start{margin:20px 0;padding-bottom:22px;border-bottom:1px solid var(--line)}.book-start p{font-size:14px;color:var(--muted)}.book-start button{margin:0 8px 8px 0}.mistake-list{list-style:none;padding:0;margin:0}.mistake-list li{padding:22px 0;border-bottom:1px solid var(--line)}.mistake-list li:first-child{padding-top:6px}.mistake-list li>div:first-child{display:flex;align-items:center;gap:10px}.mistake-list strong{font-size:16px}.mistake-list p{font-size:15px;line-height:1.8;margin:14px 0 8px}.mistake-list small{font-size:13px;color:var(--muted)}.mistake-actions{display:flex;gap:10px;margin-top:14px}.recap-answer{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:6px 0;margin:20px 0}.recap-start{width:100%;margin-top:12px}.tf-priorities>p{font-size:13px;color:var(--muted);line-height:1.8}.tf-layout>.tf-main{min-width:0}
+@media(max-width:800px){.preview-label{font-size:11px}.header h1{gap:10px;flex-wrap:wrap}.tf-mode-bar{margin-top:18px;gap:8px}.tf-mode-bar button{flex:1;white-space:nowrap}.tf-card.is-flashcard{padding:22px 20px}.flashcard-result h3,.book-title,.recap-title{font-size:23px}.flashcard-result p{font-size:13px}.answer-reason p,.course-point p,.course-example p{font-size:16px}.course-example{padding:16px}.card-actions button{flex:1}.card-actions .card-primary{flex-basis:100%}.book-tabs button{flex:1}.book-start button{width:100%;margin:0 0 10px}.tf-stats{grid-template-columns:1.5fr 1fr 1fr 1.2fr}.tf-stats strong{font-size:22px}.tf-layout .tf-main{width:100%}.mistake-actions button{flex:1}.tf-review-actions{gap:10px}.tf-migration{font-size:12px}.round-complete button{width:100%;margin:0 0 10px}}
+@media print{.preview-label,.tf-mode-bar,.card-actions,.book-tabs,.book-start button,.mistake-actions,.recap-start,.round-complete button{display:none!important}}
+
+
+.sources summary{cursor:pointer;min-height:44px;display:list-item;align-content:center}.sources[open] summary{font-weight:700}
+.tf-keyword{color:#b42318;font-weight:750}
 </style>
 </head>
 <body>
@@ -34,7 +48,7 @@
 <div class="map-toolbar"><div class="view-switch" aria-label="檢視方式"><button type="button" data-view="map" aria-pressed="true">脈絡圖</button><button type="button" data-view="list" aria-pressed="false">概念清單</button></div><span class="hint">點選閱讀 · 拖曳移動 · 按鈕縮放</span></div>
 <div class="canvas"><svg id="map" viewBox="0 0 1100 800" role="group" aria-label="16 個概念節點；可用 Tab 選取並按 Enter 閱讀"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#a7bac8"/></marker><marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#345e7d"/></marker></defs><g id="lanes"></g><g id="edges"></g><g id="labels"></g><g id="nodes"></g></svg><div class="zoom" aria-label="圖面縮放"><button type="button" id="zoom-out" aria-label="縮小">−</button><span id="zoom-value">100%</span><button type="button" id="zoom-in" aria-label="放大">＋</button><button type="button" class="fit" id="fit">全圖</button></div></div>
 <div class="concept-list" hidden></div><div class="legend"><span><i class="line-key"></i>主要脈絡</span><span><i class="line-key dash"></i>選取概念的跨區連結</span><span class="status" id="status"></span><a class="jump-detail" href="#reader">閱讀概念內容</a></div>
-<p class="guide"><strong>怎麼讀：</strong>先沿最上排看完整流程，再往下展開各區。選取節點後，相關概念會亮起；右側「相關連結」也能接續閱讀。線上的文字表示設計或概念關係，並非已證實的因果效果。</p>
+
 <noscript><p>此知識脈絡圖需要啟用 JavaScript。也可以直接開啟上方的完整講義閱讀。</p></noscript>
 </section><aside class="reader" id="reader" aria-label="概念閱讀區"><div class="reader-tools"><button type="button" id="reader-overview">回到概念總覽</button><button type="button" id="reader-return" hidden>返回練習</button></div><div id="detail"></div></aside></div>
 <div class="sr-only" role="status" aria-live="polite" id="announcement"></div>
@@ -85,7 +99,7 @@ function draw(){
 }
 function allowed(id){return mode==='all'||(mode==='design'?designIds:researchIds).has(id)}
 function highlight(){document.querySelectorAll('.learning-path button').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.group)===byId[selected].g)));const near=new Set([selected]);edges.forEach(([a,b])=>{if(a===selected)near.add(b);if(b===selected)near.add(a)});concepts.forEach(n=>{const active=mode==='all'||allowed(n.id)||n.id===selected;const node=document.getElementById(`node-${n.id}`);node.classList.toggle('selected',n.id===selected);node.classList.toggle('related',near.has(n.id)&&n.id!==selected);node.classList.toggle('dim',!active);node.setAttribute('aria-pressed',String(n.id===selected));const btn=document.querySelector(`.concept-list [data-id="${n.id}"]`);btn.classList.toggle('selected',n.id===selected);btn.classList.toggle('visited',visited.has(n.id));btn.classList.toggle('dim',!allowed(n.id));btn.setAttribute('aria-pressed',String(n.id===selected));});edges.forEach(([a,b,label,cross],i)=>{const active=a===selected||b===selected;for(const prefix of ['edge','label']){const e=document.getElementById(`${prefix}-${i}`);e.classList.toggle('active',active);e.classList.toggle('show',Boolean(cross&&active));e.classList.toggle('dim',!active&&(mode==='all'||!allowed(a)||!allowed(b)));}});}
-function select(id,updateHash=true){if(!byId[id])id='core';selected=id;visited.add(id);const n=byId[id],idx=concepts.findIndex(v=>v.id===id);reader.style.setProperty('--node-color',groups[n.g].color);const sources=n.src.map(([key,pages])=>`${key}｜${sourceNames[key]}<br>PDF 第 ${pages} 頁`).join('<br>');const adjacent=edges.filter(e=>e[0]===id||e[1]===id);const related=adjacent.map(([a,b,label])=>{const other=a===id?b:a;return `<button type="button" data-related="${other}"><span>${byId[other].title}</span><small>${a===id?'延伸：':'連回：'}${label}</small></button>`}).join('');detail.innerHTML=`<div class="chapter">${groups[n.g].name} ／ ${idx+1} / ${concepts.length}</div><h2 tabindex="-1">${n.title}</h2><p class="summary">${n.summary}</p>${n.body}<div class="links-row"><a href="遊戲式學習_重點複習講義.html#p${n.page}" target="_blank" rel="noopener">講義第 ${n.page} 頁</a><a href="遊戲式學習_重點複習講義.pdf#page=${n.page}" target="_blank" rel="noopener">PDF 對應頁</a></div><div class="quiz"><strong>想一想</strong><p>${n.q}</p><details><summary>查看參考回答</summary><p>${n.a}</p></details></div><section class="related"><h3>相關連結</h3>${related}</section><div class="sources"><b>原始講義來源</b><p>${sources}</p>頁碼採 PDF 實際頁序；可能與投影片頁腳編號不同。</div><div class="reader-nav"><button type="button" data-step="-1" ${idx===0?'disabled':''}>前一個概念</button><button type="button" data-step="1" ${idx===concepts.length-1?'disabled':''}>下一個概念</button></div><p class="notice">依使用者提供的四份黃正旭老師課堂講義整理。新增例子與解讀提醒已註明；研究假設不代表已證實結果。完整來源表見複習講義第 10 頁。</p>`;detail.querySelectorAll('[data-related]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.related)));detail.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{const next=concepts[idx+Number(b.dataset.step)];if(next)select(next.id)}));reader.scrollTop=0;highlight();document.getElementById('reading-count').textContent=`本次已開啟 ${visited.size} / 16`;document.getElementById('reading-progress').value=visited.size;document.getElementById('status').textContent=`已開啟 ${visited.size} / ${concepts.length} 個概念`;document.getElementById('announcement').textContent=`已選取「${n.title}」，內容顯示於閱讀區。`;if(updateHash){try{history.replaceState(null,'',`#${id}`)}catch{}const heading=detail.querySelector('h2');heading.focus({preventScroll:true});heading.scrollIntoView({block:'start',behavior:'instant'});}}
+function select(id,updateHash=true){if(!byId[id])id='core';selected=id;visited.add(id);const n=byId[id],idx=concepts.findIndex(v=>v.id===id);reader.style.setProperty('--node-color',groups[n.g].color);const sources=n.src.map(([key,pages])=>`${key}｜${sourceNames[key]}<br>PDF 第 ${pages} 頁`).join('<br>');const adjacent=edges.filter(e=>e[0]===id||e[1]===id);const related=adjacent.map(([a,b,label])=>{const other=a===id?b:a;return `<button type="button" data-related="${other}"><span>${byId[other].title}</span><small>${a===id?'延伸：':'連回：'}${label}</small></button>`}).join('');detail.innerHTML=`<div class="chapter">${groups[n.g].name} ／ ${idx+1} / ${concepts.length}</div><h2 tabindex="-1">${n.title}</h2><p class="summary">${n.summary}</p>${n.body}<div class="links-row"><a href="遊戲式學習_重點複習講義.html#p${n.page}" target="_blank" rel="noopener">講義第 ${n.page} 頁</a><a href="遊戲式學習_重點複習講義.pdf#page=${n.page}" target="_blank" rel="noopener">PDF 對應頁</a></div><div class="quiz"><strong>想一想</strong><p>${n.q}</p><details><summary>查看參考回答</summary><p>${n.a}</p></details></div><section class="related"><h3>相關連結</h3>${related}</section><details class="sources"><summary>資料來源</summary><p>${sources}</p></details><div class="reader-nav"><button type="button" data-step="-1" ${idx===0?'disabled':''}>前一個概念</button><button type="button" data-step="1" ${idx===concepts.length-1?'disabled':''}>下一個概念</button></div>`;detail.querySelectorAll('[data-related]').forEach(b=>b.addEventListener('click',()=>select(b.dataset.related)));detail.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{const next=concepts[idx+Number(b.dataset.step)];if(next)select(next.id)}));reader.scrollTop=0;highlight();document.getElementById('reading-count').textContent=`本次已開啟 ${visited.size} / 16`;document.getElementById('reading-progress').value=visited.size;document.getElementById('status').textContent=`已開啟 ${visited.size} / ${concepts.length} 個概念`;document.getElementById('announcement').textContent=`已選取「${n.title}」，內容顯示於閱讀區。`;if(updateHash){try{history.replaceState(null,'',`#${id}`)}catch{}const heading=detail.querySelector('h2');heading.focus({preventScroll:true});heading.scrollIntoView({block:'start',behavior:'instant'});}}
 function setMode(value){mode=value;document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===mode)));highlight();}
 function setView(value){view=value;document.querySelector('.canvas').hidden=view!=='map';document.querySelector('.concept-list').hidden=view!=='list';document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));document.querySelector('.map-toolbar .hint').textContent=view==='map'?'點選閱讀 · 拖曳移動 · 按鈕縮放':'選取概念後，往下或右側閱讀';}
 function updateBox(){svg.setAttribute('viewBox',`${box.x} ${box.y} ${box.w} ${box.h}`);document.getElementById('zoom-value').textContent=`${Math.round(zoom*100)}%`;}
@@ -107,163 +121,406 @@ draw();setView(matchMedia('(max-width:800px)').matches?'list':'map');select(byId
 </script>
 
 <section id="tf-panel" class="tf-panel" hidden aria-label="100 題是非題練習">
-<div class="tf-top"><div><h2 tabindex="-1">用 100 題，檢查你的理解</h2><p>選擇「是」或「非」，立即看詳解。答錯時，從建議章節找回觀念。</p></div><button type="button" class="tf-back" id="tf-to-map">回知識脈絡圖</button></div>
-<div class="tf-stats" id="tf-stats" aria-live="polite"></div><progress id="tf-progress" class="tf-progress" max="100" value="0" aria-label="作答進度"></progress>
+<div class="tf-top"><div><h2 tabindex="-1" id="tf-mode-label">100 題中等難度練習</h2><p>情境判斷・概念比較・設計應用</p></div><button type="button" class="tf-back" id="tf-to-map">回知識脈絡圖</button></div>
+<div class="tf-mode-bar"><button type="button" data-action="continue">繼續題目</button><button type="button" data-action="book">我的錯題本</button><button type="button" id="tf-round-resume" data-action="round" hidden>接續本輪</button></div><p id="tf-migration" class="tf-migration" hidden></p><div class="tf-stats" id="tf-stats" aria-live="polite"></div><progress id="tf-progress" class="tf-progress" max="100" value="0" aria-label="作答進度"></progress>
 <div id="tf-complete" class="tf-complete" hidden></div>
-<div class="tf-layout"><div><div id="tf-card" class="tf-card" tabindex="-1" aria-label="題目與詳解"></div><div class="tf-nav"><button type="button" id="tf-prev">上一題</button><span id="tf-position" class="status"></span><button type="button" id="tf-next">下一題</button></div><p class="tf-hint">每題以最近一次作答計分；「重答本題」會清除該題答案，重新計入待答。錯題複習會保留進入時的題目清單，方便逐題練習。</p></div><aside class="tf-side" aria-label="題目導覽"><details id="tf-outline" open><summary>題目導覽 <span id="tf-outline-count">100 題</span></summary><div class="tf-filters"><button type="button" data-tf-filter="all" aria-pressed="true">全部 100 題</button><button type="button" data-tf-filter="unanswered" aria-pressed="false">未作答</button><button type="button" data-tf-filter="wrong" aria-pressed="false">錯題複習</button></div><div id="tf-grid" class="tf-grid"></div><p class="tf-legend">✓ 答對　✗ 答錯　○ 未答</p></details><div class="tf-side-footer"><div id="tf-priorities" class="tf-priorities"></div><p id="tf-save" class="tf-save">進度會儲存在目前瀏覽器。更換裝置或搬動檔案後，可能無法沿用。</p><button type="button" id="tf-reset" class="tf-reset">清除全部作答紀錄</button></div></aside></div>
+<div class="tf-layout"><div class="tf-main"><div id="tf-card" class="tf-card" tabindex="-1" aria-label="題目與詳解"></div><div class="tf-nav"><button type="button" id="tf-prev">上一題</button><span id="tf-position" class="status"></span><button type="button" id="tf-next">下一題</button></div><p class="tf-hint">答後卡片包含詳解、核心觀念與例子。單題重答保留錯題紀錄；完成整輪後才更新熟悉次數。</p></div><aside class="tf-side" aria-label="題目導覽"><details id="tf-outline" open><summary>題目導覽 <span id="tf-outline-count">100 題</span></summary><div class="tf-filters"><button type="button" data-tf-filter="all" aria-pressed="true">全部 100 題</button><button type="button" data-tf-filter="unanswered" aria-pressed="false">未作答</button><button type="button" data-tf-filter="wrong" aria-pressed="false">錯題本</button></div><div id="tf-grid" class="tf-grid"></div><p class="tf-legend">✓ 答對　✗ 答錯　○ 未答</p></details><div class="tf-side-footer"><div id="tf-priorities" class="tf-priorities"></div><p id="tf-save" class="tf-save">進度會儲存在目前瀏覽器。更換裝置或搬動檔案後，可能無法沿用。</p><button type="button" id="tf-reset" class="tf-reset">清除全部作答紀錄</button></div></aside></div>
 </section>
 <script>
 'use strict';
 const tfQuestions=[
-['玩家完成任務時，必要的操作與思考若同時練習目標能力，就能呈現遊戲與學習的融合。',true,'core','融合要能指出「哪個行動」對應「哪個學習目標」。例如為了走出迷宮而撰寫、執行及修正程式，這些行動同時練習程式邏輯與除錯。'],
-['只要教材加入角色、故事與積分，就足以證明遊戲機制已與學習內容融合。',false,'core','角色、故事和積分可以支持參與，但仍須檢查核心操作是否練習目標能力。若學生只靠猜題獲得獎勵，仍不能直接據此判定概念理解。'],
-['學習內容可以包含知識、技能與態度，不限於事實記憶。',true,'core','講義的學習內容涵蓋概念、技能、態度與價值觀。因此，遊戲也可針對問題解決、合作或責任感設計任務及評量。'],
-['設計時只要先決定遊戲名稱與故事，就已完成「確立學習目標」。',false,'goals','遊戲名稱與故事描述情境；學習目標需要描述學生完成活動後能展現的能力。沒有明確能力與判定依據，後續機制與評量就容易失去方向。'],
-['學習目標會影響任務、遊戲機制、回饋與成效評量。',true,'goals','目標是後續設計的共同依據。例如目標要求說明理由，任務就應要求表達理由，評量也要檢查理由品質，不能僅計算通關數。'],
-['SMART 中的「可衡量」，表示所有學習目標都只能用選擇題測驗。',false,'goals','可衡量是能以明確方式蒐集與判讀證據，不限定單一題型。實作評分規準、觀察、解釋題或適當量表，都可依目標使用。'],
-['玩家的「完成基地任務」與教師設定的「運用概念解決問題」，可以是相互對應的兩層目標。',true,'goals','遊戲目標描述玩家要完成的任務，學習目標描述任務中練習的能力。兩者可用不同語言呈現，但應在實際操作與評量上對齊。'],
-['讓技能練習成為反覆進行的核心操作，是把技能目標融入遊戲的一種方式。',true,'ksa','技能學習可結合反覆操作、逐步挑戰及即時回饋。關鍵不只是重複，而是每次行動能提供修正與精熟的機會。'],
-['KSA 中的知識、技能、態度，可分別直接等同 Bloom 的記憶、應用與創造。',false,'ksa','KSA 區分目標類型；Bloom 的六個層次描述認知歷程，兩者並非一一對應。例如知識也可以涉及理解、分析與評鑑，創造更不能直接等同態度。'],
-['若想培養合作能力，只測量學生是否喜歡團隊遊戲，就能完整評估目標是否達成。',false,'ksa','喜好反映體驗或態度的一部分，無法完整代表合作能力。還需要觀察資訊分享、協調、分工與共同修正等與目標直接相關的行為。'],
-['分析先備知識與數位操作能力，可以幫助設計者決定提示與介面支持。',true,'learner','學習者分析協助辨認起點及支持需求。學生可能因概念缺口、操作不熟或規則不清而卡住，這些問題應有不同的設計回應。'],
-['學生持續失敗時，可以直接判定是學科概念不足，不必檢查遊戲規則與操作介面。',false,'learner','失敗可能來自多種原因。若操作或規則不清，增加學科講解未必能解決問題；應先觀察實際歷程，判斷卡住的位置。'],
-['相同學習目標，對不同先備程度的學生可能需要不同難度或支持。',true,'learner','學習目標描述預期能力，學習者分析則協助安排達成目標的路徑。提示、關卡進程與介面呈現可以依需求調整。'],
-['遊戲式學習七步驟中的第一步是選擇遊戲核心機制。',false,'mechanics','講義列出的第一步是確立學習目標，其次為分析學習者特徵，之後才選擇核心機制。目標應先為玩法選擇提供依據。'],
-['選擇合作、解謎或模擬等機制時，需要考慮它們能否承載預期能力。',true,'mechanics','不同機制提供不同學習行動。設計者應說明玩家在機制中如何使用知識或技能，而不是只憑機制名稱決定其教育價值。'],
-['評估學習成效列在七步驟最後，因此設定學習目標時完全不必思考評量證據。',false,'mechanics','步驟的列出順序不代表評量只能等最後才想。設定目標時就應思考如何判斷達成，才能讓任務與評量一致；後續試玩也可反覆修正。'],
-['答對題目後獲得金幣，通常較接近外生整合的設計。',true,'integration','外生整合是在學習活動外附加獎勵或遊戲包裝。題目與金幣的關係主要是獎勵連結，題目換成其他學科時，玩法通常仍能保留。'],
-['內生整合是把學習內容放進遊戲中的百科全書，核心玩法則完全不需要用到這些內容。',false,'integration','內生整合強調概念規律、限制或技能直接構成玩法。百科全書可作為支援資源，但僅放入文本、核心操作仍與知識無關，不能據此認定內生整合。'],
-['一旦採用內生整合，就能直接推定其學習成效優於所有外生整合設計。',false,'integration','整合類型不能代替成效證據。內生設計仍可能存在難度、引導或測量問題；外生設計也可能支持某些目標，需依實際資料判斷。'],
-['因果映射，是把學科中的規律轉成遊戲環境運作規則的一種設計方法。',true,'integration','玩家透過行動及結果接觸學科因果關係。例如遊戲結果直接受概念或限制條件影響，讓理解規律成為完成任務的必要部分。'],
-['逐步引入概念並提供能協助修正的提示，符合漸進關卡與鷹架的設計方向。',true,'scaffolding','講義建議循序增加任務要求，並用可理解的結果與提示支持學習。這能讓學生在可處理的挑戰中練習，再逐步整合能力。'],
-['學生使用大量提示後通關，就已足以證明他能獨立完成相同能力要求的任務。',false,'scaffolding','有支持時成功與獨立表現不同。應逐步減少提示，安排適合的任務，觀察能否自行運用概念、說明理由與修正錯誤。'],
-['動態調整難度時，應參考學習者表現，而不是固定把每次失敗都轉成更難的關卡。',true,'scaffolding','調整要配合能力與失敗原因。若學生尚有概念缺口，直接加難可能增加挫折；若已精熟，則可以安排適當的新挑戰。'],
-['AI 診斷式回饋的主要設計原則，是不論錯誤原因都立即提供完整答案。',false,'feedback','講義強調根據失敗原因提供適時引導，協助學生分析與修正。直接提供答案可能解決當下題目，卻未必讓學生練到自主診斷。'],
-['「哪一步的結果與你的預測不同？」可以作為引導學生自我檢查的提示。',true,'feedback','這個問題把注意力引向預測與結果之間的差距，讓學生檢查自己的方案。後續仍可依需要聚焦關鍵概念，並安排修正後的再嘗試。'],
-['只要提示由 AI 產生，就可以省去對診斷正確性與學習成效的檢查。',false,'feedback','使用 AI 是介入方式，並非成效已成立的證據。需檢查提示是否正確、是否適合學生，以及是否幫助理解、修正或獨立完成任務。'],
-['自我調節學習包含監控表現、分析問題與調整學習策略。',true,'srl','講義期待學生在多次診斷與引導後，逐漸學會自己分析失敗原因、調整方法並尋求適當協助，而不只依賴系統給答案。'],
-['提示點擊次數越多，就必然代表學生的自我調節能力越好。',false,'srl','次數無法單獨說明求助品質。應結合何時求助、如何運用提示、是否修正策略與是否逐漸獨立等資料判讀。'],
-['在有理論依據的研究模型中，自我調節學習可以被提出為介入影響成果的中介過程。',true,'srl','例如假設提示方式透過自我調節影響問題解決表現。這是可能的研究路徑，仍須明確測量與分析，不能只因三者都有變化就視為中介成立。'],
-['建構主義在本課程中的連結，是讓學生完全不需操作或互動，只被動接收答案。',false,'theory','課堂連結強調學習者運用先備知識，透過操作、互動與反思建立理解。設計任務時應讓學生有機會形成、檢驗並修正自己的想法。'],
-['自我決定理論在講義中的設計連結，包含自主感、勝任感與關係感。',true,'theory','這三種需求可引導設計者思考選擇權、可見的進展及有支持的互動。它們與單純增加外在獎勵是不同的設計考量。'],
-['只在報告中列出「心流理論」四個字，就已充分說明遊戲設計與理論的關係。',false,'theory','還需要說明如何安排挑戰與能力的配合，以及用哪些資料觀察相關體驗與結果。理論名稱必須連到實際機制及研究證據。'],
-['讓不同成員掌握互補資訊，可以使交換資訊與協調成為任務的一部分。',true,'social','相互依賴的設計讓玩家需要溝通才能作決策。仍應觀察參與與互動品質，避免僅有形式上的分組。'],
-['情意與社交學習只要讓玩家當下感動，就不必安排反思或連結現實情境。',false,'social','講義強調體驗後的反思及與生活的連結。短暫情緒不等於穩定的態度或能力改變，需要進一步引導與證據。'],
-['在有意義的角色選擇後，詢問理由、後果及可改進之處，有助於整理遊戲經驗。',true,'social','這些提問協助玩家回顧價值取捨與互動，再思考不同情境下如何運用。它們也能提供理解學習歷程的資料。'],
-['學生完成原遊戲的全部關卡，就已提供他能應用於新情境的直接證據。',false,'transfer','原任務成功可能反映對特定規則或操作的熟悉。若要主張遷移，應安排不同情境或遊戲外任務，檢查是否能獨立應用並解釋理由。'],
-['用遊戲分數評估學習前，需要檢查分數是否包含速度、道具、運氣或協助程度。',true,'assessment','總分可能混合多種因素，未必只反映目標能力。先釐清分數的組成，才能判斷它是否能支持概念理解或問題解決等結論。'],
-['玩家在遊戲中查閱資料的次數，可以直接代表其批判思考品質。',false,'assessment','查閱次數是行為線索，無法單獨說明如何評估證據或形成論點。需要結合理由、決策品質或其他對齊構念的資料。'],
-['操作型定義需要說明要觀察的指標，以及如何測量與計分。',true,'operational','抽象的能力或感受必須轉成具體蒐集證據的方法。例如問題解決可透過任務與規準評分，動機可採適合對象的測量工具。'],
-['只寫「本研究測量問題解決能力」，就已完整交代操作型定義。',false,'operational','這只指出想研究的構念，尚未說明實際如何測。應交代任務或工具、觀察指標、計分規則及適當的測量時機。'],
-['以固定規準評定新情境任務中的問題分析、方案理由與修正品質，是操作型定義的一種具體化方向。',true,'operational','這種安排把抽象能力對應到可觀察表現與計分依據。仍要依實際學科內容設計規準，並檢查測量是否適切。'],
-['比較 AI 診斷式提示與固定提示對問題解決的影響時，「問題解決表現」是被操控的自變項。',false,'variables','此例中比較的條件是提示方式，屬自變項；問題解決表現是觀察的結果，屬依變項。需分清介入條件與成果。'],
-['主要依變項應對應研究核心目的，因此學習動機也可能被設定為主要依變項。',true,'variables','主要與次要是研究目的下的優先順序，不是某構念的永久身分。若研究主要關心動機改變，就可以把動機設為主要結果。'],
-['次要依變項和中介變項是同一個概念，兩者可以不加說明地互換。',false,'variables','次要依變項描述研究同時關注的其他結果；中介變項描述模型中的作用過程。兩者的角色與分析目的不同，需要明確界定。'],
-['「提示方式透過自我調節影響問題解決」是一個需要理論與資料檢驗的研究路徑。',true,'variables','這個敘述提出了中介假設。必須考慮構念、測量與研究設計，再用適當分析檢查；箭頭本身不代表因果已獲證實。'],
-['只要三個變項在活動後都上升，就可以直接確認它們之間存在中介因果關係。',false,'variables','共同變化可能有其他解釋，也未直接建立時間順序或作用路徑。中介與因果結論需要配合研究設計及分析證據。'],
-['探索性研究可以用來發現學生使用提示時的行為模式與可能解釋。',true,'research','探索著重現象、模式與可能關係，可透過觀察、訪談、歷程或探索性統計協助形成後續假設。'],
-['所有驗證性研究都必須由同一位研究者先完成一項探索性研究，才能開始。',false,'research','已有充分理論與文獻時，研究者可據此界定變項、建立架構與假設，直接設計驗證研究，不必每次重新從探索開始。'],
-['透過既有文獻建立研究架構，再蒐集資料檢驗假設，是講義介紹的一種研究進路。',true,'research','文獻導向的驗證進路可利用既有理論及研究作為基礎。正式驗證仍需明確設計與實證資料，不只停留在文獻整理。'],
-['文獻探討與探索性研究是同義詞，可以在研究設計中完全互換。',false,'research','文獻探討是整理既有知識，可支援多種研究；探索性研究則是以發現、理解現象與可能關係為目的的研究取向，兩者並不相同。'],
-["在資源管理遊戲中，玩家必須依生態關係調整物種數量，才能維持系統運作；這可用來設計概念應用任務。", true, "core", "玩家需要使用生態關係作決策，學科概念因此與必要行動相連。設計者仍應要求學生說明調整理由，確認成功來自理解，而非偶然試出組合。"],
-["學生只看角色外觀就能選出正確答案時，即使題目原本要測概念比較，也不影響學習與玩法的對齊。", false, "core", "若外觀線索已足以通關，玩家就可能繞過原本要練習的比較。應檢查成功是否確實需要目標能力，並調整線索、決策要求或理由評量，避免以通關代替理解。"],
-["把「理解資源分配」改成「活動後能比較兩種分配方案並提出理由」，能使預期表現更具體。", true, "goals", "比較方案與提出理由描述了可觀察的表現，便於安排任務與評分規準。若要完整檢查 SMART，還需配合學生起點、課程關聯及適當的達成標準。"],
-["教師把達成標準訂得越高，就越符合 SMART 的「可達成」。", false, "goals", "可達成要考慮學生先備能力、可用時間與支持條件。過高而缺少學習路徑的標準可能難以實現，標準的高度本身不能證明目標符合 SMART。"],
-["目標若要求學生能修正錯誤方案，任務應提供發現問題、修改方案與再檢查的機會。", true, "goals", "目標中的動詞應反映在活動要求中。只有辨認正確答案，未必能練到修正方案；加入檢查與再試，才較能蒐集學生如何改進策略的證據。"],
-["遊戲目標和學習目標必須使用完全相同的文字，才能建立對應關係。", false, "goals", "兩層目標可以用不同語言描述。例如玩家要修復基地，學習者要運用概念規劃流程；重點是完成任務所需的行動與預期能力對齊，不是文字完全一致。"],
-["若要檢查學生是否理解概念，請他解釋兩個情境為何適用不同方法，比只問名詞更貼近理解層次。", true, "ksa", "說明情境差異與方法選擇，需要連結概念及條件，能提供超出名詞記憶的證據。題目仍需有明確評分依據，避免僅以答案長短判斷理解。"],
-["KSA 的知識、技能、態度，分別等同於 Bloom 的記憶、應用、創造三個層次。", false, "ksa", "KSA 區分目標類型，Bloom 認知歷程則區分記憶、理解、應用等思考要求，兩者沒有這種固定的一對一對應。應先釐清分類用途，再選擇任務與證據。"],
-["以角色抉擇及其理由討論責任感，可以作為態度目標的學習活動。", true, "ksa", "角色選擇可讓學生思考價值與後果，理由及反思也能提供觀察資料。但一次選擇不足以證明穩定態度已改變，仍需依目標安排合適的測量。"],
-["學生的學科先備知識相同，就可以假設他們的數位操作能力與提示需求也相同。", false, "learner", "學習者分析包含多種面向。相同的學科起點不代表相同的介面理解、操作熟練度或求助需求；試玩應分辨這些差異，以提供適當支持。"],
-["試玩時若學生能口頭解釋概念，卻找不到操作按鈕，應先檢查介面問題。", true, "learner", "這些表現提示困難可能出在操作與介面，而不只是概念缺口。可先改善按鈕辨識與操作引導，再觀察學生是否能展現原定能力，避免誤判失敗原因。"],
-["只要學生喜歡某種遊戲類型，該類型的任何玩法都適合他的學習起點。", false, "learner", "興趣是學習者分析的一部分，不能取代先備概念、技能與支持需求的評估。喜歡策略遊戲，也不表示能直接處理所有複雜規則與學科任務。"],
-["設計者可以透過資源限制，讓玩家必須比較方案的代價與結果。", true, "mechanics", "有意義的限制能使比較與權衡成為核心操作。設計者還要說明這些選擇如何反映目標知識或技能，並觀察玩家決策理由，而不只看最終得分。"],
-["七步驟中的「測試與調整」完成一次後，就不應再修改遊戲機制。", false, "mechanics", "測試是發現目標、操作或回饋問題的機會，不是禁止後續修正的界線。若試玩或成效資料顯示設計未對齊，就應依證據再調整並檢查效果。"],
-["若合作任務允許一人完成全部關鍵操作，設計者應檢查其他成員是否真正有參與機會。", true, "mechanics", "團隊形式可能掩蓋參與不均。若目標包含合作，機制應讓資訊交換、協調或互補成為必要部分，並搭配互動觀察，而非只計算團隊是否過關。"],
-["把生態系統遊戲的生物名稱換成歷史人物，保留全部規則，就必然完成歷史知識的內生整合。", false, "integration", "內生整合要讓規則反映學科的關係或技能要求。只換名稱可能仍沿用生態規律，無法呈現歷史推理；更換學科時需重新檢查玩法與內容的關係。"],
-["在遊戲內設計反思問題與新情境任務，可以補強內生整合中的反思與遷移。", true, "integration", "內生整合的方法包含反思與遷移。讓學生說明操作背後的概念，再在不同條件下應用，有助於檢查是否能將遊戲經驗轉成可說明、可再用的知識。"],
-["外生整合通常較容易替換題目，因此不需要檢查題目是否對應學習目標。", false, "integration", "替換便利是設計特性，不是免除對齊的理由。外生整合中的題目仍須符合目標、學生能力與評量要求，否則獎勵機制可能只帶動與目標無關的作答。"],
-["先提供部分步驟提示，再於熟練後要求學生自行規劃，是逐步減少鷹架的一種安排。", true, "scaffolding", "支持可以隨表現調整，從協助完成走向獨立表現。減少提示後仍應檢查概念運用、理由與錯誤修正，不能只因提示變少就認定已精熟。"],
-["漸進關卡只要縮短作答時間，就一定能增加目標能力的複雜度。", false, "scaffolding", "縮短時間增加的是速度壓力，不一定增加概念整合或推理要求。關卡進階應檢查任務內容與目標能力的變化，例如增加條件、規劃步驟或要求解釋。"],
-["同一關卡中，針對概念誤解與操作失誤提供不同提示，比只看失敗次數更能回應困難類型。", true, "scaffolding", "不同原因需要不同支持。概念誤解可能需要關鍵條件的提示，操作失誤則可能需要介面引導；判讀困難類型有助於讓鷹架切合當前需求。"],
-["診斷式回饋只要指出學生哪裡錯，就不必讓他有修正與再嘗試的機會。", false, "feedback", "講義的回饋循環包含引導、策略調整與再挑戰。指出問題只是其中一環，還需要讓學生運用回饋修改行動，才能觀察是否理解並改善。"],
-["回饋指出「你忽略了題目中的溫度條件，請重新檢查方案」，比單給零分更提供修正方向。", true, "feedback", "這則提示將注意力聚焦到被忽略的條件，提供可檢查的方向。是否適切仍取決於實際題目與學生錯誤，不能只因提示具體就省去正確性檢查。"],
-["徽章可以顯示進展，所以獲得徽章和收到錯誤診斷具有完全相同的功能。", false, "feedback", "徽章常用來標示進展或成就；診斷式回饋則提供錯誤原因與修正資訊。兩者可以搭配使用，但不應假設獎勵本身已告訴學生如何改進。"],
-["學生先比較預測與實際結果，再改變策略並重試，能提供自我監控與調整的行為線索。", true, "srl", "這個歷程呈現檢查差距與修正方法，可作為觀察自我調節的線索。研究時仍須界定指標及判讀規則，並結合任務情境，避免單憑一次行為下結論。"],
-["自主學習表示學生任何時候都不能向教師或系統求助。", false, "srl", "自我調節包含在需要時尋求適當協助。重點是能判斷困難、運用提示及調整策略，而非完全拒絕支持；有效求助也可能是管理學習的表現。"],
-["學生反覆使用同一個失敗方法時，可以引導他比較前後結果，並說明下一次準備改變什麼。", true, "srl", "比較結果與說明改變，可把注意力從單純重試轉向策略監控。後續應觀察學生是否真的調整方法，以及調整是否回應問題，才能判讀學習歷程。"],
-["心流中的挑戰與能力配合，表示所有學生都應接受相同的固定難度。", false, "theory", "相同挑戰對不同能力的學生可能過難或過易。心流的設計連結關注兩者的配合，因此應參考表現與需求安排挑戰，而不是只追求難度一致。"],
-["提供有意義的策略選擇、可理解的進展與支持性的合作，可分別連結自主感、勝任感與關係感。", true, "theory", "這些安排可作為自我決定理論與設計的具體連結。設計者仍需觀察學生實際如何感受及參與，不能僅因加入功能就認定三種需求已獲滿足。"],
-["「學習動機量表」是一項學習理論，與自我決定理論屬於相同類型的解釋架構。", false, "theory", "量表是蒐集構念相關證據的工具，理論則用來解釋現象與可能機制。研究應區分構念、解釋架構與測量工具，避免用工具名稱代替理論依據。"],
-["讓學生討論彼此不同的解法並共同修正說明，可連結社會建構取向。", true, "theory", "互動、協商與共同形成理解，是社會建構與任務設計的連結方向。觀察時應關注討論內容和修正品質，而非只以是否坐在同一組判斷。"],
-["只要遊戲故事發生在真實城市，就能證明學生已在有意義的情境中使用學科知識。", false, "theory", "真實地名提供背景，但不代表任務實際需要使用知識。情境學習的連結還要檢查問題、行動與知識用途，不能只依場景名稱判斷。"],
-["合作後回顧成員如何處理分歧，可以把遊戲經驗連到溝通與協調能力。", true, "social", "處理分歧涉及立場理解、資訊交換及共同決策。回顧具體互動與替代做法，可協助學生整理合作經驗，也提供比同組或通關更直接的歷程線索。"],
-["安全嘗試的情境表示角色選擇不應產生任何可觀察的後果。", false, "social", "安全嘗試是允許失敗、回顧與再試，而不是消除選擇後果。可理解的後果反而有助於討論責任、資源與關係，並思考下一次如何調整。"],
-["一名學生掌握地圖、另一名掌握操作規則的任務，可藉互補資訊促進溝通。", true, "social", "不同成員持有完成任務所需的資訊，能使交換與協調具有實際用途。仍要檢查成員是否都有參與，以及互動是否有助於達成預期合作目標。"],
-["把同一題的選項順序打亂，就已充分證明學生能將概念遷移到新情境。", false, "transfer", "選項重排主要改變呈現順序，未必改變情境或應用要求。若要檢查遷移，應安排不同條件的問題，觀察能否選用原理、解釋理由並獨立完成。"],
-["在活動一段時間後再測相同能力，可用來關注學習保留情形。", true, "transfer", "延宕測量關注一段時間後是否仍能展現能力。它與新情境應用所關注的遷移不同；設計者應交代測量時間、任務與想支持的結論。"],
-["反思只要讓學生敘述遊戲劇情，就一定能建立操作經驗與學科概念的連結。", false, "transfer", "敘述劇情可能只是在回憶事件。要建立概念連結，還需說明行動與結果如何由學科原理解釋，並思考換到其他情境時哪些原則仍適用。"],
-["目標是推理品質時，可以用理由的合理性與證據運用來評分，並另列操作速度。", true, "assessment", "將目標能力與其他表現分開，有助於避免速度掩蓋推理品質。實際規準仍需界定什麼是合理的理由與適當證據，才能一致判讀學生表現。"],
-["遊戲自動記錄的資料沒有人工介入，所以每一項紀錄都天然是有效的能力測量。", false, "assessment", "自動記錄描述的是行為事件，不會自動建立它與能力的關係。仍需說明指標如何反映構念、排除其他解釋並檢查適切性，才能作為學習證據。"],
-["若目標是能說明策略選擇，蒐集選擇理由可補充只記錄成功或失敗的資料。", true, "assessment", "成功與失敗提供結果，理由則有助於理解學生使用了哪些概念或判斷。兩類資料可互補，但仍須依目標與規準評分，而不是把所有說明都視為正確理解。"],
-["操作型定義只需選好工具名稱，不需要交代測量時間或計分方式。", false, "operational", "工具名稱不足以說明實際如何取得結果。操作型定義還應交代觀察指標、施測安排、計分規則及時間，讓讀者理解抽象構念如何被具體測量。"],
-["把合作表現界定為資訊分享、協調與共同修正，並明定觀察及評分方式，有助於具體化測量。", true, "operational", "這種安排把合作概念連到可觀察行為，並交代如何形成分數。仍應確認指標符合任務與對象，避免把發言次數等單一數量直接當作合作品質。"],
-["兩個研究都把結果稱為「問題解決能力」，就可以假設它們使用相同任務與評分規準。", false, "operational", "同一構念可能採用不同的操作型定義。比較研究前，需檢查任務、指標、計分與測量時間，不能只因名稱一致，就把結果視為完全相同的證據。"],
-["比較合作與個人遊戲對概念理解的影響時，活動形式可作為自變項，概念理解可作為依變項。", true, "variables", "在這個研究問題中，被比較的條件是活動形式，觀察的成果是概念理解。還需清楚說明各條件的實施方式與成果測量，才能讓變項角色具體可檢查。"],
-["只要在路徑圖中把學習動機畫在兩個變項中間，就能確定它是已獲支持的中介。", false, "variables", "圖中的位置表達研究者提出的模型，不等於實證支持。中介角色需要理論理由、適當測量與分析，且因果解讀必須配合研究設計的限制。"],
-["同一個構念可以在不同研究問題中擔任不同角色，例如動機可在某研究作為主要成果。", true, "variables", "變項角色由研究問題與模型決定，不是構念的固定身分。研究者應清楚界定每次研究的比較條件、主要成果與可能過程，避免沿用名稱就推定角色。"],
-["探索性訪談發現幾位學生喜歡 AI 提示，就足以驗證 AI 提示能提升所有學生的問題解決能力。", false, "research", "喜好訪談可提供體驗與可能機制的線索，卻不是所有學生問題解決提升的證據。若要驗證該主張，需要對應成果測量及合適的研究設計，並限定結論範圍。"],
-["既有文獻指出可能的作用機制時，可以據此形成假設，再規劃資料蒐集與檢驗。", true, "research", "這是文獻導向的驗證進路：利用既有知識建立模型，再以明確設計取得實證資料。文獻支持的是提出假設的理由，仍不能取代本研究的檢驗。"],
-["探索性研究只能使用訪談，任何數量資料都只能用於驗證性研究。", false, "research", "探索與驗證主要依研究目的區分，不能單靠資料是文字或數字判定。探索也可用歷程次數或探索性統計尋找模式，驗證則需清楚界定假設及檢驗方式。"]
+["機器人迷宮以「找出並修正指令錯誤」作為過關條件。若課程目標是除錯能力，這項過關條件能讓核心玩法與學習目標相互對應。", true, "core", "玩家為了過關必須執行指令、比較預期與實際結果並修正錯誤，這些正是目標技能。是否真正學會仍需評量，但玩法已提供對應的練習機會。"],
+["歷史遊戲要求玩家點擊發亮的人物，答對年代題才能獲得裝備。因為人物與題目都出自同一歷史時期，可以把點擊操作視為歷史推理的練習。", false, "core", "相同主題建立了情境連結，卻不表示操作練到歷史推理。若目標是推理，任務應要求比較史料、判斷證據或說明事件關係，而非只辨認發亮位置與回憶年代。"],
+["某遊戲原本要比較資源方案才能過關，改版後可反覆點擊領取資源通關。題材與教材都沒變，因此仍提供相同的決策能力練習。", false, "core", "資源取得規則改變後，玩家可能繞過比較方案的思考。判斷融合程度要看實際需要的行動；教材不變，並不代表核心學習機會也不變。"],
+["評估一款環境遊戲是否支持系統思考時，先追查「玩家的哪些決策會改變哪些結果」，比先計算它包含多少遊戲元素更切合目標。", true, "core", "系統思考關注關係與後果，因此需要檢查決策是否要求理解相互影響。遊戲元素的數量能描述外觀與功能，無法直接說明練習到何種思考。"],
+["兩組學生使用相同教材，其中一組多了故事、徽章與排名；這樣的設計已讓兩組在核心學習任務上形成差異。", false, "core", "故事、徽章與排名可能改變參與方式，但若學生做的題目與思考要求相同，核心學習任務未必改變。要主張任務不同，需指出必要操作或認知要求的具體差異。"],
+["一款辯論遊戲以「用證據回應對方理由」取得進展；即使沒有積分排行榜，仍可從規則與目標的對應討論它的學習融合。", true, "core", "積分不是判斷融合的必要依據。此例的進展規則要求證據使用與論證，能對應相關學習目標；也應檢查規則是否確實被執行及學生的論證品質。"],
+["目標寫成「學生在課堂結束前完成三個水資源關卡」，已足以用來判斷學生能否解釋水資源分配的取捨。", false, "goals", "完成數與期限清楚，但未界定學生要展現的解釋能力。可補上「比較兩個分配方案，依限制條件說明取捨」及理由品質規準，才有判斷目標能力的依據。"],
+["目標是「依兩項限制比較方案並提出理由」，評量要求學生說明未採用另一方案的原因，有助於檢查目標中的比較能力。", true, "goals", "說明未採用方案的原因，可以呈現學生是否比較限制與代價。評分仍需依理由是否切合條件，不能只看有沒有寫出一段文字。"],
+["遊戲畫面把任務寫成「讓城鎮度過缺水期」，教案則寫「分析分配策略的代價」。只要任務確實要求分析代價，兩種目標表述可以並存。", true, "goals", "玩家目標提供情境中的行動方向，學習目標說明預期能力。兩者用語可不同，重點是完成任務時確實用到目標能力，並有相應證據。"],
+["老師把「了解合作」改為「課後填完五題合作感受問卷」，就完成了把合作能力寫成可評量學習目標的工作。", false, "goals", "問卷完成是活動行為，感受也不等於合作能力。目標可界定資訊分享、協調分工等表現，再以相應任務與規準評量；不能用工具完成情形取代能力描述。"],
+["兩班的學習目標相同，但先備能力不同；設計者可以調整提示量與任務進程，同時保留共同的最終表現標準。", true, "goals", "目標與達成目標的支持方式可以分開設計。差異化提示協助不同起點的學生前進；若要比較最終獨立能力，則應確認評量條件與標準一致。"],
+["遊戲採取隱性學習目標時，老師在活動後請學生說出玩法與課程概念的關係，會使這項設計失去隱性整合的特性。", false, "goals", "把學習嵌入玩法，不表示必須隱瞞教育目的，也不排斥事後明確整理。活動後反思能協助學生把遊戲經驗連回概念，支持後續遷移。"],
+["目標加入「在本單元結束時，根據資料比較兩種方案，理由符合三項規準」，比只加入完成期限更能支援後續評量設計。", true, "goals", "期限提供時間界線；任務、資料條件與品質規準進一步說明要觀察什麼。可衡量不只關乎數量，也關乎能否依明確標準判讀表現。"],
+["學生能解釋談判原則，卻無法在角色任務中協調分工；這個落差提示設計者應增加技能練習與表現評量。", true, "ksa", "能說出原則提供知識證據，實際協調則涉及運用技能。兩者相關但不能互相取代，可增加有回饋的協調任務，觀察學生能否把知識用出來。"],
+["某關卡要求分析三個證據並判斷主張，因為思考層次較高，這項目標在 KSA 中應歸為態度而非知識或技能。", false, "ksa", "KSA 區分知識、技能與態度；分析、評鑑則描述認知歷程。高層次思考不等於態度，仍需依目標內容判斷是在運用知識、展現技能，或形成價值取向。"],
+["若合作目標同時包含「協調任務」與「願意聽取不同觀點」，可分別蒐集協調行為及面對分歧時的選擇理由。", true, "ksa", "合作可能同時涉及技能與態度。協調行為提供技能線索，選擇與理由可補充對他人觀點的態度證據；應避免用單一喜好分數涵蓋兩者。"],
+["學生能在測驗中辨認正確的實驗步驟，因此在技能目標的評量上，可以用這項結果代替實際操作表現。", false, "ksa", "辨認步驟顯示相關知識，實際操作還涉及執行、監控與修正。若目標是操作技能，應安排實作或能充分呈現執行能力的任務，不能直接以辨認題替代。"],
+["角色遊戲結束後，學生的環保態度分數提高，可據此判定他已具備分析能源方案的技能。", false, "ksa", "態度與技能是不同目標類型。態度分數可回應相關態度問題；分析能源方案的技能，還需要方案比較、理由或實際決策表現作為證據。"],
+["為了練習方案規劃，讓學生多次提出方案、查看結果並修正，會比多次照抄同一成功方案提供更多策略調整的練習機會。", true, "ksa", "技能練習的重點是目標行動與回饋形成循環。提出、檢查與修正方案要求策略調整；照抄可能練到操作流程，卻較少要求學生自行規劃。"],
+["學生口頭能正確解釋概念，卻在限時拖曳題頻繁失敗；此時最直接的改版是增加同概念的講解文字。", false, "learner", "口頭表現與操作失敗的落差提示可能存在介面或時間負荷問題。應先觀察拖曳操作與規則理解，再決定是否補概念；增加文字不一定處理真正卡點。"],
+["兩組學生前測概念分數相近，但一組不熟悉遊戲操作；在比較學習表現前，提供共同的操作練習有助於減少介面熟悉度的干擾。", true, "learner", "概念程度相近不代表數位操作能力相同。共同操作練習能幫助學生理解介面，並讓後續表現更容易解讀；仍需留意其他組間差異。"],
+["分析發現學生普遍偏好競爭，因此即使課程重點是資訊共享，設計時仍應以個人搶答排名作為主要成功條件。", false, "learner", "偏好是設計資訊之一，還要檢查機制與目標是否相容。若成功條件鼓勵搶快而不分享，可能減少合作練習；可改設需要交換資訊的任務再考量競爭安排。"],
+["試玩時先區分「不懂概念」「不懂規則」與「不會操作」三種卡點，有助於決定要修改教材、說明還是介面。", true, "learner", "相同的失敗結果可能來自不同原因。把錯誤連回具體歷程，能讓修改對準需求，避免把所有問題都當作學科能力不足。"],
+["新手與熟練者都能很快完成同一關，仍應查看兩者的作答理由與操作歷程，再決定是否提高概念難度。", true, "learner", "完成速度可能來自理解、熟悉介面或猜測。判斷能力需要更多與目標相關的證據，才能決定增加挑戰或補強支持，而非只依速度調整。"],
+["同年齡學生使用同一套教材時，可以把學習者分析集中在共同興趣，先備概念差異可等到最後測驗再處理。", false, "learner", "年齡相同仍可能有不同先備知識與支持需求。若等到最後才處理，關卡與提示可能已不合適；設計前與試玩時都應蒐集與任務相關的起點資訊。"],
+["目標要求學生比較資源分配方案，因此把「說明分配理由」納入過關條件，比只增加資源種類更直接對應目標。", true, "mechanics", "更多資源可能增加複雜度，卻不一定促使學生比較與解釋。把理由品質納入任務規則，才能讓目標行動成為成功所需的一部分。"],
+["七步驟把成效評估列在測試調整之後，所以原型試玩以找出操作錯誤為主，學習證據適合留到正式活動才蒐集。", false, "mechanics", "試玩也能檢查學生是否做出預期的思考與行動。及早蒐集學習線索可發現目標、機制與回饋不一致之處，避免只修好操作卻保留學習設計問題。"],
+["某合作任務讓每人獨立答題，最後加總分數；由於採用團隊計分，已能在機制上要求學生協調解題策略。", false, "mechanics", "團隊計分建立共同結果，但不一定要求互動。若要練習協調，可加入資訊互補、共同決策或需要整合彼此方案的條件，讓協調成為必要行動。"],
+["試玩發現學生能靠反覆碰運氣過關，設計者修改規則，要求先提交預測再驗證；這可視為依試玩結果回頭調整核心機制。", true, "mechanics", "設計步驟可以反覆迭代。加入預測與驗證是針對「猜測也能通關」的問題修改必要行動，使玩法更有機會對應推理目標。"],
+["如果研究要比較兩種回饋方式，讓兩版使用相同任務與成功條件，有助於減少機制差異對結果解讀的影響。", true, "mechanics", "任務與規則本身也會影響學習。保持它們相近，能讓比較更聚焦回饋差異；仍需處理先備能力、時間等其他可能干擾因素。"],
+["原型的完成率偏低，為了提升學習機會，先把所有限制條件移除，通常比追查失敗原因更能維持原本的問題解決目標。", false, "mechanics", "限制條件可能正是目標思考的來源；移除後可能讓任務失去取捨。應先辨認是概念、操作、規則或挑戰量的問題，再調整相應條件。"],
+["生態遊戲在每關前播放食物網介紹，過關則靠點擊速度；由於介紹內容會出現在關卡背景中，可把此設計歸為內生整合。", false, "integration", "內容出現在介紹與背景，不代表它構成玩法規則。若過關靠點擊速度，玩家不必運用食物網關係；內生整合需要概念直接影響決策與結果。"],
+["橋梁遊戲讓結構承載結果依玩家的支點與材料選擇改變；若關係符合課程中的結構原理，可用它說明因果映射。", true, "integration", "因果映射把學科關係轉成遊戲運作規則。玩家的設計選擇產生對應結果，提供觀察與修正的機會；模擬關係仍需確認正確且適合課程範圍。"],
+["同樣是答題領金幣，若金幣只用來購買與學科無關的裝飾，通常較接近外生整合，即使題目品質很好也是如此。", true, "integration", "整合類型看學習內容與核心玩法的關係。題目品質好不會自動改變金幣與內容之間的獎勵連結；外生分類也不代表沒有學習價值。"],
+["把資源限制納入玩法後，學生必須取捨，所以無須再檢查取捨是否依據課程概念，就能判定是有效的內容整合。", false, "integration", "取捨可能依運氣、外觀偏好或任意規則進行。需要確認限制與後果是否反映目標概念，以及學生是否真的運用它們；存在策略選擇不等於已有效整合。"],
+["兩款遊戲一款採內生整合、一款採答題獎勵；要比較學習效果，仍應對照目標、教學時間與評量證據，而非以類型直接排序。", true, "integration", "整合類型描述設計關係，成效則需要資料。目標適切性、支持品質與評量條件都可能影響結果，因此不能把分類當作效果排名。"],
+["某遊戲教的是資料判讀，但其資源交換價格由隨機抽籤決定；只要玩家會比較價格，便能認定交換機制已映射教材中的資料關係。", false, "integration", "比較價格可能是一般策略行為，未必反映指定資料的規律。因果映射須指出課程中的哪個關係如何決定遊戲結果，不能只因存在數字或比較就認定成立。"],
+["學生在模擬遊戲中反覆成功，表示內容已內化，因此事後再請他比較遊戲規則與真實情境，對概念遷移的設計沒有必要。", false, "integration", "遊戲內成功可能依賴熟悉規則。比較模擬與真實情境的共同原理及限制，有助於把經驗整理成可轉用的知識；遷移仍需在新任務中觀察。"],
+["初學者先用半完成的策略規劃表，熟悉後改用空白表，最後自行規劃；這種支持逐步撤除能用來檢查獨立表現。", true, "scaffolding", "鷹架協助學生完成當下尚難獨立處理的任務，之後應觀察減少支持時能否自行運用。逐步撤除支持，比一直保留完整提示更能看出獨立能力。"],
+["學生靠逐步提示完成任務，下一關只縮短作答時間而保留同樣提示，就足以檢查他是否已能獨立運用概念。", false, "scaffolding", "縮短時間主要改變速度壓力，完整提示仍可能支撐關鍵判斷。檢查獨立運用需適度減少提示，並觀察學生是否能自行選擇、解釋與修正。"],
+["系統發現學生連錯三次，就自動降低概念層次；這種只依連錯次數調整的方式，已能區分概念不足和操作困難。", false, "scaffolding", "連錯次數顯示困難，卻沒有說明原因。若問題在操作，降低概念層次可能無助於解決；需要結合錯誤類型、歷程或學生說明再決定支持方式。"],
+["學生已能穩定解釋單一條件的影響，下一關加入第二個相互作用的條件，並提供關係整理表，是一種漸進增加概念要求的安排。", true, "scaffolding", "新關卡增加需要整合的關係，同時提供整理支持，讓挑戰接續既有能力。是否適當仍需觀察學生表現，必要時調整條件數與支持量。"],
+["提示讓學生找出自己的錯誤後，再安排一次沒有同樣提示的相近任務，可以補充他是否能自行修正的證據。", true, "scaffolding", "有提示時的成功與獨立修正不同。相近的無提示任務能檢查學生是否掌握修正方法；若要主張遷移到不同情境，還需安排相應的新任務。"],
+["某關卡讓多數學生感到輕鬆愉快，因此設計者可據此判定挑戰與能力已達良好配合，不必查看他們是否在練習新能力。", false, "scaffolding", "愉快可能來自適切挑戰，也可能因任務過於簡單。挑戰與能力的配合需結合能力表現與任務要求判斷，不能以愉快感取代學習挑戰的檢查。"],
+["團隊任務由一位熟練者操作，其他人觀看，最後全隊通關；這項共同結果可作為每位成員合作能力進步的證據。", false, "social", "共同結果未呈現每個人的參與與協調。需要觀察資訊分享、回應分歧及共同修正等行為；一人帶領通關可能讓部分成員缺乏練習機會。"],
+["讓各角色掌握不同但互補的資訊，再要求提出共同方案，比只把學生分成小組更能在任務中創造協商需求。", true, "social", "資訊互補使成員需要交換與整合觀點，形成協商機會。分組本身不保證互動；仍應觀察資訊是否實際分享及決策是否共同進行。"],
+["學生在角色扮演中選擇保護弱勢角色並獲得高分，這項選擇足以區分他是認同公平價值，還是為了獎勵而選擇。", false, "social", "同一選擇可能出自不同動機。可進一步詢問理由，改變獎勵或情境條件後觀察選擇，補充態度證據；一次高分行動無法區分這些原因。"],
+["角色衝突任務結束後，請學生說明不同角色面對的限制與自己改變決策的理由，有助於把扮演經驗連回觀點理解。", true, "social", "角色扮演提供經驗，反思則協助辨認立場、限制與決策依據。這比只問角色是否有趣，更切合觀點理解與決策反思的目標。"],
+["遊戲加入安全重試後，學生能隨時換選項看結局；因此即使沒有討論選擇後果，也能把重試次數直接視為反思程度。", false, "social", "重試可能是比較後果，也可能只是試遍選項。要判斷反思，應查看學生是否分析原因、調整理由或連結概念；次數本身不能呈現思考品質。"],
+["合作任務中，評量同時記錄學生如何回應不同意見與團隊方案如何修正，比只記錄聊天訊息總數更貼近協商品質。", true, "social", "回應與修正能呈現意見如何被理解、整合及採用。訊息數僅反映互動量，可能包含無關討論，不能直接代表協商品質。"],
+["學生預測正確卻在操作時漏掉一步，回饋先提示檢查操作序列，比重新講解整套概念更貼近已觀察到的錯誤。", true, "feedback", "診斷式回饋應依據具體卡點。此例已有預測理解的線索，而失敗發生在操作序列，先引導檢查該步驟能讓回饋更有針對性。"],
+["兩位學生得到相同錯誤答案，系統便給同一段概念講解；只要講解內容正確，就能把此機制稱為依個別錯誤原因提供的診斷回饋。", false, "feedback", "相同答案可能來自不同推理或操作問題。正確講解不等於已辨認個別原因；需參考作答歷程、理由或錯誤步驟，才能做更有依據的診斷。"],
+["回饋先請學生找出「預測與結果首次不同的步驟」，再提供針對該步驟的提示，有助於把結果回饋轉成修正行動。", true, "feedback", "單純知道失敗不一定知道如何改。定位預測落差，能把回饋連回可檢查的步驟，再讓學生嘗試修正，形成回饋循環。"],
+["AI 的提示引用了學生上一輪的操作，因此即使未核對提示中的學科推論，也可優先將它視為可靠的診斷依據。", false, "feedback", "引用操作紀錄讓回饋具體，但不保證學科推論正確。仍須核對概念、限制條件及錯誤原因，避免看似個人化的提示引導學生走向錯誤解釋。"],
+["學生連續作答後出現「進步很多」徽章，這項回饋已能告訴他下一次應如何修正概念錯誤。", false, "feedback", "徽章可標記進展或提供鼓勵，但沒有指出錯在哪裡及如何改。修正概念還需可理解的原因、線索或檢查方向；獎勵與診斷回饋的功能不同。"],
+["評估提示是否有用時，除了看提示後是否通關，也追蹤學生在後續相近題能否減少同類錯誤，能補充學習上的證據。", true, "feedback", "當次通關可能依賴提示直接支援。後續同類錯誤是否減少，有助於判斷是否學到可再次運用的方法；仍需留意題目與支持條件是否相近。"],
+["兩位學生都點了五次提示，研究者據此將他們的自我調節能力評為相同，這樣可避免主觀判斷。", false, "srl", "次數相同不代表求助時機與使用方式相同。一人可能先診斷再求助，另一人可能直接索取答案；應結合策略、時機與後續修正判讀自我調節。"],
+["學生發現原策略無效，說明卡點後主動請求提示，再自行修改方案；這個歷程可作為自我調節的行為線索。", true, "srl", "自我調節包含監控、策略調整與適切求助，不等於完全不求助。此例呈現學生辨認問題並運用支援的過程，適合進一步分析其品質。"],
+["遊戲保留「原訂目標、實際結果、下一輪策略」三項紀錄，能為分析學生是否依差距調整行動提供資料。", true, "srl", "這三項紀錄串連目標、監控與調整，貼近自我調節歷程。仍須判讀內容是否具體且與實際行動一致，不能只計算欄位是否填滿。"],
+["學生這次完全沒使用提示，且完成時間最短，因此可把他列為班上自我調節表現最好的人。", false, "srl", "少用提示與速度快可能源於先備能力、任務簡單或猜測。自我調節應看如何設定目標、監控與調整；不用提示本身不是能力排名的充分依據。"],
+["若要知道學生是否根據回饋調整策略，比較他在收到回饋前後的方案與理由，會比只問他覺得回饋有沒有幫助更直接。", true, "srl", "方案及理由的變化呈現實際策略調整，自評有幫助則偏向主觀感受。兩者可互補，但要回答是否調整，應優先蒐集相關行為證據。"],
+["研究同時測量成就與自我調節，便能把自我調節視為介入提升成就的中介歷程，即使尚未分析三者的關係。", false, "srl", "測量兩種結果不會自動建立中介角色。需要先提出介入如何透過自我調節影響成就的機制，再用適當設計與分析檢查相關路徑。"],
+["遊戲讓學生選策略、看見可理解的進展，並與同伴互相支持；可分別從自主感、勝任感與關係感討論這些安排。", true, "theory", "這些安排分別對應自我決定理論關注的三種需求。理論提供設計與解釋方向，是否真的提升需求滿足或學習效果，仍需資料檢查。"],
+["遊戲讓學生自行選擇角色服裝，便足以說明他們在學習策略上具有自主決定的空間。", false, "theory", "外觀選擇是一種選擇，但不一定影響學習行動。若主張策略自主，需要讓學生能在有意義的任務路徑、方法或決策中做選擇。"],
+["學生在高難度關卡停留很久而且持續重試，這項紀錄已能區分他是在心流狀態，還是因挫折而難以離開。", false, "theory", "停留與重試可由多種經驗造成。討論心流需關注挑戰與能力配合、投入等相關證據，不能只由時間長短推定，也不能排除挫折。"],
+["設計者以建構主義說明「先讓學生提出預測，再比較結果並修正解釋」，其中關鍵是學生把新經驗與既有理解連結。", true, "theory", "建構主義重視學習者主動形成與修正理解。預測、比較與解釋能讓既有想法與新經驗互相對照；操作本身還需搭配意義建構。"],
+["只要把練習題放進醫院場景並使用醫師角色，就能據此判定學生正在進行情境學習中的專業判斷。", false, "theory", "場景與角色提供外在情境，專業判斷還需要使用相關資訊、限制與決策方式。若仍是脫離情境的記憶題，場景包裝不等於有意義的情境應用。"],
+["研究以自我決定理論提出設計理由，再用量表測量勝任感時，應區分「理論」「勝任感構念」與「量表工具」三者。", true, "theory", "理論說明概念及關係，勝任感是要研究的心理構念，量表是取得觀察資料的工具。區分三者有助於避免把工具名稱當成理論解釋。"],
+["學生在熟悉的農場遊戲成功後，改用文字資料分析不同地區的資源分配；若仍需運用相同原理，這可用來觀察跨情境應用。", true, "transfer", "新的呈現與情境要求學生辨認可共用的原理，較能提供遷移線索。任務仍需對應原目標，並避免把額外閱讀負荷誤認為概念能力差異。"],
+["學生一週後重玩相同地圖仍然通關，這項結果主要證明他能把知識遷移到新的問題情境。", false, "transfer", "隔一段時間在相同任務表現，較接近保留或熟悉度的證據。遷移需觀察不同情境或問題中的運用，不能只由延後重玩同一地圖判定。"],
+["遊戲後的反思要求學生依序列出做過哪些操作，即使未說明原因或連結概念，也已完成把經驗轉成可遷移知識的設計。", false, "transfer", "回顧操作有助於整理經驗，但還需要解釋為何產生結果、連結概念及辨認適用條件。僅重述流程，未必形成可在新情境中使用的理解。"],
+["討論「遊戲中有效的策略，在真實情境下何時可能失效」，能幫助學生辨認模擬規則與現實條件之間的界線。", true, "transfer", "遷移需要知道原理適用的條件，也需要辨認簡化與限制。討論失效情境可避免學生把遊戲中的固定規則不加區分地套到現實。"],
+["若目標是概念遷移，讓學生在新題目中解釋採用原理的理由，通常比只更換原題的人名與背景圖片更切合評量目的。", true, "transfer", "遷移重點在新情境中辨認並運用原理。只換表面元素可能仍可照原步驟作答；說明適用理由能補充學生是否真正理解關係的證據。"],
+["學生在遊戲內能背出解題規則，表示他已掌握該規則在新情境中的適用條件，可省去新任務的檢查。", false, "transfer", "背出規則是知識回憶的證據，辨認適用條件與實際轉用則是不同要求。需要新任務中的選擇與理由，檢查學生是否能判斷何時及如何使用。"],
+["學習目標是推理，但遊戲總分混合速度、抽獎與答題分數；若總分提高，便可用它直接代表推理能力的進步幅度。", false, "assessment", "總分包含與推理不同的成分，變化可能來自速度或運氣。應分開目標相關表現，結合推理任務與規準，才能更合理解讀能力變化。"],
+["學生自評更喜歡課程，但推理任務表現沒有明顯改變；報告可分別呈現參與感受與學習表現，避免把兩者合併成單一成效。", true, "assessment", "感受與推理能力回應不同問題，結果可以不一致。分別報告有助於說明設計可能改善哪一面向，以及哪些學習主張尚未得到支持。"],
+["評量合作時，把資訊分享、協調與處理分歧列成規準，並搭配實際任務觀察，比只採用團隊通關數更貼近合作目標。", true, "assessment", "合作規準能直接觀察目標行為；通關數可能受到個人能力或任務容易度影響。評分時也應確認規準定義清楚且能一致使用。"],
+["平台不打斷遊戲就記錄點擊與停留時間，因此這些紀錄天然具備隱性評量的效度，不需另說明與學習能力的關係。", false, "assessment", "不打斷活動只是蒐集方式。要把紀錄當成能力證據，仍須說明指標與構念的關係並檢查其他解釋，否則點擊可能只是介面操作。"],
+["為了公平比較兩組理解程度，只要讓兩組做相同測驗，即使一組考試時可看逐步答案提示，也能視為相同評量條件。", false, "assessment", "題目相同不代表支持條件相同。逐步答案提示可能改變所需獨立能力；比較時需統一支持，或清楚限定結論為各自支持條件下的表現。"],
+["學生在操作任務得分高卻無法說明理由時，可將這個不一致當作補充檢查的線索，而非直接刪除其中一種證據。", true, "assessment", "操作與解釋可能反映不同面向，也可能受到提示、熟悉度或表達能力影響。保留並分析不一致，能幫助釐清評量測到什麼。"],
+["前後測平均分數提高，但沒有比較組與其他資料時，最合適的結論是遊戲機制已造成這次進步。", false, "assessment", "前後變化提供進步線索，卻可能同時受熟悉題目、其他教學或時間影響。可以描述觀察到的變化，但要把效果歸因於機制，需要更充分的設計與證據。"],
+["把「推理能力」具體寫成「比較兩個方案，依證據與理由連結的品質評分」，是在把抽象構念轉成可觀察的任務與指標。", true, "operational", "操作型定義需要說明如何觀察與判分。此例提供任務與品質方向，實作時還應明定評分規準及施測時間，讓結果能被一致解讀。"],
+["研究把變項命名為「高層次思考」，並指定使用線上測驗，這樣就已完成該變項的操作型定義。", false, "operational", "名稱與平台仍未說明學生要做什麼、如何計分及何時測量。需補上題目或任務要求與評分依據，才能判斷測到的是哪一種思考表現。"],
+["兩篇研究都稱測量「投入」，一篇用停留時間、一篇用主動修正策略；比較結果前應先核對它們實際觀察的面向。", true, "operational", "同名構念可能用不同指標表徵，停留與策略修正不一定相同。比較時需理解各自操作方式及限制，避免只因名稱一致就當成同一證據。"],
+["為了讓「問題解決能力」容易量化，直接定義為按鈕點擊次數，已比使用任務評分規準更能確保測量貼近目標。", false, "operational", "容易計數不等於貼近構念。點擊可能反映探索、困惑或操作習慣；問題解決評量需能呈現分析、策略與修正品質，並說明指標的解釋依據。"],
+["學生在提示開放時與提示關閉時得到相同分數，因分數相同，兩次測量就可以視為同樣的獨立能力證據。", false, "operational", "相同分數可能在不同支持條件下取得，代表的能力要求可能不同。操作型定義應交代提示與任務條件，才不會把有協助與獨立表現混為一談。"],
+["如果要比較策略修正品質，事先定義「修正是否回應失敗原因」的評分標準，比事後依研究者印象選出好策略更容易核對。", true, "operational", "明確規準能讓評分與構念的關係可檢查，也有助於一致判讀。仍需確認標準適合任務，並檢查不同評分者的理解與使用情形。"],
+["比較 AI 提示與固定提示時，研究者因為記錄了提示點擊次數，就可以把點擊次數直接稱為本研究操弄的自變項。", false, "variables", "本例操弄的是提示方式；點擊次數是過程中觀察到的行為。變項角色由研究設計與問題決定，不能因為資料有被記錄就稱為操弄變項。"],
+["若研究主要問回饋是否提升推理，推理表現可設為主要依變項，課程滿意度則可另列為次要結果。", true, "variables", "主要與次要結果的安排應對應研究核心問題。兩者都可有價值，但不能用滿意度的提升替代主要推理結果，也不宜事後任意交換主次。"],
+["研究提出「提示促進策略監控，進而改善解題表現」，其中策略監控被賦予中介角色；這仍是一項需要檢查的機制假設。", true, "variables", "中介描述介入可能透過何種歷程影響結果。提出路徑有助於規劃測量與分析，但圖上的箭頭或合理敘事不等於已證明中介效果。"],
+["動機與成就都在介入後提高，因此可據此確定動機提升是成就進步的原因。", false, "variables", "共同提高不代表方向或機制已確定，可能有共同影響因素。若要主張動機造成成就變化，需要對應的研究設計、時序與關係證據。"],
+["同樣測量自我調節，一項研究把它當主要結果，另一項把它當影響成就的可能歷程；兩者的變項角色可以不同。", true, "variables", "變項角色取決於要回答的問題與假設。某個構念並沒有固定只能當依變項或中介的身分；但各種角色都需要相應的設計與測量支持。"],
+["介入組獲得較長練習時間且成就較高，若兩組教材相同，便可以排除時間差異對回饋效果比較的影響。", false, "variables", "教材相同未控制練習量。較長時間可能影響成就，造成回饋方式與時間效果混在一起；比較設計應盡量控制，或在解讀中處理這項差異。"],
+["研究目的是改善合作態度時，即使學科成就較容易測量，也可以把態度設為主要結果，再依目標選擇合適的證據。", true, "variables", "主要結果由研究問題決定，而非由哪個工具最方便決定。態度也需要明確定義、適切測量與限制說明，不能只用滿意度或一次選擇替代。"],
+["研究採訪學生後，才從訪談中形成「角色衝突可能促進反思」的想法；這樣的設計應稱為已確認該機制的驗證研究。", false, "research", "從資料形成可能機制較接近探索與假設生成。訪談可提供重要線索，但產生一個解釋不同於已完成其驗證；後續需設計資料與比較來檢查。"],
+["團隊已有充分文獻支持明確假設，因此可直接規劃相應的驗證研究，不必先為同一專案另做一次探索研究。", true, "research", "探索與驗證是不同研究目的，不是每個專案都必須依序重做。已有理論與文獻基礎時，可以據此提出假設並設計檢驗，仍需確認情境適切性。"],
+["研究使用開放式訪談而非選擇題測驗，因此即使問題與分析架構都為檢查預先提出的解釋，也應歸為探索性研究。", false, "research", "資料形式不直接決定探索或驗證目的。訪談也可用來檢查既有解釋；應看問題、假設與分析如何安排，而非只看是文字或數字。"],
+["試玩先用觀察找出學生常見卡點，再依結果提出回饋設計假設，後續另規劃比較，能把探索發現與效果檢查分開說明。", true, "research", "探索提供現象與可能解釋，後續比較則檢查設計是否產生預期結果。清楚區分階段，能避免把初步觀察直接報成已證實的介入效果。"],
+["若文獻與試玩線索不一致，研究者可重新檢查對象、任務與測量條件，再決定是否修正假設，而不是只保留符合原想法的資料。", true, "research", "不一致可能指出情境差異、測量限制或原解釋需要調整。保留並分析這些資料能讓研究問題更明確，也避免以選擇性證據支持預設結論。"],
+["整理十篇文獻後提出一個新遊戲構想，便可以在方法中寫成「已完成對本班學生的探索性實證研究」。", false, "research", "文獻整理能建立背景與假設，但沒有直接蒐集本班學生的資料。應如實描述為文獻分析與設計構想；若要主張對本班的實證探索，還需相應資料。"]
 ].map((q,i)=>({id:i+1,text:q[0],answer:q[1],node:q[2],explanation:q[3]}));
+const tfHighlights=[
+[["找出並修正指令錯誤", "除錯能力"], ["比較預期與實際結果並修正錯誤", "對應的練習機會"]],
+[["點擊發亮的人物", "歷史推理"], ["卻不表示操作練到歷史推理", "比較史料、判斷證據或說明事件關係"]],
+[["反覆點擊領取資源通關", "決策能力"], ["繞過比較方案的思考", "實際需要的行動"]],
+[["系統思考", "哪些決策會改變哪些結果"], ["關係與後果", "決策是否要求理解相互影響"]],
+[["相同教材", "故事、徽章與排名"], ["題目與思考要求相同", "核心學習任務未必改變"]],
+[["用證據回應對方理由", "規則與目標的對應"], ["積分不是判斷融合的必要依據", "證據使用與論證"]],
+[["完成三個水資源關卡", "解釋水資源分配的取捨"], ["未界定學生要展現的解釋能力", "理由品質規準"]],
+[["依兩項限制比較方案並提出理由", "未採用另一方案的原因"], ["比較限制與代價", "理由是否切合條件"]],
+[["讓城鎮度過缺水期", "分析分配策略的代價"], ["行動方向", "完成任務時確實用到目標能力"]],
+[["填完五題合作感受問卷", "合作能力"], ["感受也不等於合作能力", "不能用工具完成情形取代能力描述"]],
+[["先備能力不同", "共同的最終表現標準"], ["支持方式可以分開設計", "評量條件與標準一致"]],
+[["隱性學習目標", "活動後"], ["不表示必須隱瞞教育目的", "把遊戲經驗連回概念"]],
+[["比較兩種方案", "理由符合三項規準"], ["任務、資料條件與品質規準", "依明確標準判讀表現"]],
+[["能解釋談判原則", "無法在角色任務中協調分工"], ["知識證據", "實際協調則涉及運用技能"]],
+[["思考層次較高", "KSA"], ["分析、評鑑則描述認知歷程", "高層次思考不等於態度"]],
+[["協調任務", "願意聽取不同觀點"], ["協調行為提供技能線索", "選擇與理由可補充對他人觀點的態度證據"]],
+[["辨認正確的實驗步驟", "實際操作表現"], ["執行、監控與修正", "不能直接以辨認題替代"]],
+[["環保態度分數提高", "分析能源方案的技能"], ["態度與技能是不同目標類型", "方案比較、理由或實際決策表現"]],
+[["提出方案、查看結果並修正", "照抄同一成功方案"], ["目標行動與回饋形成循環", "自行規劃"]],
+[["口頭能正確解釋概念", "限時拖曳題頻繁失敗"], ["介面或時間負荷問題", "先觀察拖曳操作與規則理解"]],
+[["前測概念分數相近", "不熟悉遊戲操作"], ["不代表數位操作能力相同", "共同操作練習"]],
+[["資訊共享", "個人搶答排名"], ["檢查機制與目標是否相容", "需要交換資訊的任務"]],
+[["不懂概念", "不懂規則", "不會操作"], ["相同的失敗結果可能來自不同原因", "修改對準需求"]],
+[["很快完成同一關", "作答理由與操作歷程"], ["判斷能力需要更多與目標相關的證據", "而非只依速度調整"]],
+[["同年齡", "先備概念差異"], ["不同先備知識與支持需求", "起點資訊"]],
+[["說明分配理由", "過關條件"], ["理由品質納入任務規則", "目標行動成為成功所需的一部分"]],
+[["原型試玩", "學習證據"], ["試玩也能檢查學生是否做出預期的思考與行動", "及早蒐集學習線索"]],
+[["每人獨立答題", "團隊計分"], ["不一定要求互動", "資訊互補、共同決策"]],
+[["反覆碰運氣過關", "先提交預測再驗證"], ["反覆迭代", "修改必要行動"]],
+[["兩種回饋方式", "相同任務與成功條件"], ["任務與規則本身也會影響學習", "比較更聚焦回饋差異"]],
+[["所有限制條件移除", "問題解決目標"], ["限制條件可能正是目標思考的來源", "失去取捨"]],
+[["過關則靠點擊速度", "內生整合"], ["不代表它構成玩法規則", "概念直接影響決策與結果"]],
+[["支點與材料選擇", "因果映射"], ["把學科關係轉成遊戲運作規則", "設計選擇產生對應結果"]],
+[["與學科無關的裝飾", "外生整合"], ["學習內容與核心玩法的關係", "獎勵連結"]],
+[["學生必須取捨", "是否依據課程概念"], ["限制與後果是否反映目標概念", "學生是否真的運用它們"]],
+[["比較學習效果", "以類型直接排序"], ["成效則需要資料", "不能把分類當作效果排名"]],
+[["價格由隨機抽籤決定", "資料關係"], ["未必反映指定資料的規律", "哪個關係如何決定遊戲結果"]],
+[["模擬遊戲中反覆成功", "概念遷移"], ["共同原理及限制", "遷移仍需在新任務中觀察"]],
+[["支持逐步撤除", "獨立表現"], ["減少支持時能否自行運用", "逐步撤除支持"]],
+[["縮短作答時間", "保留同樣提示"], ["主要改變速度壓力", "獨立運用需適度減少提示"]],
+[["只依連錯次數調整", "概念不足和操作困難"], ["卻沒有說明原因", "錯誤類型、歷程或學生說明"]],
+[["第二個相互作用的條件", "關係整理表"], ["增加需要整合的關係", "同時提供整理支持"]],
+[["沒有同樣提示的相近任務", "自行修正"], ["有提示時的成功與獨立修正不同", "相近的無提示任務"]],
+[["輕鬆愉快", "挑戰與能力"], ["能力表現與任務要求", "不能以愉快感取代學習挑戰的檢查"]],
+[["一位熟練者操作", "每位成員合作能力"], ["未呈現每個人的參與與協調", "資訊分享、回應分歧及共同修正"]],
+[["互補的資訊", "共同方案"], ["交換與整合觀點", "分組本身不保證互動"]],
+[["認同公平價值", "為了獎勵而選擇"], ["同一選擇可能出自不同動機", "詢問理由"]],
+[["不同角色面對的限制", "改變決策的理由"], ["反思則協助辨認立場、限制與決策依據"]],
+[["重試次數", "反思程度"], ["分析原因、調整理由或連結概念", "次數本身不能呈現思考品質"]],
+[["回應不同意見", "團隊方案如何修正"], ["理解、整合及採用", "訊息數僅反映互動量"]],
+[["預測正確", "操作時漏掉一步"], ["診斷式回饋應依據具體卡點", "失敗發生在操作序列"]],
+[["相同錯誤答案", "個別錯誤原因"], ["相同答案可能來自不同推理或操作問題", "正確講解不等於已辨認個別原因"]],
+[["預測與結果首次不同的步驟", "修正行動"], ["定位預測落差", "形成回饋循環"]],
+[["引用了學生上一輪的操作", "未核對提示中的學科推論"], ["不保證學科推論正確", "核對概念、限制條件及錯誤原因"]],
+[["進步很多", "修正概念錯誤"], ["沒有指出錯在哪裡及如何改", "獎勵與診斷回饋的功能不同"]],
+[["後續相近題", "減少同類錯誤"], ["後續同類錯誤是否減少", "可再次運用的方法"]],
+[["都點了五次提示", "自我調節能力"], ["次數相同不代表求助時機與使用方式相同", "策略、時機與後續修正"]],
+[["主動請求提示", "自行修改方案"], ["監控、策略調整與適切求助", "不等於完全不求助"]],
+[["原訂目標、實際結果、下一輪策略"], ["目標、監控與調整", "與實際行動一致"]],
+[["完全沒使用提示", "完成時間最短"], ["設定目標、監控與調整", "不用提示本身不是能力排名的充分依據"]],
+[["回饋前後的方案與理由", "覺得回饋有沒有幫助"], ["實際策略調整", "主觀感受"]],
+[["同時測量成就與自我調節", "中介歷程"], ["測量兩種結果不會自動建立中介角色", "適當設計與分析"]],
+[["自主感、勝任感與關係感"], ["自我決定理論關注的三種需求", "仍需資料檢查"]],
+[["選擇角色服裝", "學習策略"], ["不一定影響學習行動", "有意義的任務路徑、方法或決策"]],
+[["停留很久而且持續重試", "心流狀態"], ["挑戰與能力配合", "不能只由時間長短推定"]],
+[["提出預測，再比較結果並修正解釋", "建構主義"], ["主動形成與修正理解", "既有想法與新經驗互相對照"]],
+[["醫院場景", "專業判斷"], ["相關資訊、限制與決策方式", "場景包裝不等於有意義的情境應用"]],
+[["理論", "勝任感構念", "量表工具"], ["理論說明概念及關係", "量表是取得觀察資料的工具"]],
+[["不同地區的資源分配", "相同原理"], ["辨認可共用的原理", "遷移線索"]],
+[["一週後", "相同地圖"], ["保留或熟悉度的證據", "不同情境或問題中的運用"]],
+[["依序列出做過哪些操作", "未說明原因或連結概念"], ["解釋為何產生結果、連結概念及辨認適用條件"]],
+[["真實情境下何時可能失效", "模擬規則與現實條件"], ["原理適用的條件", "辨認簡化與限制"]],
+[["解釋採用原理的理由", "更換原題的人名與背景圖片"], ["新情境中辨認並運用原理", "說明適用理由"]],
+[["背出解題規則", "新情境中的適用條件"], ["辨認適用條件與實際轉用則是不同要求", "新任務中的選擇與理由"]],
+[["總分混合速度、抽獎與答題分數", "推理能力"], ["總分包含與推理不同的成分", "分開目標相關表現"]],
+[["自評更喜歡課程", "推理任務表現沒有明顯改變"], ["感受與推理能力回應不同問題", "分別報告"]],
+[["資訊分享、協調與處理分歧", "實際任務觀察"], ["合作規準能直接觀察目標行為", "規準定義清楚且能一致使用"]],
+[["不打斷遊戲", "隱性評量的效度"], ["不打斷活動只是蒐集方式", "指標與構念的關係"]],
+[["相同測驗", "可看逐步答案提示"], ["題目相同不代表支持條件相同", "比較時需統一支持"]],
+[["操作任務得分高", "無法說明理由"], ["操作與解釋可能反映不同面向", "保留並分析不一致"]],
+[["前後測平均分數提高", "沒有比較組與其他資料"], ["熟悉題目、其他教學或時間影響", "需要更充分的設計與證據"]],
+[["依證據與理由連結的品質評分", "抽象構念"], ["如何觀察與判分", "評分規準及施測時間"]],
+[["命名為「高層次思考」", "指定使用線上測驗"], ["學生要做什麼、如何計分及何時測量", "任務要求與評分依據"]],
+[["停留時間", "主動修正策略"], ["同名構念可能用不同指標表徵", "各自操作方式及限制"]],
+[["問題解決能力", "按鈕點擊次數"], ["容易計數不等於貼近構念", "分析、策略與修正品質"]],
+[["提示開放時與提示關閉時", "相同分數"], ["不同支持條件", "能力要求可能不同"]],
+[["修正是否回應失敗原因", "評分標準"], ["評分與構念的關係可檢查", "一致判讀"]],
+[["AI 提示與固定提示", "提示點擊次數"], ["操弄的是提示方式", "觀察到的行為"]],
+[["推理表現", "課程滿意度"], ["對應研究核心問題", "不能用滿意度的提升替代主要推理結果"]],
+[["策略監控", "中介角色"], ["透過何種歷程影響結果", "不等於已證明中介效果"]],
+[["動機與成就都在介入後提高", "原因"], ["共同提高不代表方向或機制已確定", "研究設計、時序與關係證據"]],
+[["主要結果", "影響成就的可能歷程"], ["變項角色取決於要回答的問題與假設", "相應的設計與測量支持"]],
+[["較長練習時間", "教材相同"], ["教材相同未控制練習量", "回饋方式與時間效果混在一起"]],
+[["改善合作態度", "態度設為主要結果"], ["主要結果由研究問題決定", "明確定義、適切測量與限制說明"]],
+[["從訪談中形成", "已確認該機制"], ["探索與假設生成", "產生一個解釋不同於已完成其驗證"]],
+[["充分文獻支持明確假設", "驗證研究"], ["探索與驗證是不同研究目的", "已有理論與文獻基礎"]],
+[["開放式訪談", "檢查預先提出的解釋"], ["資料形式不直接決定探索或驗證目的", "問題、假設與分析如何安排"]],
+[["探索發現", "效果檢查"], ["探索提供現象與可能解釋", "後續比較則檢查設計是否產生預期結果"]],
+[["文獻與試玩線索不一致", "修正假設"], ["情境差異、測量限制或原解釋需要調整", "避免以選擇性證據支持預設結論"]],
+[["整理十篇文獻", "對本班學生的探索性實證研究"], ["沒有直接蒐集本班學生的資料", "文獻分析與設計構想"]]
+];
+function tfEmphasize(text,phrases){
+ const escape=value=>value.replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+ const ranges=phrases.map(phrase=>({start:text.indexOf(phrase),length:phrase.length})).filter(range=>range.start>=0&&range.length>0).sort((a,b)=>a.start-b.start||b.length-a.length);
+ let html='',cursor=0;
+ for(const range of ranges){
+  if(range.start<cursor)continue;
+  html+=escape(text.slice(cursor,range.start))+'<strong class="tf-keyword">'+escape(text.slice(range.start,range.start+range.length))+'</strong>';
+  cursor=range.start+range.length;
+ }
+ return html+escape(text.slice(cursor));
+}
 const tfTotal=tfQuestions.length;
-const tfKey='gbl-tf-20261018-v1';
-let tfAnswers={},tfCurrent=1,tfFilter='all',tfQueue=tfQuestions.map(q=>q.id),tfStorageOK=true;
-try{const saved=JSON.parse(localStorage.getItem(tfKey)||'null');if(saved&&saved.version===1){if(saved.answers&&typeof saved.answers==='object'&&!Array.isArray(saved.answers)){for(const q of tfQuestions){if(typeof saved.answers[q.id]==='boolean')tfAnswers[q.id]=saved.answers[q.id];}}if(Number.isInteger(saved.current)&&saved.current>=1&&saved.current<=tfTotal)tfCurrent=saved.current;}}catch{tfStorageOK=false;}
-const tfPanel=document.getElementById('tf-panel'),tfCard=document.getElementById('tf-card');
-const tfEntry=document.createElement('button');tfEntry.type='button';tfEntry.className='tf-entry';tfEntry.id='tf-entry';tfEntry.textContent='100 題是非練習';
+const tfKey='gbl-review-cards-medium-v1';
+const tfObsoleteKeys=['gbl-tf-20261018-v1','gbl-review-cards-v2'];
+const tfIds=tfQuestions.map(q=>q.id);
+const tfOwn=(obj,key)=>Object.prototype.hasOwnProperty.call(obj,key);
+const tfValidId=id=>Number.isInteger(id)&&id>=1&&id<=tfTotal;
+const tfObject=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
+const tfFresh=()=>({version:2,answers:{},mistakes:{},current:1,round:null,roundSerial:0});
+let tfState=tfFresh(),tfStorageOK=true,tfCorrupt=false,tfMigration='';
+function tfReadAnswers(value,ids=tfIds){const out={};if(tfObject(value))for(const id of ids)if(typeof value[id]==='boolean')out[id]=value[id];return out;}
+function tfReadState(value){
+ if(!tfObject(value)||value.version!==2||!tfObject(value.answers)||!tfObject(value.mistakes))throw Error('Invalid review state');
+ const state=tfFresh();state.answers=tfReadAnswers(value.answers);state.current=tfValidId(value.current)?value.current:1;
+ for(const id of tfIds){const r=value.mistakes[id];if(tfObject(r)){state.mistakes[id]={errors:Number.isSafeInteger(r.errors)&&r.errors>0?r.errors:1,streak:Number.isInteger(r.streak)&&r.streak>=0&&r.streak<=2?r.streak:0};}}
+ for(const q of tfQuestions)if(tfOwn(state.answers,q.id)&&state.answers[q.id]!==q.answer){state.mistakes[q.id]??={errors:1,streak:0};state.mistakes[q.id].streak=0;}
+ state.roundSerial=Number.isSafeInteger(value.roundSerial)&&value.roundSerial>=0?value.roundSerial:0;
+ const r=value.round;
+ if(tfObject(r)&&Array.isArray(r.ids)&&r.ids.length>0&&r.ids.length<=tfTotal&&r.ids.every(tfValidId)&&new Set(r.ids).size===r.ids.length&&r.ids.every(id=>state.mistakes[id])&&Number.isSafeInteger(r.id)&&r.id>0){
+  const responses=tfReadAnswers(r.responses,r.ids),complete=r.ids.every(id=>tfOwn(responses,id));
+  // Keep only consistent round snapshots; never infer that an incomplete round earned credit.
+  if((r.applied===true&&complete)||(r.applied===false&&!complete)){
+   state.round={id:r.id,ids:[...r.ids],responses,applied:r.applied};state.roundSerial=Math.max(state.roundSerial,r.id);
+  }
+ }
+ return state;
+}
+// This bank has new question identities. Remove only the two retired quiz records.
+let tfLegacyCleanupOK=true;
+try{
+ let removed=false;
+ for(const key of tfObsoleteKeys){if(localStorage.getItem(key)!==null){localStorage.removeItem(key);removed=true;}}
+ if(removed)tfMigration='已清除舊題庫紀錄，從新版重新開始。';
+}catch{tfLegacyCleanupOK=false;}
+try{
+ const raw=localStorage.getItem(tfKey);
+ if(raw!==null){try{tfState=tfReadState(JSON.parse(raw));}catch{tfCorrupt=true;tfStorageOK=false;}}
+}catch{tfStorageOK=false;}
+let tfCurrent=tfState.current,tfMode='practice',tfFilter='all',tfQueue=[...tfIds],tfDraft=null,tfEntered=false,tfBookTab='pending',tfRecapIds=[],tfRecapIndex=0;
+const tfPanel=document.getElementById('tf-panel'),tfCard=document.getElementById('tf-card'),tfOutline=document.getElementById('tf-outline');
+const tfEntry=document.createElement('button');tfEntry.type='button';tfEntry.className='tf-entry';tfEntry.id='tf-entry';tfEntry.textContent='100 題與複習卡';tfEntry.setAttribute('aria-pressed','false');
 const tfReturn=document.createElement('button');tfReturn.type='button';tfReturn.className='tf-back';tfReturn.id='tf-return';tfReturn.hidden=true;
-document.querySelector('.study-tabs').append(tfEntry);document.querySelector('.study-nav').append(tfReturn);tfEntry.setAttribute('aria-pressed','false');
-const tfOutline=document.getElementById('tf-outline');
+document.querySelector('.study-tabs').append(tfEntry);document.querySelector('.study-nav').append(tfReturn);
 const tfMobile=matchMedia('(max-width:800px)');
-function tfArrangeOutline(){
- const layout=document.querySelector('.tf-layout'),side=document.querySelector('.tf-side');
- if(tfMobile.matches)layout.prepend(tfOutline);else side.prepend(tfOutline);
- tfOutline.open=!tfMobile.matches;
-}
+function tfArrangeOutline(){const layout=document.querySelector('.tf-layout'),side=document.querySelector('.tf-side');if(tfMobile.matches)layout.prepend(tfOutline);else side.prepend(tfOutline);tfOutline.open=!tfMobile.matches;}
 tfArrangeOutline();tfMobile.addEventListener('change',tfArrangeOutline);
-document.getElementById('map-entry').addEventListener('click',()=>tfClose());document.getElementById('reader-return').addEventListener('click',tfOpen);
-function tfHas(id){return Object.prototype.hasOwnProperty.call(tfAnswers,id)}
-function tfWrong(id){return tfHas(id)&&tfAnswers[id]!==tfQuestions[id-1].answer}
-function tfSave(){try{localStorage.setItem(tfKey,JSON.stringify({version:1,answers:tfAnswers,current:tfCurrent}));tfStorageOK=true;}catch{tfStorageOK=false;}const e=document.getElementById('tf-save');e.classList.toggle('tf-storage-warning',!tfStorageOK);e.textContent=tfStorageOK?'進度會儲存在目前瀏覽器。更換裝置或搬動檔案後，可能無法沿用。':'此瀏覽器目前無法儲存進度；本頁仍可作答，關閉或重新整理後可能遺失。';}
-function tfOpen(){document.querySelector('.workspace').hidden=true;tfPanel.hidden=false;tfReturn.hidden=true;tfEntry.setAttribute('aria-pressed','true');document.getElementById('map-entry').setAttribute('aria-pressed','false');document.querySelector('.skip-link').href='#tf-card';tfRender();document.querySelector('.tf-top h2').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});}
-function tfClose(reviewNode){tfPanel.hidden=true;document.querySelector('.workspace').hidden=false;tfEntry.setAttribute('aria-pressed','false');document.getElementById('map-entry').setAttribute('aria-pressed','true');document.querySelector('.skip-link').href='#reader';document.getElementById('reader-return').hidden=false;document.getElementById('reader-return').textContent=`返回第 ${tfCurrent} 題`;tfReturn.textContent=`返回第 ${tfCurrent} 題`;tfReturn.hidden=false;if(reviewNode){select(reviewNode);}else window.scrollTo({top:0,behavior:'instant'});(reviewNode?detail.querySelector('h2'):document.getElementById('map-entry')).focus({preventScroll:true});}
-function tfSetFilter(f){tfFilter=f;tfQueue=tfQuestions.filter(q=>f==='all'||(f==='wrong'?tfWrong(q.id):!tfHas(q.id))).map(q=>q.id);if(!tfQueue.includes(tfCurrent)&&tfQueue.length)tfCurrent=tfQueue[0];tfRender();tfSave();tfCard.focus({preventScroll:true});if(matchMedia('(max-width:800px)').matches){tfOutline.open=false;tfCard.scrollIntoView({block:'start'});}}
-function tfGo(id){if(!tfQuestions[id-1])return;tfCurrent=id;if(matchMedia('(max-width:800px)').matches)tfOutline.open=false;tfRender();tfSave();if(matchMedia('(max-width:800px)').matches)tfCard.scrollIntoView({block:'start'});tfCard.focus({preventScroll:true});}
-function tfRender(){
- const answered=tfQuestions.filter(q=>tfHas(q.id)).length,wrong=tfQuestions.filter(q=>tfWrong(q.id)).length,right=answered-wrong;
- document.getElementById('tf-stats').innerHTML=`<span>已作答<strong>${answered} / ${tfTotal}</strong></span><span>答對<strong>${right}</strong></span><span>答錯<strong>${wrong}</strong></span><span>已答正確率<strong>${answered?Math.round(right/answered*100)+'%':'—'}</strong></span>`;
- document.getElementById('tf-progress').max=tfTotal;document.getElementById('tf-progress').value=answered;
- document.getElementById('tf-outline-count').textContent=`${tfQueue.length} 題`;
- const priorities=document.getElementById('tf-priorities');priorities.replaceChildren();const weak=concepts.map(n=>({n,count:tfQuestions.filter(q=>q.node===n.id&&tfWrong(q.id)).length})).filter(v=>v.count).sort((a,b)=>b.count-a.count).slice(0,3);if(weak.length){const title=document.createElement('h3');title.textContent='優先複習';priorities.append(title);for(const {n,count} of weak){const b=document.createElement('button');b.type='button';b.innerHTML=`<span>${n.title}</span><small>${count} 題答錯</small>`;b.addEventListener('click',()=>tfClose(n.id));priorities.append(b);}}
- const completion=document.getElementById('tf-complete');completion.hidden=answered!==tfTotal;completion.textContent=wrong?`100 題皆已作答，目前答對 ${right} 題。可切換「錯題複習」，依詳解與章節連結再練習。`:'100 題皆已答對。可再回到知識脈絡圖，試著用自己的話串起各個概念。';
- if(answered===tfTotal&&wrong){const b=document.createElement('button');b.type='button';b.textContent=`複習 ${wrong} 題錯題`;b.addEventListener('click',()=>tfSetFilter('wrong'));completion.append(b);}
- document.querySelectorAll('[data-tf-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tfFilter===tfFilter)));
- const grid=document.getElementById('tf-grid');grid.replaceChildren();
- for(const id of tfQueue){const b=document.createElement('button');b.type='button';const done=tfHas(id),bad=tfWrong(id);b.className=done?(bad?'wrong':'correct'):'';b.setAttribute('aria-current',String(id===tfCurrent));b.setAttribute('aria-label',`第 ${id} 題，${done?(bad?'答錯':'答對'):'未作答'}`);b.innerHTML=`${id}<span aria-hidden="true">${done?(bad?'✗':'✓'):'○'}</span>`;b.addEventListener('click',()=>tfGo(id));grid.append(b);}
- const pos=tfQueue.indexOf(tfCurrent);document.getElementById('tf-prev').disabled=pos<=0;document.getElementById('tf-next').disabled=pos<0||pos>=tfQueue.length-1;document.getElementById('tf-position').textContent=tfQueue.length?`${pos+1} / ${tfQueue.length}${tfFilter==='wrong'?'（本輪錯題）':''}`:'無符合題目';
- if(!tfQueue.length){tfCard.innerHTML=`<div class="tf-empty"><h3>${tfFilter==='wrong'?'目前沒有答錯的題目':'目前沒有未作答的題目'}</h3><p>${tfFilter==='wrong'?'可先從全部題目開始練習，作答後再檢視錯題。':'可以查看全部題目與詳解，或從錯題複習繼續。'}</p><button type="button" id="tf-show-all">返回全部題目</button></div>`;document.getElementById('tf-show-all').addEventListener('click',()=>tfSetFilter('all'));return;}
- const q=tfQuestions[tfCurrent-1],n=byId[q.node],done=tfHas(q.id),bad=tfWrong(q.id);
- tfCard.innerHTML=`<div class="tf-meta"><span class="question-number">第 ${q.id} 題</span><span>${groups[n.g].name} ／ ${n.title}</span></div><h3 class="tf-statement">${q.text}</h3><div class="tf-choices" role="group" aria-label="選擇是或非"><button type="button" data-tf-answer="true" ${done?'disabled':''} class="${done&&tfAnswers[q.id]===true?'chosen ':''}${done&&q.answer===true?'right-answer':''}">是<small>這個敘述正確</small></button><button type="button" data-tf-answer="false" ${done?'disabled':''} class="${done&&tfAnswers[q.id]===false?'chosen ':''}${done&&q.answer===false?'right-answer':''}">非<small>這個敘述錯誤</small></button></div>${done?`<div class="tf-feedback"><div class="tf-feedback-top"><div class="tf-result ${bad?'wrong':''}" tabindex="-1">${bad?'✗ 答錯了':'✓ 答對了'}　正確答案：${q.answer?'是':'非'}</div>${pos<tfQueue.length-1?'<button type="button" id="tf-continue">下一題</button>':''}</div><p class="small">你的作答：${tfAnswers[q.id]?'是':'非'}</p><h4>詳解</h4><p>${q.explanation}</p><div class="tf-review ${bad?'wrong':''}"><strong>${bad?'建議複習章節':'延伸複習'}：${n.title}</strong><p>複習講義第 ${n.page} 頁。${n.summary}</p><div class="tf-review-actions"><button type="button" id="tf-review-node">閱讀「${n.title}」概念</button><a href="遊戲式學習_重點複習講義.html#p${n.page}" target="_blank" rel="noopener">講義第 ${n.page} 頁</a><a href="遊戲式學習_重點複習講義.pdf#page=${n.page}" target="_blank" rel="noopener">PDF 對應頁</a></div></div><p class="tf-source">原講義依據：${n.src.map(([k,p])=>`${k} 第 ${p} 頁`).join('；')}。完整來源名稱見相關概念的閱讀區。題目與解答依講義及已標示的整理補充編寫。</p></div><button type="button" id="tf-retry" class="tf-retry">重答本題</button>`:'<p class="tf-hint">請先作答，答案與詳解會在選擇後顯示。</p>'}`;
- tfCard.querySelectorAll('[data-tf-answer]').forEach(b=>b.addEventListener('click',()=>{if(tfHas(q.id))return;tfAnswers[q.id]=b.dataset.tfAnswer==='true';tfSave();tfRender();const result=tfCard.querySelector('.tf-result');result.focus({preventScroll:true});result.scrollIntoView({block:'nearest'});}));
- if(done){document.getElementById('tf-continue')?.addEventListener('click',()=>tfGo(tfQueue[pos+1]));document.getElementById('tf-review-node').addEventListener('click',()=>tfClose(q.node));document.getElementById('tf-retry').addEventListener('click',()=>{delete tfAnswers[q.id];tfSave();tfRender();tfCard.querySelector('[data-tf-answer]').focus();});}
+const tfExamples={
+ core:'玩家用程式指揮機器人走出迷宮，必須執行、除錯與修正；通關行動同時就是能力練習。',
+ goals:'若目標是比較兩個方案並說明理由，遊戲就要讓學生比較、解釋，評量也檢查理由品質。',
+ ksa:'合作可同時涉及溝通技能與尊重他人的態度。評量應看協調行為與選擇理由，不能只問喜不喜歡。',
+ learner:'學生能口頭解釋概念，卻找不到按鈕時，先改善操作引導，再判斷是否需要補強概念。',
+ mechanics:'規劃物資回收時，玩家要選擇、排序操作並預測結果，讓決策對應概念應用與問題解決。',
+ integration:'答題換金幣較接近外生整合；必須運用生態關係調整物種才能維持系統，則可呈現內生整合。',
+ scaffolding:'先給流程提示，再逐步減少提示，最後請學生獨立規劃新任務，以檢查是否真正掌握。',
+ social:'一人有地圖、一人有操作資訊，必須交換資訊才能完成任務；活動後再回顧如何處理分歧。',
+ feedback:'「哪一步的結果和預測不同？」能引導學生檢查方案；只給零分，通常無法提供修正方向。',
+ srl:'學生比較結果與目標，發現問題後調整策略；需要時主動求助，也可以是自我調節的表現。',
+ theory:'提供策略選擇、可理解的進展與支持性的合作，可分別連結自主感、勝任感與關係感。',
+ transfer:'原遊戲過關後，改用不同條件的問題檢查概念應用；過一段時間再測，則更關注學習保留。',
+ assessment:'若目標是推理品質，就評估理由與證據；將速度、道具或運氣另外記錄，避免混成一個能力分數。',
+ operational:'用相同規準評定問題分析、方案理由與修正品質，並交代何時測量，讓能力變成可檢查的指標。',
+ variables:'比較 AI 與固定提示時，提示方式是自變項，問題解決可作為依變項；中介路徑仍需資料檢驗。',
+ research:'探索可先尋找學生使用提示的模式；驗證則由理論形成假設，再規劃測量與資料分析。'
+};
+function tfHas(id){return tfOwn(tfState.answers,id);}
+function tfWrong(id){return tfHas(id)&&tfState.answers[id]!==tfQuestions[id-1].answer;}
+function tfMistakeIds(tab='pending'){return tfIds.filter(id=>tfState.mistakes[id]&&(tab==='all'||(tab==='mastered'?tfState.mistakes[id].streak>=2:tfState.mistakes[id].streak<2)));}
+function tfAllAnswered(){return tfIds.every(tfHas);}
+function tfRoundDone(){return !!tfState.round?.applied;}
+function tfRoundActive(){return !!tfState.round&&!tfState.round.applied;}
+function tfSave(){
+ tfState.current=tfCurrent;
+ if(!tfCorrupt){try{localStorage.setItem(tfKey,JSON.stringify(tfState));tfStorageOK=true;}catch{tfStorageOK=false;}}
+ const e=document.getElementById('tf-save');e.classList.toggle('tf-storage-warning',!tfStorageOK||!tfLegacyCleanupOK);
+ e.textContent=tfCorrupt?'儲存紀錄格式異常，本次暫不保存；可繼續練習，或清除本版紀錄後重新開始。':tfStorageOK?(tfLegacyCleanupOK?'進度已保存在此瀏覽器。':'新題進度已保存；舊紀錄暫時無法清除，請允許瀏覽器儲存後重新整理。'):'此瀏覽器目前無法儲存進度；仍可練習，但關閉或重新整理後可能遺失。';
 }
-
-tfEntry.addEventListener('click',tfOpen);tfReturn.addEventListener('click',tfOpen);document.getElementById('tf-to-map').addEventListener('click',()=>tfClose());
+function tfFocus(){const target=tfCard.querySelector('[data-card-focus]')||tfCard;target.focus({preventScroll:true});tfCard.scrollIntoView({block:'start',behavior:'instant'});}
+function tfOpen(){
+ document.querySelector('.workspace').hidden=true;tfPanel.hidden=false;tfReturn.hidden=true;tfEntry.setAttribute('aria-pressed','true');document.getElementById('map-entry').setAttribute('aria-pressed','false');document.querySelector('.skip-link').href='#tf-card';
+ if(!tfEntered){tfEntered=true;const pending=tfMistakeIds(),mastered=tfMistakeIds('mastered');if(pending.length||mastered.length){tfRecapIds=[...pending,...mastered];tfRecapIndex=0;tfMode='recap';}}
+ tfRender();tfFocus();
+}
+function tfClose(reviewNode){
+ tfPanel.hidden=true;document.querySelector('.workspace').hidden=false;tfEntry.setAttribute('aria-pressed','false');document.getElementById('map-entry').setAttribute('aria-pressed','true');document.querySelector('.skip-link').href='#reader';
+ const text=tfMode==='recap'?'返回課程卡':tfMode==='book'?'返回錯題本':`返回第 ${tfCurrent} 題`;
+ const back=document.getElementById('reader-return');back.hidden=false;back.textContent=text;tfReturn.hidden=false;tfReturn.textContent=text;
+ if(reviewNode)select(reviewNode);else{window.scrollTo({top:0,behavior:'instant'});document.getElementById('map-entry').focus({preventScroll:true});}
+}
+function tfPractice(filter='all',id){tfMode='practice';tfFilter=filter;tfQueue=tfIds.filter(x=>filter==='all'||!tfHas(x));if(tfValidId(id)&&tfQueue.includes(id))tfCurrent=id;else if(!tfQueue.includes(tfCurrent)&&tfQueue.length)tfCurrent=tfQueue[0];tfDraft=null;tfOutline.open=!tfMobile.matches;tfRender();tfSave();tfFocus();}
+function tfContinuePractice(){const id=tfIds.find(x=>!tfHas(x));tfPractice(id?'unanswered':'all',id||tfCurrent);}
+function tfShowBook(tab='pending'){tfMode='book';tfBookTab=tab;tfDraft=null;tfRender();tfFocus();}
+function tfSetFilter(value){if(value==='wrong')tfShowBook();else tfPractice(value);}
+function tfGo(id){if(!tfValidId(id)||!tfQueue.includes(id))return;tfCurrent=id;tfDraft=null;if(tfMobile.matches)tfOutline.open=false;tfRender();tfSave();tfFocus();}
+function tfStartRound(){
+ if(!tfAllAnswered())return;
+ if(!tfRoundActive()){
+  const ids=tfMistakeIds();if(!ids.length)return;
+  tfState.roundSerial+=1;tfState.round={id:tfState.roundSerial,ids,responses:{},applied:false};
+ }
+ tfMode='review';tfQueue=[...tfState.round.ids];tfCurrent=tfQueue.find(id=>!tfOwn(tfState.round.responses,id))||tfQueue[0];tfDraft=null;tfOutline.open=!tfMobile.matches;tfSave();tfRender();tfFocus();
+}
+function tfCompleteRound(){
+ const r=tfState.round;if(!r||r.applied||!r.ids.every(id=>tfOwn(r.responses,id)))return;
+ for(const id of r.ids){const m=tfState.mistakes[id];m.streak=r.responses[id]===tfQuestions[id-1].answer?Math.min(2,m.streak+1):0;}
+ r.applied=true;
+}
+function tfAnswer(answer){
+ const q=tfQuestions[tfCurrent-1];
+ if(tfMode==='review'){
+  const r=tfState.round;if(!r||r.applied||!r.ids.includes(q.id)||tfOwn(r.responses,q.id))return;r.responses[q.id]=answer;
+ }else if(tfMode!=='practice'||(tfHas(q.id)&&tfDraft!==q.id))return;
+ tfState.answers[q.id]=answer;tfDraft=null;
+ if(answer!==q.answer){const m=tfState.mistakes[q.id]??{errors:0,streak:0};m.errors=Math.min(Number.MAX_SAFE_INTEGER,m.errors+1);m.streak=0;tfState.mistakes[q.id]=m;}
+ if(tfMode==='review')tfCompleteRound();
+ tfSave();tfRender();tfFocus();
+}
+function tfRestartQuestion(id){
+ // A single-question practice never deletes history or earns round credit.
+ if(tfRoundActive()){tfStartRound();return;}
+ tfMode='practice';tfFilter='all';tfQueue=[...tfIds];tfCurrent=id;tfDraft=id;tfRender();tfSave();tfFocus();
+}
+function tfCourse(n){return `<section class="course-point"><h4>核心觀念</h4><p>${n.summary}</p></section><section class="course-example"><h4>用例子記住</h4><p>${tfExamples[n.id]}</p><small>依課程概念整理的應用例</small></section>`;}
+function tfLinks(n){return `<div class="tf-review-actions"><button type="button" data-review-node="${n.id}">閱讀「${n.title}」完整內容</button><a href="遊戲式學習_重點複習講義.html#p${n.page}" target="_blank" rel="noopener">講義第 ${n.page} 頁</a><a href="遊戲式學習_重點複習講義.pdf#page=${n.page}" target="_blank" rel="noopener">PDF 對應頁</a></div><p class="tf-source">原講義依據：${n.src.map(([k,p])=>`${k} 第 ${p} 頁`).join('；')}。完整來源名稱見概念閱讀區。</p>`;}
+function tfRoundSummary(){const r=tfState.round,correct=r.ids.filter(id=>r.responses[id]===tfQuestions[id-1].answer).length;return `<section class="round-complete"><h4>第 ${r.id} 輪完成</h4><p>本輪答對 ${correct} / ${r.ids.length} 題。完整輪次已記入；已熟悉 ${tfMistakeIds('mastered').length} 題，待複習 ${tfMistakeIds().length} 題。</p><button type="button" data-action="round" ${tfMistakeIds().length?'':'disabled'}>開始下一輪</button><button type="button" data-action="book">查看錯題本</button></section>`;}
+function tfRenderQuestion(){
+ if(!tfQueue.length){tfCard.innerHTML='<h3 data-card-focus tabindex="-1">目前沒有未作答題目</h3><p>可以檢查錯題，或回顧全部題目。</p><button data-action="book">打開錯題本</button><button data-action="all">查看全部題目</button>';return;}
+ const q=tfQuestions[tfCurrent-1],n=byId[q.node],r=tfState.round,isRound=tfMode==='review';
+ const done=isRound?tfOwn(r.responses,q.id):tfHas(q.id)&&tfDraft!==q.id;
+ const answer=isRound?r.responses[q.id]:tfState.answers[q.id],bad=done&&answer!==q.answer,m=tfState.mistakes[q.id];
+ const meta=`<div class="tf-meta"><span class="question-number">第 ${q.id} 題</span><span>${isRound?`錯題第 ${r.id} 輪`:'新題與重練'} ／ ${n.title}</span></div>`;
+ if(!done){tfCard.classList.remove('is-flashcard');tfCard.innerHTML=`${meta}<h3 class="tf-statement" data-card-focus tabindex="-1">${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</h3><div class="tf-choices" role="group" aria-label="選擇是或非"><button type="button" data-tf-answer="true">是<small>這個敘述正確</small></button><button type="button" data-tf-answer="false">非<small>這個敘述錯誤</small></button></div><p class="tf-hint">${isRound?'先憑記憶作答，再看課程卡。同一題每輪只計一次。':'作答後會切換到複習卡，答對、答錯都能重溫觀念。'}${tfDraft===q.id?' 單題重練不計入熟悉輪次。':''}</p>`;return;}
+ tfCard.classList.add('is-flashcard');
+ const pos=tfQueue.indexOf(q.id),next=isRound?tfQueue.find(id=>!tfOwn(r.responses,id)):tfQueue[pos+1];
+ const progress=m?m.streak>=2?'已熟悉 · 紀錄保留在錯題本':`已收進錯題本 · 連續答對 ${m.streak} / 2 輪`:'這個觀念答對了，再用例子加深印象。';
+ tfCard.innerHTML=`${meta}<div class="flashcard-result ${bad?'wrong':''}"><h3 data-card-focus tabindex="-1">${bad?'答錯了，一起釐清':'答對了，再記一次'}</h3><p>你的答案：${answer?'是':'非'}　正確答案：${q.answer?'是':'非'}</p></div><p class="mastery-note">${progress}${isRound&&!r.applied?'；本輪完成後更新輪次。':''}</p><section class="answer-reason"><div class="answered-question"><h4>題目</h4><p>${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</p></div><h4>本題為什麼？</h4><p>${tfEmphasize(q.explanation,tfHighlights[q.id-1][1])}</p></section>${tfCourse(n)}${tfLinks(n)}<div class="card-actions">${next?`<button type="button" class="card-primary" data-next-id="${next}">${isRound?'本輪下一題':'下一題'}</button>`:''}${!isRound?`<button type="button" data-retry-id="${q.id}">${tfRoundActive()?'接續未完成的錯題輪次':'重答本題'}</button>`:''}<button type="button" data-action="book">查看錯題本</button></div>${isRound&&r.applied?tfRoundSummary():''}`;
+}
+function tfRenderBook(){
+ tfCard.classList.remove('is-flashcard');const ids=tfMistakeIds(tfBookTab),pending=tfMistakeIds().length,mastered=tfMistakeIds('mastered').length;
+ const ready=tfAllAnswered(),remaining=tfTotal-tfIds.filter(tfHas).length;
+ tfCard.innerHTML=`<h3 class="book-title" data-card-focus tabindex="-1">我的錯題本</h3><p class="book-intro">錯過的題目會留在這裡。完成兩輪且連續答對後，才移到「已熟悉」；再次答錯會回到待複習。</p><div class="book-tabs" aria-label="錯題狀態"><button data-book-tab="pending" aria-pressed="${tfBookTab==='pending'}">待複習 ${pending}</button><button data-book-tab="mastered" aria-pressed="${tfBookTab==='mastered'}">已熟悉 ${mastered}</button></div><div class="book-start"><p>${ready?'每輪每題只計一次；完成整輪後可開始下一輪。':`先完成全部 100 題，再集中重練。目前還有 ${remaining} 題未作答；現在可以先閱讀課程卡。`}</p><button type="button" class="card-primary" data-action="round" ${ready&&(pending||tfRoundActive())?'':'disabled'}>${tfRoundActive()?'接續未完成的輪次':'開始錯題複習'}</button><button data-action="continue">${ready?'回到題目':'繼續未作答題目'}</button></div>${ids.length?`<ul class="mistake-list">${ids.map(id=>{const q=tfQuestions[id-1],m=tfState.mistakes[id];return `<li><div><span class="question-number">第 ${id} 題</span><strong>${byId[q.node].title}</strong></div><p>${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</p><small>答錯 ${m.errors} 次 · ${m.streak>=2?'已熟悉':`連續答對 ${m.streak} / 2 輪`}</small><div class="mistake-actions"><button data-study-id="${id}">看課程卡</button>${tfBookTab==='mastered'?`<button data-retry-id="${id}">重新挑戰</button>`:''}</div></li>`;}).join('')}</ul>`:`<div class="tf-empty"><p>${tfBookTab==='mastered'?'完成兩輪且連續答對後，題目會出現在這裡。':'目前沒有待複習的錯題。可以繼續練習，或回顧已熟悉的內容。'}</p></div>`}`;
+}
+function tfShowRecap(id){tfRecapIds=tfMistakeIds('all');if(!tfRecapIds.length)return;tfRecapIndex=Math.max(0,tfRecapIds.indexOf(id));tfMode='recap';tfRender();tfFocus();}
+function tfRenderRecap(){
+ tfCard.classList.add('is-flashcard');const id=tfRecapIds[tfRecapIndex],q=tfQuestions[id-1],n=byId[q.node],m=tfState.mistakes[id];
+ tfCard.innerHTML=`<div class="tf-meta"><span class="question-number">課程卡 ${tfRecapIndex+1} / ${tfRecapIds.length}</span><span>來自第 ${id} 題</span></div><h3 class="recap-title" data-card-focus tabindex="-1">再記一次：${n.title}</h3><p class="mastery-note">${m.streak>=2?'已熟悉，仍可回顧':`待複習 · 連續答對 ${m.streak} / 2 輪`}。看卡片不計入答對輪次。</p><section class="answer-reason"><div class="answered-question"><h4>題目</h4><p>${tfEmphasize(q.text,tfHighlights[q.id-1][0])}</p><p>正確答案：${q.answer?'是':'非'}</p></div><h4>本題為什麼？</h4><p>${tfEmphasize(q.explanation,tfHighlights[q.id-1][1])}</p></section>${tfCourse(n)}${tfLinks(n)}<div class="card-actions"><button data-action="recap-prev" ${tfRecapIndex===0?'disabled':''}>上一張</button>${tfRecapIndex<tfRecapIds.length-1?'<button class="card-primary" data-action="recap-next">下一張課程卡</button>':'<button class="card-primary" data-action="book">課程卡看完了</button>'}<button data-action="continue">${tfAllAnswered()?'回到題目':'繼續新題'}</button></div>${tfAllAnswered()&&(tfMistakeIds().length||tfRoundActive())?`<button class="recap-start" data-action="round">${tfRoundActive()?'接續未完成的錯題輪次':'開始錯題作答'}</button>`:''}`;
+}
+function tfRender(){
+ const answered=tfIds.filter(tfHas).length,pending=tfMistakeIds().length,mastered=tfMistakeIds('mastered').length;
+ document.getElementById('tf-stats').innerHTML=`<span>已作答<strong>${answered} / ${tfTotal}</strong></span><span>待複習<strong>${pending}</strong></span><span>已熟悉<strong>${mastered}</strong></span><span>完成輪次<strong>${tfState.roundSerial-(tfRoundActive()?1:0)}</strong></span>`;
+ document.getElementById('tf-progress').value=answered;document.getElementById('tf-migration').textContent=tfMigration;document.getElementById('tf-migration').hidden=!tfMigration;
+ const completion=document.getElementById('tf-complete');completion.hidden=answered!==tfTotal||tfMode!=='practice';completion.innerHTML=answered===tfTotal?`<strong>100 題已完成</strong><p>${pending?`有 ${pending} 題待複習，現在可以集中重練。`:'目前沒有待複習錯題，可回顧已熟悉的觀念。'}</p><button data-action="book">查看錯題本</button>${pending?`<button data-action="round">${tfRoundActive()?'接續錯題複習':'開始錯題複習'}</button>`:''}`:'';
+ document.querySelectorAll('[data-tf-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.tfFilter==='wrong'?tfMode==='book':tfMode==='practice'&&b.dataset.tfFilter===tfFilter)));
+ tfOutline.hidden=tfMode==='book'||tfMode==='recap';document.querySelector('.tf-nav').hidden=tfMode==='book'||tfMode==='recap';
+ document.getElementById('tf-outline-count').textContent=`${tfQueue.length} 題`;const grid=document.getElementById('tf-grid');grid.replaceChildren();
+ if(!tfOutline.hidden)for(const id of tfQueue){const b=document.createElement('button'),round=tfMode==='review',done=round?tfOwn(tfState.round.responses,id):tfHas(id),bad=done&&(round?tfState.round.responses[id]!==tfQuestions[id-1].answer:tfWrong(id));b.type='button';b.className=done?(bad?'wrong':'correct'):'';b.setAttribute('aria-current',String(id===tfCurrent));b.setAttribute('aria-label',`第 ${id} 題，${done?(bad?'答錯':'答對'):'未作答'}`);b.innerHTML=`${id}<span aria-hidden="true">${done?(bad?'✗':'✓'):'○'}</span>`;b.dataset.goId=id;grid.append(b);}
+ const pos=tfQueue.indexOf(tfCurrent);document.getElementById('tf-prev').disabled=pos<=0;document.getElementById('tf-next').disabled=pos<0||pos>=tfQueue.length-1;document.getElementById('tf-position').textContent=tfQueue.length?`${pos+1} / ${tfQueue.length}${tfMode==='review'?'（本輪錯題）':''}`:'無符合題目';
+ const r=tfState.round;document.getElementById('tf-round-resume').hidden=!tfRoundActive()||tfMode==='review';
+ document.getElementById('tf-priorities').innerHTML=`<h3>錯題會怎麼複習？</h3><p>完成 100 題後集中重練。每輪各答一次，連續兩輪答對標為已熟悉。</p><button data-action="book">打開錯題本（${pending} 題待複習）</button>`;
+ if(tfMode==='book')tfRenderBook();else if(tfMode==='recap')tfRenderRecap();else tfRenderQuestion();
+ document.getElementById('tf-mode-label').textContent=tfMode==='review'?`錯題複習 · 第 ${r.id} 輪`:tfMode==='recap'?'先溫習，再挑戰':tfMode==='book'?'留住每一次需要再想的觀念':'100 題中等難度練習';
+}
+// Delegation keeps replaced cards keyboard-operable without accumulating handlers.
+tfPanel.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b||b.disabled)return;
+ if(b.dataset.tfAnswer!==undefined){tfAnswer(b.dataset.tfAnswer==='true');return;}
+ if(b.dataset.reviewNode){tfClose(b.dataset.reviewNode);return;}
+ if(b.dataset.nextId||b.dataset.goId){tfGo(Number(b.dataset.nextId||b.dataset.goId));return;}
+ if(b.dataset.retryId){tfRestartQuestion(Number(b.dataset.retryId));return;}
+ if(b.dataset.studyId){tfShowRecap(Number(b.dataset.studyId));return;}
+ if(b.dataset.bookTab){tfShowBook(b.dataset.bookTab);return;}
+ if(b.dataset.tfFilter){tfSetFilter(b.dataset.tfFilter);return;}
+ const a=b.dataset.action;
+ if(a==='book')tfShowBook();else if(a==='round')tfStartRound();else if(a==='continue')tfContinuePractice();else if(a==='all')tfPractice();else if(a==='recap-next'||a==='recap-prev'){tfRecapIndex=Math.max(0,Math.min(tfRecapIds.length-1,tfRecapIndex+(a==='recap-next'?1:-1)));tfRender();tfFocus();}
+});
+tfEntry.addEventListener('click',tfOpen);tfReturn.addEventListener('click',tfOpen);document.getElementById('reader-return').addEventListener('click',tfOpen);document.getElementById('map-entry').addEventListener('click',()=>tfClose());document.getElementById('tf-to-map').addEventListener('click',()=>tfClose());
 document.getElementById('tf-prev').addEventListener('click',()=>{const i=tfQueue.indexOf(tfCurrent);if(i>0)tfGo(tfQueue[i-1]);});document.getElementById('tf-next').addEventListener('click',()=>{const i=tfQueue.indexOf(tfCurrent);if(i>=0&&i<tfQueue.length-1)tfGo(tfQueue[i+1]);});
-document.querySelectorAll('[data-tf-filter]').forEach(b=>b.addEventListener('click',()=>tfSetFilter(b.dataset.tfFilter)));
-document.getElementById('tf-reset').addEventListener('click',()=>{if(!window.confirm('清除全部作答紀錄？此動作無法復原。'))return;tfAnswers={};tfCurrent=1;tfFilter='all';tfQueue=tfQuestions.map(q=>q.id);tfSave();tfRender();});
+document.getElementById('tf-reset').addEventListener('click',()=>{if(!confirm('清除本版全部答案、錯題與複習輪次？此動作無法復原。'))return;tfState=tfFresh();tfCurrent=1;tfMode='practice';tfQueue=[...tfIds];tfFilter='all';tfDraft=null;tfRecapIds=[];tfRecapIndex=0;tfCorrupt=false;tfMigration='';tfSave();tfRender();tfFocus();});
 tfRender();tfSave();
+
 </script>
 
 </body>
