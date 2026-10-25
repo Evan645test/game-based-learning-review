@@ -1,0 +1,169 @@
+{
+  "verified_at": "2026-10-26",
+  "scope": "漸進交錯學習路徑：暖身→SN2/SN1→E2→E1→三種加成→重排與脫水→總混合練習；對比觀察、隨階段長出的流程圖、分級提示箭頭、弱點加權混合練習；新增五種機構10例三維動畫；後測／延後測重寫；新版清除舊資料、移除PK入口",
+  "preview": "http://127.0.0.1:8768/academy.html",
+  "core_tests": {
+    "passed": 63,
+    "command": "node --test tests/*.test.mjs"
+  },
+  "server_tests": {
+    "passed": 8,
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py'"
+  },
+  "browser": {
+    "passed": true,
+    "script": "tests/path-browser.mjs",
+    "evidence": "/private/tmp/organic-path-verification/report.json",
+    "viewports": [
+      320,
+      390,
+      1280
+    ],
+    "pageerror": 0
+  },
+  "not_verified": [
+    "真實本機 AI 生成（只驗證離線備援路徑未觸發錯誤）",
+    "實體手機、VoiceOver",
+    "學生學習成效或題本信效度"
+  ],
+  "previous": {
+    "verified_at": "2026-10-25T22:51:45+08:00",
+    "scope": "四單元先概念說明與圖解，再預測、三維觀察、產物推理、自我檢核與對照；取消前測，保留既有作答與觀看進度",
+    "preview": "http://127.0.0.1:8768/academy.html",
+    "redirect": "index.html → entry.js → academy.html，保留查詢與錨點，遵守script-src self",
+    "core_tests": {
+      "passed": 54,
+      "command": "node --test tests/*.test.mjs"
+    },
+    "server_tests": {
+      "passed": 8,
+      "command": "python3 -m unittest discover -s tests -p 'test_*.py'"
+    },
+    "browser": {
+      "passed": true,
+      "checks": [
+        "兩網址直接共用課程入口，不要求前測",
+        "學習路徑與進度保留，後測與延後測可選做",
+        "四單元均先說明與圖解再預測，八概念唯一位置；回看說明及重載續學可用",
+        "四類各四例可用；單一播放器與放大返回",
+        "課內SN1實際繪製／空間檢核、AI離線備援、椅式與換條件延伸",
+        "後測與延後測各100，評量期間無提示與產物揭曉",
+        "首次／未完成分開，舊紀錄原文保留，匯出包括所有版本",
+        "320–1280無溢出、主要操作44px，沒有頁面例外"
+      ],
+      "errors": []
+    },
+    "pk_transactions": {
+      "passed": true,
+      "checks": [
+        "12個分頁並行、兩間房各六回合，示範確認、個人首次與共識提交無遺漏",
+        "舊localStorage教室可匯入IndexedDB並接續，不刪除原副本"
+      ]
+    },
+    "magnification_example": {
+      "normal": 12.093994140625,
+      "enlarged": 30.509864807128906,
+      "ratio": 2.522728591759695
+    },
+    "evidence": "/private/tmp/organic-no-pre-verification/；完整課程回歸/private/tmp/organic-integration-verification/",
+    "content_map": {
+      "charge": [
+        "polarity",
+        "electrophile",
+        "leaving",
+        "SN1電子與空間"
+      ],
+      "donor": [
+        "nucleophile",
+        "solvent",
+        "SN2電子與空間"
+      ],
+      "target": [
+        "base",
+        "space",
+        "E2電子與空間",
+        "椅式延伸"
+      ],
+      "product": [
+        "pathway",
+        "E1電子與空間",
+        "換條件延伸"
+      ]
+    },
+    "data": {
+      "course": "organic-learning-course-v2，flowVersion:2；保留phase識別但顯示順序1,0,2,3,4,5；舊phase0轉先說明，其餘位置、答案、首次／最近推理與觀看書籤保留",
+      "self_checks": "organic-course-check-v2:*，首次及最近證據快照，不設通關分數",
+      "assessments": "後測／延後測選做，逐次UUID獨立鍵；舊前測唯讀歷史用途，不限制課程或PK",
+      "drafts": "目前評量草稿增加:optional後綴；舊前測草稿保留但不恢復；有效舊後測／延後測草稿仍可續作",
+      "views": "organic-demo-view-v1:*，引導片段使用:guided:步驟後綴；保存鏡頭及進度，還原暫停",
+      "legacy": "舊10分／100分／舊引導／PK與原始壞JSON保留，不混算，完整匯出包含版本化資料及本頁暫存"
+    },
+    "terminology": {
+      "entries": 32,
+      "audit": "terminology-audit.json",
+      "checked_at": "2026-10-25",
+      "source": "國家教育研究院樂詞網化學學門",
+      "scope": "沿用本對話先前官方詞條查核；現行詞條不宣稱等同國立編譯館某一歷史版本逐字證明；未查得相符複合詞標為教學用語"
+    },
+    "live_ai": {
+      "current_run": "檢查UI離線備援與Python核可診斷邊界，未重新做真實模型生成測試",
+      "mode": "既有本機Ollama選取核可電子診斷，不自由生成化學答案或負責評分"
+    },
+    "limitations": [
+      "本機同瀏覽器學習紀錄，非學生身分驗證；PK僅同台分頁模擬",
+      "三維及電子曲線為教學幾何，非量子化學或分子動力學",
+      "課內自我檢核與正式評量分開，題本未經學生試測／信效度校準",
+      "Chrome及CDP觸控模擬，未做實體手機／VoiceOver／Safari／Firefox或學生認知負荷實證",
+      "舊入口專用瀏覽器腳本保留作歷史證據，新版以integration-browser及integration-edges-browser驗收"
+    ],
+    "publication": "僅本機，未commit／push／部署；原Markdown及根目錄公開網站未改",
+    "no_pretest": {
+      "passed": true,
+      "checks": [
+        "全新瀏覽器兩入口直接進入四單元學習，沒有前測門檻",
+        "先概念說明、後預測，重載保留說明位置",
+        "取消前測入口；先前前測草稿保留且不強迫恢復",
+        "選做後測可提早結束並返回課程，不影響進度",
+        "未做前測亦可使用PK；320–1280無溢出"
+      ],
+      "errors": []
+    },
+    "current_run": {
+      "core_tests": 54,
+      "browser": [
+        "no-pre-browser.mjs",
+        "integration-browser.mjs",
+        "integration-edges-browser.mjs"
+      ],
+      "server": "Python未變更，本輪未重跑；沿用先前8項通過結果",
+      "evidence": [
+        "/private/tmp/organic-no-pre-verification/",
+        "/private/tmp/organic-integration-verification/"
+      ],
+      "health": "GET /health: 200, ok=true",
+      "visual_review": "已檢視390px手機概念說明入口截圖，先說明標示／單一重點／主要操作可見。",
+      "pk_transactions": "交易程式未變更，本輪未重跑12分頁並行測試；本輪驗證教師／兩學生入口及開始個人作答。"
+    },
+    "entry_policy": "直接依說明→預測→觀察→推理→檢核→對照學習；沒有前測。原有進度接續，預測可回看說明。",
+    "prior_browser_edges": {
+      "passed": true,
+      "checks": [
+        "引導片段跨PK／重載保存段落及進度",
+        "真實CDP觸控旋轉會暫停，放大返回焦點",
+        "前測完成後教師與兩學生PK入口可使用，示範確認後開始個人作答",
+        "受損課程原文保留，額度不足仍能在本頁學習"
+      ],
+      "errors": []
+    },
+    "browser_edges": {
+      "passed": true,
+      "checks": [
+        "引導片段跨PK／重載保存段落及進度",
+        "真實CDP觸控旋轉會暫停，放大返回焦點",
+        "教師與兩學生PK入口可使用，示範確認後開始個人作答",
+        "受損課程原文保留，額度不足仍能在本頁學習"
+      ],
+      "errors": []
+    }
+  }
+}

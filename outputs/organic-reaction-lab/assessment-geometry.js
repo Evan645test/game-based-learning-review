@@ -1,0 +1,41 @@
+import {inspectGeometry} from './logic.js';
+import {makeModel,MoleculeViewer} from './geometry.js';
+import {esc} from './reason-workbench.js';
+export function mountAssessmentGeometry(root,kind,s,saved,onSave,onChange=()=>{}){
+  const assessment=true,scenes=[],$=(selector,r=root)=>r.querySelector(selector),toast=()=>{};
+  const id='scene-'+Math.random().toString(36).slice(2,9),isAngular=['sn2','e2'].includes(kind),isSN2=kind==='sn2';
+  root.innerHTML=`<section class="stage" aria-label="分子觀察台"><div class="stage-top"><h2>三維觀察台</h2>${isAngular?`<div class="segmented"><button data-view="ball" class="${s.view==='ball'?'active':''}">球棍</button><button data-view="newman" class="${s.view==='newman'?'active':''}">Newman</button></div>`:'<small>球棍模型</small>'}</div><div class="molecule-host"></div><div class="viewer-actions"><button type="button" data-rotate="left" aria-label="向左旋轉視角">↶ 左轉</button><button type="button" data-rotate="right" aria-label="向右旋轉視角">右轉 ↷</button><button type="button" data-rotate="up" aria-label="向上旋轉視角">仰視</button><button type="button" data-rotate="down" aria-label="向下旋轉視角">俯視</button><button type="button" data-zoom="in" aria-label="放大分子">＋</button><button type="button" data-zoom="out" aria-label="縮小分子">−</button><button type="button" data-reset>重設視角</button></div></section><p class="stage-note">拖曳模型可旋轉視角。下方控制才會改變進攻方向或分子構形。Me＝CH₃；虛線表示進攻方向，非已形成的鍵。</p><div class="controls">${isAngular?`<label class="control-title" for="${id}-angle">${isSN2?'進攻角 Nu–Cα–Br':'單鍵構形 H–Cβ–Cα–Br'}<output data-angle-output></output></label><div class="range-row"><input id="${id}-angle" data-angle type="range" min="0" max="${isSN2?180:360}" step="1" value="${isSN2?s.approach:s.torsion}" aria-label="${isSN2?'進攻角':'單鍵構形二面角'}"><input data-angle-number type="number" min="0" max="${isSN2?180:360}" step="1" value="${isSN2?s.approach:s.torsion}" aria-label="${isSN2?'輸入進攻角度':'輸入構形二面角'}"></div><div class="range-ends"><span>0°</span><span>${isSN2?'180°':'360°'}</span></div>`:''}${kind==='sn1'||kind==='e1'?`<div class="control-title">機構步驟 <output data-step-label></output></div><div class="step-buttons"><button type="button" data-step="0">受質</button><button type="button" data-step="1">脫離基離開</button>${kind==='sn1'?'<button type="button" data-step="2">親核進攻</button>':''}</div>${kind==='sn1'?'<div class="atom-picks"><button type="button" data-face="front">前面進攻</button><button type="button" data-face="back">背面進攻</button></div><p class="control-help">可切換步驟與進攻面，保存自己的觀察。</p>':''}`:''}${kind==='chair'?'<div class="control-title">椅式構形 <output data-chair-label></output></div><div class="step-buttons"><button type="button" data-chair="equatorial">雙赤道向椅式</button><button type="button" data-chair="axial">翻至雙軸向椅式</button></div><p class="control-help">使用椅式控制與原子選取，保存自己的觀察。</p>':''}${kind==='e2'?'<div class="atom-picks"><button type="button" data-beta="HB1">選 Hβ1</button><button type="button" data-beta="HB2">選 Hβ2</button></div>':kind==='chair'?'<div class="atom-picks"><button type="button" data-beta="H2">選 C2 的 H2</button><button type="button" data-beta="H6">選 C6 的 H6（向下）</button><button type="button" data-beta="H6b">選 C6 的 H6′（向上）</button></div>':kind==='e1'?'<div class="atom-picks"><button type="button" data-beta="Hethyl">選乙基側 β-H</button><button type="button" data-beta="Hmethyl">選甲基側 β-H</button></div>':''}<p class="control-help" data-measure></p><div class="evidence-row"><span class="evidence-status ${saved?.valid&&!assessment?'saved':''}" data-status>${saved?(assessment?'已保存觀察紀錄':saved.valid?'✓ 已保存有效空間證據':'尚未保存空間證據'):'尚未保存空間證據'}</span><button type="button" data-capture>保存空間證據</button></div><p class="evidence-snapshot" data-snapshot>${saved?esc(snapshotText(saved)):''}</p><p class="inline-error" data-spatial-error role="status" hidden></p></div>`;
+  function chooseBeta(beta){if(kind==='e2'&&s.beta!==beta){const old=s.beta==='HB2'?120:0;const next=beta==='HB2'?120:0;s.torsion=(s.torsion+next-old+360)%360;const range=$('[data-angle]',root),number=$('[data-angle-number]',root);if(range)range.value=s.torsion;if(number)number.value=s.torsion;}s.beta=beta;refresh();onChange();}
+  const viewer=new MoleculeViewer($('.molecule-host',root),atom=>{if(['HB1','HB2','H2','H6','H6b','Hethyl','Hmethyl'].includes(atom))chooseBeta(atom);});scenes.push(viewer);
+  function refresh(){
+    const model=makeModel(kind,s);viewer.view=s.view;viewer.set(model,s.beta);
+    const out=$('[data-angle-output]',root);if(out)out.textContent=`${Math.round(model.measurement)}°`;
+    const measure=$('[data-measure]',root);measure.textContent=`${model.measurementLabel}：${Math.round(model.measurement)}°${s.beta?'；目前選取 '+s.beta:''}。${kind==='e2'||kind==='chair'?'角度由模型內部座標計算。':''}`;
+    for(const button of root.querySelectorAll('[data-beta]'))button.classList.toggle('active',s.beta===button.dataset.beta);
+    for(const button of root.querySelectorAll('[data-step]'))button.classList.toggle('active',s.step===Number(button.dataset.step));
+    for(const button of root.querySelectorAll('[data-face]')){button.classList.toggle('active',s.face===button.dataset.face);button.disabled=s.step<1;}
+    for(const button of root.querySelectorAll('[data-chair]'))button.classList.toggle('active',s.chair===button.dataset.chair);
+    const step=$('[data-step-label]',root);if(step)step.textContent=s.step===0?'四面體受質':s.step===1?'平面碳陽離子':'親核進攻階段';
+    const chair=$('[data-chair-label]',root);if(chair)chair.textContent=s.chair==='axial'?'Br 軸向':'Br 赤道向';
+    for(const button of root.querySelectorAll('[data-view]'))button.classList.toggle('active',s.view===button.dataset.view);
+  }
+  root.querySelectorAll('[data-rotate]').forEach(button=>button.onclick=()=>{const dirs={left:[-.3,0],right:[.3,0],up:[0,-.3],down:[0,.3]};viewer.rotate(...dirs[button.dataset.rotate]);});
+  root.querySelectorAll('[data-zoom]').forEach(button=>button.onclick=()=>{viewer.zoom=Math.max(.65,Math.min(1.5,viewer.zoom+(button.dataset.zoom==='in'?.1:-.1)));viewer.render();});
+  $('[data-reset]',root).onclick=()=>viewer.reset();
+  root.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{s.view=button.dataset.view;refresh();onChange();});
+  function changeAngle(value){const num=Number(value);if(!Number.isFinite(num))return;const angle=Math.max(0,Math.min(isSN2?180:360,num));s[isSN2?'approach':'torsion']=angle;$('[data-angle]',root).value=angle;$('[data-angle-number]',root).value=angle;refresh();onChange();}
+  if(isAngular){$('[data-angle]',root).oninput=e=>changeAngle(e.target.value);$('[data-angle-number]',root).onchange=e=>changeAngle(e.target.value);}
+  root.querySelectorAll('[data-beta]').forEach(button=>button.onclick=()=>{chooseBeta(button.dataset.beta);});
+  root.querySelectorAll('[data-step]').forEach(button=>button.onclick=()=>{s.step=Number(button.dataset.step);if(kind==='sn1'&&s.step>=1&&!s.faceSeen.includes(s.face))s.faceSeen.push(s.face);refresh();onChange();});
+  root.querySelectorAll('[data-face]').forEach(button=>button.onclick=()=>{s.face=button.dataset.face;if(s.step>=1&&!s.faceSeen.includes(s.face))s.faceSeen.push(s.face);refresh();onChange();});
+  root.querySelectorAll('[data-chair]').forEach(button=>button.onclick=()=>{s.chair=button.dataset.chair;refresh();onChange();});
+  $('[data-capture]',root).onclick=()=>{
+    const result=inspectGeometry(kind,s),model=makeModel(kind,s);
+    const geometric=kind==='sn2'||kind==='e2'?Math.abs(model.measurement-180)<=12:kind==='chair'?Math.abs(model.measurement-180)<=12:true;
+    if(!assessment&&(!result.ok||!geometric)){const error=$('[data-spatial-error]',root);error.textContent=assessment?'目前觀察尚未符合所選反應的空間條件，請重新檢查並操作。':result.reason;error.hidden=false;return;}
+    const snap={valid:result.ok&&geometric,kind,at:new Date().toISOString(),state:structuredClone(s),measurement:model.measurement,view:{yaw:viewer.yaw,pitch:viewer.pitch,zoom:viewer.zoom}};
+    onSave(snap);$('[data-status]',root).textContent=assessment?'已保存觀察紀錄':'✓ 已保存有效空間證據';if(!assessment)$('[data-status]',root).classList.add('saved');$('[data-snapshot]',root).textContent=snapshotText(snap);$('[data-spatial-error]',root).hidden=true;toast('已保存這個構形與觀察數值。');
+  };
+  refresh();return {destroy(){scenes.forEach(s=>s.destroy());}};
+}
+function snapshotText(snap){return `${snap.kind.toUpperCase()} ｜ ${Math.round(snap.measurement)}°${snap.state.beta?' ｜ '+snap.state.beta:''}`;}
