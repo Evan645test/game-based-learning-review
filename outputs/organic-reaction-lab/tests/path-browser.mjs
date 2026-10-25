@@ -47,6 +47,23 @@ await page.reload();assert.equal(await page.locator('#course-notice').isHidden()
 // 2. Warm-up: eight concepts with instant checks; first answer wrong on card 1.
 assert.equal(await page.locator('[data-learning-path]').getAttribute('data-stage'),'warmup');await overflow('暖身 390px');await page.screenshot({path:out+'/01-warmup-390.png',fullPage:false});
 for(const [i,c] of WARMUP.entries()){
+ if(c.widget){
+  const svg=page.locator('[data-cation-svg]');await svg.scrollIntoViewIfNeeded();const clouds=[];
+  for(const id of ['methyl','primary','secondary','tertiary']){await page.locator(`[data-cation="${id}"]`).click();clouds.push(Number(await page.locator('[data-cation-atom="C"] [data-cloud]').getAttribute('data-cloud')));}
+  assert.ok(clouds.every((v,k)=>!k||v<clouds[k-1]),'中心碳藍色應逐級變淡 '+clouds);assert.equal(await svg.getAttribute('data-parallel'),'6');assert.equal(await page.locator('[data-p-lobe]').count(),2);
+  const box=await svg.boundingBox(),yaw=await svg.getAttribute('data-yaw');await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width/2+90,box.y+box.height/2,{steps:6});await page.mouse.up();assert.notEqual(await svg.getAttribute('data-yaw'),yaw);
+  await page.locator('[data-twist]').fill('30');assert.ok(Number(await svg.getAttribute('data-parallel'))<6);await page.locator('[data-twist]').fill('0');
+  await overflow('碳陽離子電子雲 390px');await page.locator('[data-cation-cloud]').screenshot({path:out+'/01c-cation-cloud-390.png'});
+  ok('碳陽離子電子雲：四級比較、空 p 軌域、超共軛計數、拖曳與轉動甲基');
+ }
+ if(c.demos){
+  const svg=page.locator('[data-concept-player] svg.spotlight-canvas');await svg.waitFor();assert.equal(await svg.getAttribute('data-renderer'),'xyz-ball-stick');
+  await svg.scrollIntoViewIfNeeded();const box=await svg.boundingBox(),yaw=Number(await svg.getAttribute('data-yaw'));await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width/2+80,box.y+box.height/2,{steps:6});await page.mouse.up();
+  assert.notEqual(Number(await svg.getAttribute('data-yaw')),yaw,c.id+' 拖曳應改變視角');
+  if(c.demos.length>1){await page.locator('[data-concept-demo="1"]').click();await page.locator('[data-concept-player] [data-physical-step]').filter({hasText:'E2'}).waitFor();}
+  if(c.id==='nucleophile'){await overflow('暖身三維 390px');await page.screenshot({path:out+'/01b-warmup-3d-390.png'});}
+  ok(`暖身「${c.title}」三維可拖曳旋轉`);
+ }
  if(i===0){await choose(page.locator('[data-warm-check]'),c.check.options[(c.check.answer+1)%3]);await page.locator('[data-warm-check] button').click();await page.locator('[data-warm-feedback]').filter({hasText:'再想想'}).waitFor();}
  await choose(page.locator('[data-warm-check]'),c.check.options[c.check.answer]);await page.locator('[data-warm-check] button').click();await page.locator('[data-warm-feedback]').filter({hasText:'正確'}).waitFor();
  if(i<WARMUP.length-1)await page.locator('[data-warm-next]').click();else await page.locator('[data-warm-done]').click();
@@ -56,7 +73,7 @@ ok('暖身八個觀念與即時檢查（含答錯回饋）');
 // 3. Five stages.
 for(const [si,st] of STAGES.entries()){
  await page.locator(`[data-learning-path][data-stage="${st.id}"]`).waitFor();
- for(let i=0;i<st.concepts.length;i++)await page.locator('[data-concept-next]').click();
+ for(let i=0;i<st.concepts.length;i++){if(st.concepts[i].widget)await page.locator('[data-cation-svg]').waitFor();await page.locator('[data-concept-next]').click();}
  for(const [pi,pair] of st.pairs.entries()){
   await page.locator('[data-predict="0"]').selectOption(kindOf.get(pair.a));await page.locator('[data-predict="1"]').selectOption(kindOf.get(pair.b));await page.locator('[data-reveal]').click();
   assert.equal(await page.locator('.contrast-card.right').count(),2);

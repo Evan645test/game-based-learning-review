@@ -72,3 +72,12 @@ test('新版第一次載入清除所有舊 organic- 紀錄與 PK 資料庫，其
  assert.deepEqual([...local.m.keys()].sort(),[DATA_VERSION_KEY,'other-app'].sort());assert.deepEqual([...session.m.keys()],['x']);assert.deepEqual(deleted,['organic-reaction-pk-v1']);
  local.setItem('organic-path-v3','{"version":3}');assert.equal(clearLegacyData([local,session],n=>deleted.push(n)),false);assert.equal(local.getItem('organic-path-v3'),'{"version":3}');
 });
+import {CATIONS,cationModel} from '../cation-cloud.js';
+test('碳陽離子電子雲：取代越多中心碳越不缺電子；鄰近 C–H 數 0/3/6/9，平行於空 p 軌域的會隨轉動改變',()=>{
+ const models=CATIONS.map(c=>cationModel(c.id));
+ for(let i=1;i<models.length;i++)assert.ok(models[i].cation.blue<models[i-1].cation.blue);
+ assert.deepEqual(models.map(m=>m.neighborCH),[0,3,6,9]);assert.deepEqual(models.map(m=>m.parallel),[0,2,4,6]);
+ assert.ok(cationModel('primary',Math.PI/6).parallel<2);
+ for(const m of models){const c=m.atoms.find(a=>a.center);assert.equal(m.bonds.filter(b=>b[0]==='C').length,3);for(const a of m.atoms)if(a.el==='C'&&!a.center)assert.equal(m.bonds.filter(b=>b.includes(a.id)).length,4);assert.ok(m.atoms.filter(a=>a.id!=='C'&&m.bonds.some(b=>b[0]==='C'&&b[1]===a.id)).every(a=>Math.abs(a.p[1])<1e-9),'陽離子平面');}
+ for(const s of [STAGES[3].concepts[0],STAGES[4].concepts[0],WARMUP.find(c=>c.id==='carbocation')])assert.equal(s.widget.kind,'cation-cloud');
+});

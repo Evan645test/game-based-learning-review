@@ -3,6 +3,7 @@ import {REACTION_EXAMPLES,exampleSpec} from './reaction-examples.js';
 import {mountSpotlight} from './spotlight-demo.js';
 import {mountArrowEditor} from './arrow-editor.js';
 import {mountVisual} from './concept-visuals.js';
+import {mountCationCloud} from './cation-cloud.js';
 import {newMechanism,validWork} from './electron-flow.js';
 import {gradedHint,firstArrowResult,aiArrowHint} from './graded-hints.js';
 import {esc,sourceLinks} from './reason-workbench.js';
@@ -55,13 +56,16 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
   if(focus){root.querySelector('h2')?.focus({preventScroll:true});root.scrollIntoView({block:'start',behavior:'instant'});}
  }
  const go=(stageId)=>{state.stage=stageId;save();draw(true);};
- function conceptCard(c,{index,total}){return `<p class="course-part">${index}／${total}</p><h2 tabindex="-1">${esc(c.title)}</h2>${c.body.map(p=>`<p>${esc(p)}</p>`).join('')}${c.visual?'<div class="concept-visual guide-concept" data-path-visual></div>':''}<p class="concept-example">${esc(c.example)}</p>`;}
+ function conceptCard(c,{index,total}){return `<p class="course-part">${index}／${total}</p><h2 tabindex="-1">${esc(c.title)}</h2>${c.body.map(p=>`<p>${esc(p)}</p>`).join('')}${c.demos?`<section class="concept-3d" data-concept-3d><p class="teacher-note">三維模型：拖曳旋轉、加減鍵縮放，可逐段播放電子移動。</p>${c.demos.length>1?`<div class="check-tools">${c.demos.map((d,k)=>`<button type="button" data-concept-demo="${k}" aria-pressed="${k===0}">${esc(d.label)}</button>`).join('')}</div>`:''}<div data-concept-player></div></section>`:''}${c.visual?`<details class="concept-flat"><summary>看平面示意圖</summary><div class="concept-visual guide-concept" data-path-visual></div></details>`:''}${c.widget?'<div class="concept-widget" data-cation-host></div>':''}<p class="concept-example">${esc(c.example)}</p>`;}
+ const mountWidget=c=>{if(c.widget?.kind==='cation-cloud')children.push(mountCationCloud($('[data-cation-host]'),{initial:c.widget.initial}));};
 
  function warmup(panel){
   const i=Math.min(state.warm.index,WARMUP.length-1),c=WARMUP[i],answered=state.warm.checks[c.id];
   const opts=shuffled(c.check.options,c.id);
   panel.innerHTML=`${conceptCard(c,{index:i+1,total:WARMUP.length})}<form class="concept-quiz" data-warm-check><fieldset><legend>即時檢查：${esc(c.check.prompt)}</legend>${radios('warm',opts,answered?.choice)}</fieldset><button type="submit">檢查</button><p class="feedback-box" data-warm-feedback role="status" ${answered?'':'hidden'}>${answered?esc((answered.choice===c.check.answer?'正確。':'再想想。')+c.check.feedback):''}</p></form><p class="teacher-note">不計分，只幫你確認有沒有讀懂。</p><div class="guide-actions">${i?'<button type="button" data-warm-prev>上一個</button>':''}${i<WARMUP.length-1?'<button type="button" class="primary" data-warm-next>下一個觀念</button>':'<button type="button" class="primary" data-warm-done>完成暖身，進入階段 1</button>'}<button type="button" data-warm-skip>跳過暖身</button></div><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;
   if(c.visual)mountVisual($('[data-path-visual]'),c.visual);
+  mountWidget(c);
+  if(c.demos){let spot=null;const play=k=>{if(spot){spot.destroy();children=children.filter(x=>x!==spot);}root.querySelectorAll('[data-concept-demo]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.conceptDemo)===k)));const d=c.demos[k],found=exampleById(d.example),key='warm:'+c.id+':'+k;spot=mountSpotlight($('[data-concept-player]'),{kind:d.kind,specOverride:exampleSpec(d.kind,found.example),segment:Number.isInteger(d.step)?{step:d.step}:null,initialState:loadView(key),onStateChange:s=>saveView(key,s)});children.push(spot);};root.querySelectorAll('[data-concept-demo]').forEach(b=>b.onclick=()=>play(Number(b.dataset.conceptDemo)));play(0);}
   $('[data-warm-check]').onsubmit=e=>{e.preventDefault();const v=new FormData(e.target).get('warm');if(v===null)return;const choice=Number(v),first=state.warm.checks[c.id]?.first??choice===c.check.answer;state.warm.checks[c.id]={choice,first};save();const box=$('[data-warm-feedback]');box.hidden=false;box.textContent=(choice===c.check.answer?'正確。':'再想想。')+c.check.feedback;};
   $('[data-warm-prev]')?.addEventListener('click',()=>{state.warm.index=i-1;save();draw(true);});
   $('[data-warm-next]')?.addEventListener('click',()=>{state.warm.index=i+1;save();draw(true);});
@@ -76,6 +80,7 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  function concepts(panel,st,r,next){
   const i=Math.min(r.concept,st.concepts.length-1),c=st.concepts[i];
   panel.innerHTML=`${conceptCard(c,{index:i+1,total:st.concepts.length})}<div class="guide-actions">${i?'<button type="button" data-concept-prev>上一個</button>':''}<button type="button" class="primary" data-concept-next>${i<st.concepts.length-1?'下一個概念':'用對比案例觀察差異'}</button></div><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;
+  mountWidget(c);
   $('[data-concept-prev]')?.addEventListener('click',()=>{r.concept=i-1;save();draw(true);});
   $('[data-concept-next]').onclick=()=>{if(i<st.concepts.length-1){r.concept=i+1;save();draw(true);}else next();};
  }
