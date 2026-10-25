@@ -156,7 +156,7 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
   if(current===frames.length-1&&!completed){completed=true;onComplete();}
  }
  function stop(reason=''){playing=false;cancelAnimationFrame(raf);last=0;q('[data-play]').textContent='播放動畫';q('[data-play]').setAttribute('aria-pressed','false');if(reason)status(reason);persist();}
- function interact(){if(playing)stop('操作視角時已暫停，按播放動畫繼續。');}
+ function interact(){if(settling){cancelAnimationFrame(settling);settling=0;status('已停止切換視角，可自由旋轉。');}if(playing)stop('操作視角時已暫停，按播放動畫繼續；播放時會先回到建議視角。');}
  function move(n){stop();current=Math.max(0,Math.min(frames.length-1,n));progress=0;status('逐段觀察中，可播放本段。');show();}
  function tick(now){
   if(!playing||destroyed)return;
@@ -165,7 +165,19 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
   else{progressUI();draw();if(now-lastSaved>1000)persist();}raf=requestAnimationFrame(tick);
  }
  q('[data-demo-prev]').onclick=()=>move(current-1);q('[data-demo-next]').onclick=()=>move(current+1);q('[data-replay]').onclick=()=>move(0);
- q('[data-play]').onclick=()=>{if(playing){stop('已暫停，可旋轉模型查看。');return;}if(reduced.matches){q('[data-motion-note]').textContent=' 已啟用減少動態：以逐段切換閱讀。';if(segment&&current===frames.length-1){progress=1;show();}else move(current===frames.length-1?0:current+1);status('減少動態模式：已切到下一段。');return;}if(current===frames.length-1&&progress>=1){current=0;progress=0;}playing=true;last=0;status('播放中；旋轉或調整視角會暫停。');show();raf=requestAnimationFrame(tick);};
+ // Playback always starts from the recommended viewpoint so every learner sees the same motion.
+ const VIEW={yaw:-.3,pitch:.36,zoom:1};let settling=0;
+ const atView=()=>Math.abs(camera.yaw-VIEW.yaw)<1e-3&&Math.abs(camera.pitch-VIEW.pitch)<1e-3&&Math.abs(camera.zoom-VIEW.zoom)<1e-3;
+ function settleCamera(done){
+  // Shortest turn back to the preset yaw, then start.
+  const turn=((camera.yaw-VIEW.yaw)%(2*Math.PI)+3*Math.PI)%(2*Math.PI)-Math.PI,from={yaw:VIEW.yaw+turn,pitch:camera.pitch,zoom:camera.zoom};
+  const finish=()=>{settling=0;Object.assign(camera,VIEW);q('[data-view-zoom]').value=100;draw();persist();done();};
+  if(atView())return done();status('已切回建議視角，接著播放。');
+  if(reduced.matches)return finish();
+  const t0=performance.now(),step=now=>{if(destroyed)return;const t=Math.min(1,(now-t0)/450),e=t*t*(3-2*t);camera.yaw=from.yaw+(VIEW.yaw-from.yaw)*e;camera.pitch=from.pitch+(VIEW.pitch-from.pitch)*e;camera.zoom=from.zoom+(VIEW.zoom-from.zoom)*e;draw();if(t<1)settling=requestAnimationFrame(step);else finish();};
+  settling=requestAnimationFrame(step);
+ }
+ q('[data-play]').onclick=()=>{if(settling)return;if(playing){stop('已暫停，可旋轉模型查看。');return;}if(reduced.matches){settleCamera(()=>{});q('[data-motion-note]').textContent=' 已啟用減少動態：以逐段切換閱讀。';if(segment&&current===frames.length-1){progress=1;show();}else move(current===frames.length-1?0:current+1);status('減少動態模式：已切到下一段。');return;}settleCamera(()=>{if(current===frames.length-1&&progress>=1){current=0;progress=0;}playing=true;last=0;status('播放中（建議視角）；旋轉或調整視角會暫停。');show();raf=requestAnimationFrame(tick);});};
  q('[data-speed]').onchange=e=>{speed=Number(e.target.value);persist();};q('[data-spot]').onclick=e=>{spot=!spot;e.target.textContent=`聚光燈：${spot?'開':'關'}`;e.target.setAttribute('aria-pressed',String(spot));draw();persist();};q('[data-seek]').oninput=e=>{stop('已停在指定位置，可旋轉查看。');progress=Number(e.target.value)/100;progressUI();draw();persist();};
  const orbit=(dx,dy=0,save=true)=>{interact();camera.yaw+=dx;camera.pitch=Math.max(-1.35,Math.min(1.35,camera.pitch+dy));draw();if(save)persist();};
  const rotations={left:[-.3,0],right:[.3,0],up:[0,-.2],down:[0,.2]};for(const button of root.querySelectorAll('[data-view-orbit]'))button.onclick=()=>orbit(...rotations[button.dataset.viewOrbit]);
