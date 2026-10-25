@@ -37,6 +37,7 @@ test('題庫每類至少五題，選項與正解完整；例子模板與類型�
  const n={};for(const it of ITEMS){n[it.type]=(n[it.type]||0)+1;assert.equal(it.reasons.length,3);assert.equal(it.products.length,3);assert.equal(new Set(it.products).size,3,it.id);if(it.example){assert.ok(examples.has(it.example),it.id);}}
  for(const t of Object.keys(TYPES))assert.ok(n[t]>=5,t);
  assert.equal(new Set(ITEMS.map(i=>i.id)).size,ITEMS.length);
+ assert.equal(new Set(ITEMS.map(i=>[i.substrate,i.reagent,i.conditions].join('|'))).size,ITEMS.length,'題目卡片內容必須可區分');
 });
 test('混合練習交錯且依弱點加權；精熟度依最近五題',()=>{
  const types=['sn2','sn1','e2'],history=[{item:'e2-a',type:'e2',mech:false},{item:'e2-b',type:'e2',mech:false},{item:'e2-c',type:'e2',mech:false},{item:'sn2-a',type:'sn2',mech:true},{item:'sn1-a',type:'sn1',mech:true}];

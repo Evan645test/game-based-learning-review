@@ -27,7 +27,8 @@ async function drawArrows(root,kind,{correct=true,check=true}={}){
 }
 async function clearArrows(root,kind){const steps=mechanismSpec(kind).steps;for(let i=0;i<steps.length;i++){const b=root.locator(`[data-flow-step="${i}"]`);if(await b.isDisabled())break;await b.click();if(!(await root.locator('[data-arrow-clear]').isDisabled()))await root.locator('[data-arrow-clear]').click();}}
 async function answerItem({wrongMech=false,arrows=true}={}){
- const card=await page.locator('.reaction-card').innerText(),item=ITEMS.find(i=>card.includes(i.substrate)&&card.includes(i.reagent)&&card.includes(i.conditions));assert.ok(item,'找不到題目：'+card);
+ // Match each field exactly: substring matching confused 丙烯 with 2-甲基丙烯 and Cl₂ with CH₂Cl₂.
+ const fields=await page.locator('.reaction-card p').evaluateAll(ps=>ps.map(p=>p.textContent.replace(/^[^：]*：/,'').trim())),matches=ITEMS.filter(i=>i.substrate===fields[0]&&i.reagent===fields[1]&&i.conditions===fields[2]);assert.equal(matches.length,1,'題目應唯一對應：'+fields.join(' | '));const item=matches[0];
  const types=await page.locator('[name=mech]').evaluateAll(n=>n.map(x=>x.value)),mech=wrongMech?types.find(t=>t!==item.type):item.type;
  await page.locator(`[name=mech][value="${mech}"]`).check();await choose(page.locator('[data-mixed-form] fieldset').nth(1),item.reasons[0]);await choose(page.locator('[data-mixed-form] fieldset').nth(2),item.products[0]);
  await page.locator('[data-mixed-form] button[type=submit]').click();
@@ -37,6 +38,8 @@ async function answerItem({wrongMech=false,arrows=true}={}){
  await page.locator('[data-mixed-next]').click();return item;
 }
 
+// On failure keep the stack, the last passed check and a screenshot so intermittent timeouts can be diagnosed.
+try{
 // 1. Legacy data is cleared on first load of the new version; unrelated keys survive.
 await page.goto(base);await page.evaluate(()=>{localStorage.clear();localStorage.setItem('organic-course-v1','{"version":1}');localStorage.setItem('organic-assessment-v2:attempt:x','{}');localStorage.setItem('organic-pk-v1:ROOM','{}');localStorage.setItem('unrelated','keep');});
 await page.reload();await page.locator('#course-notice').filter({hasText:'舊的課程進度'}).waitFor();
@@ -129,4 +132,5 @@ await page.locator('text=提早結束').first().waitFor();const recs=await page.
 for(const w of [320,1280]){await page.setViewportSize({width:w,height:w===320?700:800});await page.locator('[data-back-learning]').click();await page.locator('[data-path-stage]').selectOption('s4');await page.locator('[data-goto-step="1"]').click();await overflow(`對比 ${w}px`);await page.locator('[data-goto-step="2"]').click();await overflow(`流程圖 ${w}px`);if(w===1280)await page.screenshot({path:out+'/06-flow-1280.png',fullPage:true});await page.locator('[data-page=assess]').click();}
 ok('320／1280px 無水平溢出');
 
+}catch(error){await fs.writeFile(out+'/failure.txt',[String(error.stack||error),'last passed: '+report.checks.at(-1),'url: '+page.url(),'pageerrors: '+JSON.stringify(errors)].join('\n'));await page.screenshot({path:out+'/failure.png',fullPage:true}).catch(()=>{});await browser.close();throw error;}
 assert.deepEqual(errors,[]);report.errors=errors;report.passed=true;report.at=new Date().toISOString();await fs.writeFile(out+'/report.json',JSON.stringify(report,null,2));console.log('ALL PASSED');await browser.close();
