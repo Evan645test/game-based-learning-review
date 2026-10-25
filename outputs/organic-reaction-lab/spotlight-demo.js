@@ -144,7 +144,9 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
  function draw(){
   const f=frames[current],scene=reactionScene3D(kind,f.step,f.mode,progress,spec);
   viewHeight=dialog.open?Math.max(410,650*viewport.height/viewport.width):410;svg.setAttribute('viewBox',`0 0 650 ${viewHeight}`);
-  labelLayer(drawReaction3D(svg,scene,{id,frame:f,required:spec.steps[f.step].required,progress,spot,camera,hydrogens,chloride,viewHeight}));
+  // Zoom in on electron movement; while playing, ease between frames over the first fifth of each frame.
+  const flow=fr=>['focus','together','transform'].includes(fr?.mode)?1:0,target=flow(f),before=current>0?flow(frames[current-1]):0,blend=playing&&!reduced.matches&&before!==target?Math.min(1,progress/.2):1,e=blend*blend*(3-2*blend);
+  labelLayer(drawReaction3D(svg,scene,{id,frame:f,required:spec.steps[f.step].required,progress,spot,camera,hydrogens,chloride,viewHeight,focus:before+(target-before)*e}));
  }
  function status(text){q('[data-player-status]').textContent=text;}
  function show(){

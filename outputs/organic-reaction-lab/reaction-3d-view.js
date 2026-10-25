@@ -3,8 +3,13 @@ const NS='http://www.w3.org/2000/svg';
 const el=(tag,attrs={},text)=>{const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text!==undefined)n.textContent=text;return n;};
 const colors={C:['#b3bec6','#536575','#293642'],H:['#fff','#e7ebee','#8c9aa1'],O:['#ffb1a6','#d2514c','#762c2a'],N:['#b1d1ff','#4a82d0','#263f79'],Br:['#e9b898','#ae623f','#5c3221'],Cl:['#bfe3a3','#6d9b48','#39562b'],I:['#d8c1ee','#9773bd','#4e345f']};
 const radius={C:17,H:10,O:18,N:17,Br:22,Cl:20,I:23};
-export function drawReaction3D(svg,scene,{id,frame,required,progress,spot,camera,hydrogens=false,chloride=false,viewHeight=410}){
- const raw=p=>projectPoint(p,{...camera,zoom:1}),extent=scene.bounds.filter(b=>hydrogens||!b.spectator).map(b=>raw(b.p)),xs=extent.map(p=>p.x),ys=extent.map(p=>p.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,fit=Math.min(viewHeight>410?2.4:1.2,550/Math.max(1,Math.max(...xs)-Math.min(...xs)),(viewHeight-(viewHeight>410?140:110))/Math.max(1,Math.max(...ys)-Math.min(...ys)));
+export const FOCUS_ZOOM=1.6;
+export function drawReaction3D(svg,scene,{id,frame,required,progress,spot,camera,hydrogens=false,chloride=false,viewHeight=410,focus=0}){
+ let raw=p=>projectPoint(p,{...camera,zoom:1}),extent=scene.bounds.filter(b=>hydrogens||!b.spectator).map(b=>raw(b.p)),xs=extent.map(p=>p.x),ys=extent.map(p=>p.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,fit=Math.min(viewHeight>410?2.4:1.2,550/Math.max(1,Math.max(...xs)-Math.min(...xs)),(viewHeight-(viewHeight>410?140:110))/Math.max(1,Math.max(...ys)-Math.min(...ys)));
+ // Electron-flow frames zoom toward the arrows' sources and targets (focus 0→1 blends in).
+ const flowPoints=frame.arrows.flatMap(i=>[required[i]?.from,required[i]?.to]).map(k=>scene.anchors.get(k)).filter(Boolean).map(raw);
+ if(focus>0&&flowPoints.length){const fx=flowPoints.reduce((t,p)=>t+p.x,0)/flowPoints.length,fy=flowPoints.reduce((t,p)=>t+p.y,0)/flowPoints.length;cx+=(fx-cx)*focus;cy+=(fy-cy)*focus;fit*=1+(FOCUS_ZOOM-1)*focus;}
+ svg.dataset.focus=focus.toFixed(2);
  const project=p=>{const q=raw(p);return {...q,x:325+(q.x-cx)*fit*camera.zoom,y:viewHeight/2+(q.y-cy)*fit*camera.zoom,scale:q.scale*fit};},points=new Map(scene.atoms.map(a=>[a.id,project(a.p)])),anchors=new Map([...scene.anchors].map(([id,p])=>[id,project(p)]));
  svg.replaceChildren();Object.assign(svg.dataset,{renderer:'xyz-ball-stick',mode:frame.mode,step:String(frame.step),yaw:String(camera.yaw),pitch:String(camera.pitch),zoom:String(camera.zoom)});
  const defs=el('defs');
@@ -41,7 +46,7 @@ export function drawReaction3D(svg,scene,{id,frame,required,progress,spot,camera
  }
  items.sort((a,b)=>b.z-a.z).forEach(i=>svg.append(i.node));
  if(spot)svg.append(el('rect',{width:650,height:viewHeight,fill:'#0c2d29',opacity:.52,mask:`url(#${id}-mask3d)`,class:'spotlight-shade','pointer-events':'none'}));
- for(const {i,from,to,d}of paths){svg.append(el('path',{d,fill:'none',stroke:'#aa6416','stroke-width':2.6,'marker-end':`url(#${id}-arrow3d)`,'pointer-events':'none'}));const p=project(electronCurve3D(from,to,Math.min(.99,progress)));for(const delta of[-3.4,3.4])svg.append(el('circle',{cx:p.x+delta,cy:p.y,r:4,fill:'#ffe36c',stroke:'#76501b','stroke-width':1,'data-electron':i}));}
+ for(const {i,from,to,d}of paths){svg.append(el('path',{d,fill:'none',stroke:'#aa6416','stroke-width':2.6,'marker-end':`url(#${id}-arrow3d)`,'pointer-events':'none'}));const p=project(electronCurve3D(from,to,Math.min(.99,progress)));for(const delta of[-4.6,4.6])svg.append(el('circle',{cx:p.x+delta,cy:p.y,r:5.4,fill:'#ffe36c',stroke:'#76501b','stroke-width':1,'data-electron':i}));}
  // Critical labels are rendered in a separate HTML layer, so SVG shrinking never shrinks their font.
  const roles={CA:'Cα',CB:'Cβ',Br:chloride?'Cl':null,Nu:'親核',Base:'鹼',HB:'β-H',HN:'轉移H'};
  return scene.atoms.filter(a=>a.reactive||a.element==='N').map(a=>{const point=points.get(a.id),element=a.id==='Br'&&chloride?'Cl':a.element,charge=a.charge>0?'⁺':a.charge<0?'⁻':'';
