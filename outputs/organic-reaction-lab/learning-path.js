@@ -1,10 +1,11 @@
-import {TYPES,WARMUP,STAGES,FLOW,ITEMS,stageIndex,unlockedTypes,pickItem,mastery,shuffled} from './course-path.js';
+import {TYPES,WARMUP,WARM_GROUPS,PATH_GOALS,STAGES,FLOW,ITEMS,stageIndex,unlockedTypes,pickItem,mastery,shuffled} from './course-path.js';
 import {REACTION_EXAMPLES,exampleSpec} from './reaction-examples.js';
 import {mountSpotlight} from './spotlight-demo.js';
 import {mountArrowEditor} from './arrow-editor.js';
 import {mountVisual} from './concept-visuals.js';
 import {mountCationCloud} from './cation-cloud.js';
 import {leavingHTML} from './leaving-visual.js';
+import {energyHTML} from './energy-visual.js';
 import {newMechanism,validWork} from './electron-flow.js';
 import {gradedHint,firstArrowResult,aiArrowHint} from './graded-hints.js';
 import {esc,sourceLinks} from './reason-workbench.js';
@@ -35,6 +36,22 @@ export function flowHTML(stageId,{highlight=[],pending=[]}={}){
  return `<div class="flow-chart" aria-label="反應類型判斷流程圖">${cards}</div>`;
 }
 
+/** Learning-path tree: each step's goal, the warm-up cards it relies on, and entry primers; marks the current step and finished ones. */
+export function pathTreeHTML(state){
+ const warmTitle=new Map(WARMUP.map((c,i)=>[c.id,{title:c.title.split('：')[0],i}])),checked=id=>Boolean(state.warm.checks[id]);
+ const chip=(attrs,label,cls='',done=false)=>`<button type="button" class="tree-chip${cls}" ${attrs}>${done?'✓ ':''}${esc(label)}</button>`;
+ const warmChip=id=>{const w=warmTitle.get(id);return chip(`data-tree-warm="${w.i}"`,w.title,'',checked(id));};
+ const stageDone=st=>{const r=state.stages[st.id];return r.step>=4&&r.mixed.done>=st.mixCount;};
+ const node=({id,title,tag,goal,body='',done=false,attrs})=>`<li class="tree-node${state.stage===id?' current':''}${done?' done':''}" data-tree-node="${id}"><div class="tree-head"><button type="button" class="tree-title" ${attrs}>${done?'✓ ':''}${esc(title)}</button>${tag?`<span class="tree-tag">${esc(tag)}</span>`:''}${state.stage===id?'<span class="tree-here">你在這裡</span>':''}</div><p class="tree-goal"><strong>目標：</strong>${esc(goal)}</p>${body}</li>`;
+ const groups=`<div class="tree-groups">${WARM_GROUPS.map(g=>`<section class="tree-group" data-tree-group="${g.id}"><h4>${esc(g.title)}</h4><p>${esc(g.hint)}</p><div class="tree-chips">${WARMUP.filter(c=>c.group===g.id).map(c=>warmChip(c.id)).join('')}</div></section>`).join('')}</div>`;
+ const warmDone=WARMUP.every(c=>checked(c.id));
+ const items=[node({id:'warmup',title:'暖身：反應的語言',tag:`${WARMUP.length} 張卡，可跳過`,goal:PATH_GOALS.warmup,body:groups,done:warmDone,attrs:'data-tree-stage="warmup"'}),
+  ...STAGES.map((st,k)=>node({id:st.id,title:`階段 ${k+1}　${st.short}`,tag:st.title.split('：')[0],goal:st.goal,done:stageDone(st),attrs:`data-tree-stage="${st.id}"`,body:`<div class="tree-chips">${(st.primers||[]).map((p,j)=>chip(`data-tree-primer="${st.id}:${j}"`,(p.optional?'選讀 ':'')+p.title.replace(/^選讀：/,''),' primer',checked(p.id))).join('')}${st.needs.map(warmChip).join('')}</div>`})),
+  node({id:'final',title:'總混合練習',tag:'弱點加權，不擋關',goal:PATH_GOALS.final,attrs:'data-tree-stage="final"'}),
+  node({id:'assessment',title:'選做評量',tag:'後測／延後測',goal:PATH_GOALS.assessment,attrs:'data-tree-assess'})];
+ return `<details class="path-tree" data-path-tree ${state.warm.index===0&&!Object.keys(state.warm.checks).length&&state.stage==='warmup'?'open':''}><summary>學習路徑地圖：每一步的目標</summary><p class="tree-legend"><span class="tree-chip sample">暖身卡</span><span class="tree-chip primer sample">入口小暖身</span>點任一張卡或步驟就能跳過去；✓ 表示已完成。</p><ol class="tree">${items.join('')}</ol></details>`;
+}
+
 let memory=null,blocked=false;
 export const pathSnapshot=()=>memory?structuredClone(memory):null;
 export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},loadView=()=>null,saveView=()=>{}}={}){
@@ -46,28 +63,34 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  function header(){
   const i=ORDER.indexOf(state.stage),names=['暖身：反應的語言',...STAGES.map((s,k)=>`階段 ${k+1}：${s.title}`),'總混合練習'];
   const st=STAGES.find(s=>s.id===state.stage),steps=st?`<ol class="guide-progress" aria-label="本階段步驟">${STEP_LABELS.map((l,k)=>`<li ${k===state.stages[st.id].step?'aria-current="step"':''}><button type="button" data-goto-step="${k}">${k+1}<span>${l}</span></button></li>`).join('')}</ol>`:'';
-  return `<header class="guide-header"><p class="course-part">有機反應 · 從零到能分辨反應類型</p><h1>先懂語言，再一種一種加入，最後混在一起分辨</h1><label>學習路徑<select data-path-stage>${ORDER.map((id,k)=>`<option value="${id}" ${k===i?'selected':''}>${esc(names[k])}</option>`).join('')}</select></label><p class="learning-goal">${st?`本階段新增：${st.newTypes.map(t=>TYPES[t].label).join('、')}；已學會分辨：${unlockedTypes(st.id).map(t=>TYPES[t].label).join('、')}`:state.stage==='warmup'?'先熟悉之後每個階段都會用到的詞與觀念；可以跳過，之後隨時回來。':'九種反應類型交錯出現；系統依你的弱點多出題，不設門檻。'}</p>${steps}</header>`;
+  return `<header class="guide-header"><p class="course-part">有機反應 · 從零到能分辨反應類型</p><h1>先懂語言，再一種一種加入，最後混在一起分辨</h1><label>學習路徑<select data-path-stage>${ORDER.map((id,k)=>`<option value="${id}" ${k===i?'selected':''}>${esc(names[k])}</option>`).join('')}</select></label>${pathTreeHTML(state)}<p class="learning-goal">${st?`本階段新增：${st.newTypes.map(t=>TYPES[t].label).join('、')}；已學會分辨：${unlockedTypes(st.id).map(t=>TYPES[t].label).join('、')}`:state.stage==='warmup'?'先熟悉之後每個階段都會用到的詞與觀念；可以跳過，之後隨時回來。':'九種反應類型交錯出現；系統依你的弱點多出題，不設門檻。'}</p>${steps}</header>`;
  }
  function draw(focus=false){
   clear();root.innerHTML=`<section class="guided-lesson learning-path" data-learning-path data-stage="${state.stage}">${header()}<article class="guide-panel" data-path-panel></article></section>`;
   $('[data-path-stage]').onchange=e=>{state.stage=e.target.value;save();draw(true);};
+  root.querySelectorAll('[data-tree-stage]').forEach(b=>b.onclick=()=>go(b.dataset.treeStage));
+  root.querySelectorAll('[data-tree-warm]').forEach(b=>b.onclick=()=>{state.warm.index=Number(b.dataset.treeWarm);go('warmup');});
+  root.querySelectorAll('[data-tree-primer]').forEach(b=>b.onclick=()=>{const [id,j]=b.dataset.treePrimer.split(':'),r=state.stages[id];r.step=0;r.concept=Number(j);go(id);});
+  $('[data-tree-assess]').onclick=onAssessment;
   root.querySelectorAll('[data-goto-step]').forEach(b=>b.onclick=()=>{state.stages[state.stage].step=Number(b.dataset.gotoStep);save();draw(true);});
   const panel=$('[data-path-panel]');
   if(state.stage==='warmup')warmup(panel);else if(state.stage==='final')finalPractice(panel);else stage(panel,STAGES.find(s=>s.id===state.stage));
   if(focus){root.querySelector('h2')?.focus({preventScroll:true});root.scrollIntoView({block:'start',behavior:'instant'});}
  }
  const go=(stageId)=>{state.stage=stageId;save();draw(true);};
- function conceptCard(c,{index,total}){return `<p class="course-part">${index}／${total}</p><h2 tabindex="-1">${esc(c.title)}</h2>${c.body.map(p=>`<p>${esc(p)}</p>`).join('')}${c.demos?`<section class="concept-3d" data-concept-3d><p class="teacher-note">三維模型：拖曳旋轉、加減鍵縮放，可逐段播放電子移動。</p>${c.demos.length>1?`<div class="check-tools">${c.demos.map((d,k)=>`<button type="button" data-concept-demo="${k}" aria-pressed="${k===0}">${esc(d.label)}</button>`).join('')}</div>`:''}<div data-concept-player></div></section>`:''}${c.visual?`<details class="concept-flat"><summary>看平面示意圖</summary><div class="concept-visual guide-concept" data-path-visual></div></details>`:''}${c.widget?'<div class="concept-widget" data-cation-host></div>':''}<p class="concept-example">${esc(c.example)}</p>`;}
- const mountWidget=c=>{if(c.widget?.kind==='leaving')$('[data-cation-host]').innerHTML=leavingHTML();if(c.widget?.kind==='cation-cloud')children.push(mountCationCloud($('[data-cation-host]'),{initial:c.widget.initial}));};
+ function conceptCard(c,{index,total,tag=''}){return `<p class="course-part">${tag}${index}／${total}</p><h2 tabindex="-1">${esc(c.title)}</h2>${c.body.map(p=>`<p>${esc(p)}</p>`).join('')}${c.demos?`<section class="concept-3d" data-concept-3d><p class="teacher-note">三維模型：拖曳旋轉、加減鍵縮放，可逐段播放電子移動。</p>${c.demos.length>1?`<div class="check-tools">${c.demos.map((d,k)=>`<button type="button" data-concept-demo="${k}" aria-pressed="${k===0}">${esc(d.label)}</button>`).join('')}</div>`:''}<div data-concept-player></div></section>`:''}${c.visual?`<details class="concept-flat"><summary>看平面示意圖</summary><div class="concept-visual guide-concept" data-path-visual></div></details>`:''}${c.widget?'<div class="concept-widget" data-cation-host></div>':''}<p class="concept-example">${esc(c.example)}</p>`;}
+ const checkForm=c=>{const answered=state.warm.checks[c.id];return `<form class="concept-quiz" data-warm-check><fieldset><legend>即時檢查：${esc(c.check.prompt)}</legend>${radios('warm',shuffled(c.check.options,c.id),answered?.choice)}</fieldset><button type="submit">檢查</button><p class="feedback-box" data-warm-feedback role="status" ${answered?'':'hidden'}>${answered?esc((answered.choice===c.check.answer?'正確。':'再想想。')+c.check.feedback):''}</p></form><p class="teacher-note">不計分，只幫你確認有沒有讀懂。</p>`;};
+ // Warm-up and entry-primer checks share state.warm.checks, keyed by card id.
+ const bindCheck=c=>{$('[data-warm-check]').onsubmit=e=>{e.preventDefault();const v=new FormData(e.target).get('warm');if(v===null)return;const choice=Number(v),first=state.warm.checks[c.id]?.first??choice===c.check.answer;state.warm.checks[c.id]={choice,first};save();const box=$('[data-warm-feedback]');box.hidden=false;box.textContent=(choice===c.check.answer?'正確。':'再想想。')+c.check.feedback;};};
+ const mountDemos=c=>{if(!c.demos)return;let spot=null;const play=k=>{if(spot){spot.destroy();children=children.filter(x=>x!==spot);}root.querySelectorAll('[data-concept-demo]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.conceptDemo)===k)));const d=c.demos[k],found=exampleById(d.example),key='warm:'+c.id+':'+k;spot=mountSpotlight($('[data-concept-player]'),{kind:d.kind,specOverride:exampleSpec(d.kind,found.example),segment:Number.isInteger(d.step)?{step:d.step}:null,initialState:loadView(key),onStateChange:s=>saveView(key,s)});children.push(spot);};root.querySelectorAll('[data-concept-demo]').forEach(b=>b.onclick=()=>play(Number(b.dataset.conceptDemo)));play(0);};
+ const mountWidget=c=>{if(c.widget?.kind==='energy')$('[data-cation-host]').innerHTML=energyHTML();if(c.widget?.kind==='leaving')$('[data-cation-host]').innerHTML=leavingHTML();if(c.widget?.kind==='cation-cloud')children.push(mountCationCloud($('[data-cation-host]'),{initial:c.widget.initial}));};
 
  function warmup(panel){
-  const i=Math.min(state.warm.index,WARMUP.length-1),c=WARMUP[i],answered=state.warm.checks[c.id];
-  const opts=shuffled(c.check.options,c.id);
-  panel.innerHTML=`${conceptCard(c,{index:i+1,total:WARMUP.length})}<form class="concept-quiz" data-warm-check><fieldset><legend>即時檢查：${esc(c.check.prompt)}</legend>${radios('warm',opts,answered?.choice)}</fieldset><button type="submit">檢查</button><p class="feedback-box" data-warm-feedback role="status" ${answered?'':'hidden'}>${answered?esc((answered.choice===c.check.answer?'正確。':'再想想。')+c.check.feedback):''}</p></form><p class="teacher-note">不計分，只幫你確認有沒有讀懂。</p><div class="guide-actions">${i?'<button type="button" data-warm-prev>上一個</button>':''}${i<WARMUP.length-1?'<button type="button" class="primary" data-warm-next>下一個觀念</button>':'<button type="button" class="primary" data-warm-done>完成暖身，進入階段 1</button>'}<button type="button" data-warm-skip>跳過暖身</button></div><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;
+  const i=Math.min(state.warm.index,WARMUP.length-1),c=WARMUP[i],group=WARM_GROUPS.find(g=>g.id===c.group);
+  panel.innerHTML=`${conceptCard(c,{index:i+1,total:WARMUP.length,tag:`${esc(group.title)} · `})}${checkForm(c)}<div class="guide-actions">${i?'<button type="button" data-warm-prev>上一個</button>':''}${i<WARMUP.length-1?'<button type="button" class="primary" data-warm-next>下一個觀念</button>':'<button type="button" class="primary" data-warm-done>完成暖身，進入階段 1</button>'}<button type="button" data-warm-skip>跳過暖身</button></div><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;
   if(c.visual)mountVisual($('[data-path-visual]'),c.visual);
   mountWidget(c);
-  if(c.demos){let spot=null;const play=k=>{if(spot){spot.destroy();children=children.filter(x=>x!==spot);}root.querySelectorAll('[data-concept-demo]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.conceptDemo)===k)));const d=c.demos[k],found=exampleById(d.example),key='warm:'+c.id+':'+k;spot=mountSpotlight($('[data-concept-player]'),{kind:d.kind,specOverride:exampleSpec(d.kind,found.example),segment:Number.isInteger(d.step)?{step:d.step}:null,initialState:loadView(key),onStateChange:s=>saveView(key,s)});children.push(spot);};root.querySelectorAll('[data-concept-demo]').forEach(b=>b.onclick=()=>play(Number(b.dataset.conceptDemo)));play(0);}
-  $('[data-warm-check]').onsubmit=e=>{e.preventDefault();const v=new FormData(e.target).get('warm');if(v===null)return;const choice=Number(v),first=state.warm.checks[c.id]?.first??choice===c.check.answer;state.warm.checks[c.id]={choice,first};save();const box=$('[data-warm-feedback]');box.hidden=false;box.textContent=(choice===c.check.answer?'正確。':'再想想。')+c.check.feedback;};
+  mountDemos(c);bindCheck(c);
   $('[data-warm-prev]')?.addEventListener('click',()=>{state.warm.index=i-1;save();draw(true);});
   $('[data-warm-next]')?.addEventListener('click',()=>{state.warm.index=i+1;save();draw(true);});
   $('[data-warm-done]')?.addEventListener('click',()=>go('s1'));
@@ -79,11 +102,14 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
   if(r.step===0)concepts(panel,st,r,next);else if(r.step===1)contrast(panel,st,r,next);else if(r.step===2)branches(panel,st,r,next);else if(r.step===3)arrows(panel,st,r,next);else mixed(panel,st,r);
  }
  function concepts(panel,st,r,next){
-  const i=Math.min(r.concept,st.concepts.length-1),c=st.concepts[i];
-  panel.innerHTML=`${conceptCard(c,{index:i+1,total:st.concepts.length})}<div class="guide-actions">${i?'<button type="button" data-concept-prev>上一個</button>':''}<button type="button" class="primary" data-concept-next>${i<st.concepts.length-1?'下一個概念':'用對比案例觀察差異'}</button></div><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;
-  mountWidget(c);
+  // Entry primers come first in step 0, then the stage's own concepts; r.concept indexes the combined list.
+  const primers=st.primers||[],list=[...primers,...st.concepts],i=Math.min(r.concept,list.length-1),c=list[i],primer=i<primers.length;
+  const card=primer?conceptCard(c,{index:i+1,total:primers.length,tag:c.optional?'入口小暖身（選讀） · ':'入口小暖身 · '})+checkForm(c):conceptCard(c,{index:i-primers.length+1,total:st.concepts.length,tag:'概念 '});
+  panel.innerHTML=`${primer&&i===0?'<p class="guide-bridge" data-primer-intro>開始這個階段前，先補上馬上會用到的觀念；已經會了可以跳過。</p>':''}${card}<div class="guide-actions">${i?'<button type="button" data-concept-prev>上一個</button>':''}<button type="button" class="primary" data-concept-next>${i<list.length-1?(i===primers.length-1?'開始本階段概念':primer?'下一個小暖身':'下一個概念'):'用對比案例觀察差異'}</button>${primer?'<button type="button" data-skip-primers>跳過入口小暖身</button>':''}</div><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;
+  mountWidget(c);if(primer){mountDemos(c);bindCheck(c);}
+  $('[data-skip-primers]')?.addEventListener('click',()=>{r.concept=primers.length;save();draw(true);});
   $('[data-concept-prev]')?.addEventListener('click',()=>{r.concept=i-1;save();draw(true);});
-  $('[data-concept-next]').onclick=()=>{if(i<st.concepts.length-1){r.concept=i+1;save();draw(true);}else next();};
+  $('[data-concept-next]').onclick=()=>{if(i<list.length-1){r.concept=i+1;save();draw(true);}else next();};
  }
  function contrast(panel,st,r,next){
   const k=Math.min(r.pair,st.pairs.length-1),pair=st.pairs[k],key=String(k),cards=[pair.a,pair.b].map(id=>({id,...exampleById(id)})),types=unlockedTypes(st.id),pred=r.predictions[key]||{},revealed=Boolean(r.revealed[key]);

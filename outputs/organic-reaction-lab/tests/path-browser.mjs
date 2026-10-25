@@ -47,8 +47,20 @@ const keys=await page.evaluate(()=>Object.keys(localStorage).sort());assert.ok(!
 assert.equal(await page.locator('[data-page=pk]').count(),0);ok('舊課程／評量／PK 紀錄清除，其他資料保留；PK 入口已移除');
 await page.reload();assert.equal(await page.locator('#course-notice').isHidden(),true);ok('清除只執行一次');
 
-// 2. Warm-up: eight concepts with instant checks; first answer wrong on card 1.
+// 2. Warm-up: twelve concepts in four branches with instant checks; first answer wrong on card 1.
 assert.equal(await page.locator('[data-learning-path]').getAttribute('data-stage'),'warmup');await overflow('暖身 390px');await page.screenshot({path:out+'/01-warmup-390.png',fullPage:false});
+// Path tree: open on first visit, chips jump to warm-up cards, primers and stages.
+const tree=page.locator('[data-path-tree]');assert.equal(await tree.getAttribute('open'),'');assert.equal(await page.locator('.tree-node.current').getAttribute('data-tree-node'),'warmup');
+assert.equal(await page.locator('[data-tree-node]').count(),STAGES.length+3);assert.equal(await page.locator('[data-tree-group]').count(),4);
+for(const st of STAGES)await page.locator(`[data-tree-node="${st.id}"] .tree-goal`).filter({hasText:st.goal}).waitFor();
+await overflow('學習路徑樹 390px');await tree.screenshot({path:out+'/00-path-tree-390.png'});
+const small=await page.locator('[data-path-tree] button').evaluateAll(b=>b.filter(x=>x.getBoundingClientRect().height<44).length);assert.equal(small,0,'路徑樹按鈕至少 44px');
+await page.locator('[data-tree-group] [data-tree-warm="10"]').click();await page.locator('[data-path-panel] h2').filter({hasText:WARMUP[10].title}).waitFor();
+await page.locator('[data-path-tree] summary').click();await page.locator('[data-tree-primer="s2:1"]').click();await page.locator('[data-learning-path][data-stage="s2"] [data-path-panel] h2').filter({hasText:STAGES[1].primers[1].title}).waitFor();
+await page.locator('[data-path-tree] summary').click();await page.locator('[data-tree-stage="warmup"]').click();await page.locator('[data-path-panel] h2').filter({hasText:WARMUP[10].title}).waitFor();
+await page.locator('[data-path-tree] summary').click();await page.locator('[data-tree-group] [data-tree-warm="0"]').click();await page.locator('[data-path-panel] h2').filter({hasText:WARMUP[0].title}).waitFor();
+await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('organic-path-v3'));s.stages.s2.concept=0;localStorage.setItem('organic-path-v3',JSON.stringify(s));});await page.reload();await page.locator('[data-learning-path][data-stage="warmup"]').waitFor();
+ok('學習路徑樹：首次展開、九個節點各有目標、暖身卡／入口小暖身／階段可跳轉、44px、無溢出');
 for(const [i,c] of WARMUP.entries()){
  if(c.widget?.kind==='leaving'){assert.equal(await page.locator('[data-ion]').count(),3);assert.equal(await page.locator('[data-leaving-row]').count(),2);await page.locator('[data-leaving-visual]').scrollIntoViewIfNeeded();await overflow('脫離基圖解 390px');await page.locator('[data-leaving-visual]').screenshot({path:out+'/01d-leaving-390.png'});ok('脫離基圖解：鹵離子比較與 –OH 質子化對照');}
  if(c.widget?.kind==='cation-cloud'){
@@ -65,20 +77,31 @@ for(const [i,c] of WARMUP.entries()){
   const svg=page.locator('[data-concept-player] svg.spotlight-canvas');await svg.waitFor();assert.equal(await svg.getAttribute('data-renderer'),'xyz-ball-stick');
   await svg.scrollIntoViewIfNeeded();const box=await svg.boundingBox(),yaw=Number(await svg.getAttribute('data-yaw'));await page.mouse.move(box.x+box.width/2,box.y+box.height/2);await page.mouse.down();await page.mouse.move(box.x+box.width/2+80,box.y+box.height/2,{steps:6});await page.mouse.up();
   assert.notEqual(Number(await svg.getAttribute('data-yaw')),yaw,c.id+' 拖曳應改變視角');
-  if(c.demos.length>1){await page.locator('[data-concept-demo="1"]').click();await page.locator('[data-concept-player] [data-physical-step]').filter({hasText:'E2'}).waitFor();}
+  if(c.demos.length>1){await page.locator('[data-concept-demo="1"]').click();await page.locator('[data-concept-demo="1"][aria-pressed="true"]').waitFor();await svg.waitFor();if(c.id==='basicity')await page.locator('[data-concept-player] [data-physical-step]').filter({hasText:'E2'}).waitFor();}
   if(c.id==='nucleophile'){await overflow('暖身三維 390px');await page.screenshot({path:out+'/01b-warmup-3d-390.png'});}
   ok(`暖身「${c.title}」三維可拖曳旋轉`);
  }
+ if(c.widget?.kind==='energy'){const v=page.locator('[data-energy-visual]');await v.scrollIntoViewIfNeeded();assert.equal(await page.locator('[data-energy-diagram="one"] [data-energy-ts]').count(),1);assert.equal(await page.locator('[data-energy-diagram="two"] [data-energy-ts]').count(),2);assert.equal(await page.locator('[data-energy-int]').count(),1);await overflow('能量圖 390px');await v.screenshot({path:out+'/01e-energy-390.png'});ok('能量圖：一步一個過渡態；兩步兩個過渡態夾中間體');}
  if(i===0){await choose(page.locator('[data-warm-check]'),c.check.options[(c.check.answer+1)%3]);await page.locator('[data-warm-check] button').click();await page.locator('[data-warm-feedback]').filter({hasText:'再想想'}).waitFor();}
  await choose(page.locator('[data-warm-check]'),c.check.options[c.check.answer]);await page.locator('[data-warm-check] button').click();await page.locator('[data-warm-feedback]').filter({hasText:'正確'}).waitFor();
  if(i<WARMUP.length-1)await page.locator('[data-warm-next]').click();else await page.locator('[data-warm-done]').click();
 }
-ok('暖身八個觀念與即時檢查（含答錯回饋）');
+ok('暖身十二個觀念與即時檢查（含答錯回饋）');
 
 // 3. Five stages.
 for(const [si,st] of STAGES.entries()){
  await page.locator(`[data-learning-path][data-stage="${st.id}"]`).waitFor();
- for(let i=0;i<st.concepts.length;i++){if(st.concepts[i].widget)await page.locator('[data-cation-svg]').first().waitFor();await page.locator('[data-concept-next]').click();}
+ assert.equal(await page.locator('.tree-node.current').getAttribute('data-tree-node'),st.id);if(si>0)assert.equal(await page.locator(`[data-tree-node="${STAGES[si-1].id}"]`).getAttribute('class'),'tree-node done');
+ const primers=st.primers||[];
+ if(si===1){await page.locator('[data-primer-intro]').waitFor();await page.locator('[data-skip-primers]').click();await page.locator('[data-path-panel] h2').filter({hasText:st.concepts[0].title}).waitFor();await page.locator('[data-concept-prev]').click();await page.locator('[data-path-panel] h2').filter({hasText:primers.at(-1).title}).waitFor();for(let k=primers.length-1;k>0;k--)await page.locator('[data-concept-prev]').click();ok('入口小暖身可跳過、可回看');}
+ for(const [k,p] of primers.entries()){
+  await page.locator('[data-path-panel] h2').filter({hasText:p.title}).waitFor();assert.match(await page.locator('[data-path-panel] .course-part').first().innerText(),p.optional?/入口小暖身（選讀）/:/入口小暖身/);
+  if(p.demos){const svg=page.locator('[data-concept-player] svg.spotlight-canvas');await svg.waitFor();assert.equal(await svg.getAttribute('data-renderer'),'xyz-ball-stick');}
+  await choose(page.locator('[data-warm-check]'),p.check.options[p.check.answer]);await page.locator('[data-warm-check] button').click();await page.locator('[data-warm-feedback]').filter({hasText:'正確'}).waitFor();
+  if(k===0&&si===0){await overflow('入口小暖身 390px');await page.screenshot({path:out+'/02a-primer-390.png'});}
+  await page.locator('[data-concept-next]').click();
+ }
+ for(let i=0;i<st.concepts.length;i++){await page.locator('[data-path-panel] h2').filter({hasText:st.concepts[i].title}).waitFor();if(st.concepts[i].widget)await page.locator('[data-cation-svg]').first().waitFor();await page.locator('[data-concept-next]').click();}
  for(const [pi,pair] of st.pairs.entries()){
   await page.locator('[data-predict="0"]').selectOption(kindOf.get(pair.a));await page.locator('[data-predict="1"]').selectOption(kindOf.get(pair.b));await page.locator('[data-reveal]').click();
   assert.equal(await page.locator('.contrast-card.right').count(),2);
@@ -104,7 +127,7 @@ for(const [si,st] of STAGES.entries()){
  await page.locator('[data-to-mixed]').click();
  for(let n=0;n<st.mixCount;n++)await answerItem({wrongMech:si===2&&n===0,arrows:n===0});
  await page.locator('[data-next-stage]').waitFor();assert.ok(await page.locator('table.mastery tr[data-mastery]').count()===new Set(STAGES.slice(0,si+1).flatMap(s=>s.newTypes)).size);
- ok(`階段 ${si+1}：概念 ${st.concepts.length}、對比 ${st.pairs.length}、補分支 ${st.branches.length}、箭頭 ${st.arrowKinds.length}、混合 ${st.mixCount}`);
+ ok(`階段 ${si+1}：入口小暖身 ${(st.primers||[]).length}、概念 ${st.concepts.length}、對比 ${st.pairs.length}、補分支 ${st.branches.length}、箭頭 ${st.arrowKinds.length}、混合 ${st.mixCount}`);
  await page.locator('[data-next-stage]').click();
 }
 ok('階段 1 的箭頭先錯：第一層只指出步驟，第二層才指出箭頭');

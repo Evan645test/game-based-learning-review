@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {TYPES,WARMUP,STAGES,FLOW,ITEMS,unlockedTypes,stageIndex,pickItem,mastery,shuffled} from '../course-path.js';
+import {TYPES,WARMUP,WARM_GROUPS,PATH_GOALS,STAGES,FLOW,ITEMS,unlockedTypes,stageIndex,pickItem,mastery,shuffled} from '../course-path.js';
 import {REACTION_EXAMPLES} from '../reaction-examples.js';
 import {mechanismSpec,newMechanism} from '../electron-flow.js';
 import {gradedHint} from '../graded-hints.js';
@@ -10,8 +10,11 @@ const examples=new Map(Object.entries(REACTION_EXAMPLES).flatMap(([kind,list])=>
 const branches=new Map(FLOW.flatMap(n=>n.branches.map(b=>[b.id,{...b,node:n.id}])));
 const typeStage=Object.fromEntries(STAGES.flatMap(s=>s.newTypes.map(t=>[t,s.id])));
 
-test('暖身八個觀念各有即時檢查；五階段依序加入九種反應類型',()=>{
- assert.equal(WARMUP.length,8);for(const c of WARMUP){assert.ok(c.body.length&&c.pages.length);assert.ok(c.check.answer>=0&&c.check.answer<c.check.options.length);}
+test('暖身十二個觀念分四個分支、各有即時檢查；五階段依序加入九種反應類型',()=>{
+ assert.equal(WARMUP.length,12);for(const c of WARMUP){assert.ok(c.body.length&&c.pages.length);assert.ok(c.check.answer>=0&&c.check.answer<c.check.options.length);}
+ assert.deepEqual(WARM_GROUPS.map(g=>WARMUP.filter(c=>c.group===g.id).length),[3,3,4,2]);assert.ok(WARMUP.every(c=>WARM_GROUPS.some(g=>g.id===c.group)));
+ // A group's cards stay together so the tree order matches the card order.
+ assert.deepEqual(WARMUP.map(c=>c.group),WARM_GROUPS.flatMap(g=>WARMUP.filter(c=>c.group===g.id).map(()=>g.id)));
  assert.deepEqual(STAGES.map(s=>s.newTypes),[['sn2','sn1'],['e2'],['e1'],['addhx','hydration','halogenation'],['rearrangement','dehydration']]);
  assert.deepEqual(unlockedTypes('s1'),['sn2','sn1']);assert.equal(unlockedTypes('s3').length,4);assert.deepEqual(new Set(unlockedTypes('final')),new Set(Object.keys(TYPES)));
  assert.equal(stageIndex('warmup'),-1);assert.equal(unlockedTypes('warmup').length,0);
@@ -93,4 +96,40 @@ test('書面結構式：每步依箭頭推得的總電荷守恆，且形成的�
   if(!['sn2','sn1','e1','e2','chair'].includes(kind))assert.equal(formed2d,formed3d,`${ex.id} ${i}`);
   assert.ok(formed2d+[...g.changes.values()].filter(c=>c.end<c.start).length>=1,`${ex.id} ${i} 至少一處鍵結改變`);
  });}
+});
+
+import {pathTreeHTML,freshPath} from '../learning-path.js';
+import {energyHTML} from '../energy-visual.js';
+import fs from 'node:fs';
+test('立體卡拆成階段入口小暖身；每階段有目標與先備暖身卡，所有卡片 id 唯一',()=>{
+ assert.equal(WARMUP.find(c=>c.id==='stereo'),undefined);
+ assert.deepEqual(STAGES.map(s=>(s.primers||[]).map(p=>p.id)),[['rs'],['newman','alkene','chair'],['heat'],[],['equilibrium']]);
+ const primers=STAGES.flatMap(s=>s.primers||[]),ids=[...WARMUP,...primers].map(c=>c.id);assert.equal(new Set(ids).size,ids.length);
+ for(const p of primers){assert.ok(p.body.length&&p.pages.length&&p.example,p.id);assert.ok(p.check.answer>=0&&p.check.answer<p.check.options.length,p.id);for(const d of p.demos||[]){const x=examples.get(d.example);assert.ok(x&&x.kind===d.kind,p.id);}}
+ assert.deepEqual(primers.filter(p=>p.optional).map(p=>p.id),['chair']);
+ for(const s of STAGES){assert.ok(s.goal.length>10,s.id);assert.ok(s.needs.length);for(const n of s.needs)assert.ok(WARMUP.some(c=>c.id===n),`${s.id} ${n}`);}
+ for(const k of ['warmup','final','assessment'])assert.ok(PATH_GOALS[k]);
+ for(const c of WARMUP)for(const d of c.demos||[]){const x=examples.get(d.example);assert.ok(x&&x.kind===d.kind,c.id);if(Number.isInteger(d.step))assert.ok(d.step<mechanismSpec(d.kind).steps.length,c.id);}
+});
+test('所有引用的原文頁碼都在伺服器白名單內',()=>{
+ const src=fs.readFileSync(new URL('../server.py',import.meta.url),'utf8'),allowed=new Set(src.match(/SOURCE_PAGES = \{([^}]*)\}/)[1].split(',').map(Number));
+ const cards=[...WARMUP,...STAGES.flatMap(s=>[...(s.primers||[]),...s.concepts])];
+ for(const c of cards)for(const p of c.pages)assert.ok(allowed.has(p),`${c.title} 第 ${p} 頁`);
+});
+test('學習路徑樹：標出目前位置、完成狀態，並連到暖身卡與入口小暖身',()=>{
+ const st=freshPath(),h=pathTreeHTML(st);
+ assert.equal((h.match(/data-tree-node=/g)||[]).length,STAGES.length+3);
+ assert.equal((h.match(/data-tree-primer=/g)||[]).length,6);assert.equal((h.match(/data-tree-group=/g)||[]).length,4);
+ assert.match(h,/class="tree-node current" data-tree-node="warmup"/);assert.match(h,/<details class="path-tree" data-path-tree open>/);
+ for(const s of STAGES)assert.ok(h.includes(s.goal),s.id);
+ st.stage='s2';for(const c of WARMUP)st.warm.checks[c.id]={choice:c.check.answer,first:true};Object.assign(st.stages.s1,{step:4,mixed:{done:6,current:null}});
+ const h2=pathTreeHTML(st);
+ assert.match(h2,/class="tree-node done" data-tree-node="warmup"/);assert.match(h2,/class="tree-node done" data-tree-node="s1"/);assert.match(h2,/class="tree-node current" data-tree-node="s2"/);assert.doesNotMatch(h2,/data-path-tree open/);
+ assert.equal((h2.match(/✓ /g)||[]).length,WARMUP.length+STAGES[0].needs.length+STAGES.slice(1).reduce((n,s)=>n+s.needs.length,0)+2+1,'暖身卡、先備連結、兩個完成節點與圖例');
+});
+test('能量圖：一步反應一個過渡態；兩步反應兩個過渡態夾一個中間體',()=>{
+ const h=energyHTML(),one=h.split('data-energy-diagram="two"')[0],two=h.split('data-energy-diagram="two"')[1];
+ assert.equal((one.match(/data-energy-ts/g)||[]).length,1);assert.equal((one.match(/data-energy-int/g)||[]).length,0);
+ assert.equal((two.match(/data-energy-ts/g)||[]).length,2);assert.equal((two.match(/data-energy-int/g)||[]).length,1);
+ assert.equal(WARMUP.find(c=>c.id==='energy').widget.kind,'energy');
 });

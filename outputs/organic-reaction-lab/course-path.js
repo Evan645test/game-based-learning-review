@@ -15,18 +15,39 @@ export const TYPES={
 
 const check=(prompt,options,answer,feedback)=>({prompt,options,answer,feedback});
 export const WARMUP=[
- {id:'arrows',title:'彎箭頭：追蹤電子對',pages:[194,199,200],visual:'polarity',demos:[{label:'C–Br 斷鍵（SN1 第一步）',kind:'sn1',example:'sn1-water',step:0}],body:['有機反應是電子對的重新分配。彎箭頭從一對電子出發：孤對電子，或一條化學鍵；箭頭指向電子要去的地方：缺電子的原子，或兩原子之間即將形成的新鍵。','完整箭頭搬兩個電子。原子本身不會「飛過去」；我們只記錄電子對往哪裡走，再看鍵怎麼形成、怎麼斷裂，以及電荷如何改變。'],example:'C–Br 鍵斷裂時，箭頭從 C–Br 鍵指向 Br：Br 帶走這對電子成為 Br⁻，碳少了電子變成 C⁺。',check:check('彎箭頭的起點應該畫在哪裡？',['可提供的孤對電子或化學鍵','帶正電的原子','產物的位置'],0,'箭頭永遠從一對電子出發；帶正電的原子通常是電子的去處。')},
- {id:'nucleophile',title:'親核劑與親電子劑',pages:[73,74,199],visual:'nucleophile',demos:[{label:'水進攻碳陽離子（SN1 第二步）',kind:'sn1',example:'sn1-water',step:1}],body:['親核劑（nucleophile）提供電子對，常見的是帶負電或有孤對電子的原子，例如 I⁻、OH⁻、CN⁻、H₂O 的氧、醇的氧。烯的 π 鍵電子也能當親核劑。','親電子劑（electrophile）接受電子對：帶正電或部分正電、缺電子的原子，例如碳陽離子、C–X 中的碳、HBr 的氫。','判斷反應的第一步：找出誰提供電子、誰接受電子，箭頭就從前者指向後者。'],example:'水的氧有兩對孤對電子，可以進攻帶正電的碳；I⁻ 可以進攻 C–Br 中帶部分正電的碳。',check:check('下列哪一個可以當親核劑？',['H₂O 的氧（有孤對電子）','碳陽離子 (CH₃)₃C⁺','HBr 中的 H'],0,'有孤對電子的氧能提供電子對；碳陽離子與 HBr 的 H 是接受電子的一方。')},
- {id:'carbocation',title:'碳陽離子：平面、缺電子、有穩定順序',pages:[244,245,252],widget:{kind:'cation-cloud',initial:'methyl'},body:['碳陽離子是只有三個鍵、帶正電的碳。它是 sp² 平面三角形，上下各有一個空的 p 軌域，所以親核劑可以從上下兩面接近。','穩定性：三級 > 二級 > 一級 > 甲基。相連的烷基越多，越能透過超共軛與誘導效應分散正電。越穩定的碳陽離子越容易形成。','用下面四個模型驗證：甲基、一級、二級、三級並排，中心碳的藍色（缺電子程度）逐格變淡；打開「空 p 軌域與超共軛」可看到能分享電子的鄰近 C–H 鍵變多。','本課程有五種反應會經過碳陽離子：SN1、E1、HX 加成、酸催化加水、醇的脫水；重排也是碳陽離子的行為。'],example:'(CH₃)₃C⁺ 是三級碳陽離子，比 CH₃CH₂⁺（一級）穩定得多。',check:check('哪一個碳陽離子最穩定？',['(CH₃)₃C⁺（三級）','(CH₃)₂CH⁺（二級）','CH₃CH₂⁺（一級）'],0,'相連烷基越多，正電被分散得越好：三級 > 二級 > 一級。')},
- {id:'degree',title:'數級數，找 α 碳與 β 碳',pages:[101,375,378],body:['碳的級數看「它直接連了幾個碳」：連一個碳是一級（1°），兩個是二級（2°），三個是三級（3°）；甲基碳不連任何碳。','α 碳是帶脫離基（或帶正電）的碳；β 碳是緊鄰 α 碳的碳，β 碳上的氫叫 β-H。消去反應移走的就是 β-H。'],example:'2-溴丁烷 CH₃CH(Br)CH₂CH₃：帶 Br 的碳連兩個碳，是二級 α 碳；它兩側的 CH₃ 與 CH₂ 都是 β 碳。',check:check('(CH₃)₃C–Br 中帶 Br 的碳是幾級？',['一級','二級','三級'],2,'它直接連了三個甲基碳，所以是三級。')},
- {id:'leaving',title:'好脫離基：離開後要穩定',pages:[365,366],widget:{kind:'leaving'},demos:[{label:'水帶著電子離開，留下碳陽離子（醇脫水第 2 步）',kind:'dehydration',example:'dehyd-tertbutanol',step:1}],body:['脫離基帶著鍵電子離開，離開後越穩定（越弱的鹼）越容易離開：I⁻ > Br⁻ > Cl⁻。','OH⁻ 是強鹼，所以 –OH 是很差的脫離基。醇要先被酸質子化成 –OH₂⁺，才能以中性水的形式離開——醇的脫水就是這樣開始的。'],example:'(CH₃)₃C–OH 加強酸後變成 (CH₃)₃C–OH₂⁺，水離開後得到 (CH₃)₃C⁺。',check:check('為什麼醇要先質子化才會離開？',['OH⁻ 是強鹼、差的脫離基；質子化後能以中性水離開','因為氧沒有孤對電子','因為碳太穩定'],0,'弱鹼才是好脫離基；–OH₂⁺ 離開時帶走的是中性的水。')},
- {id:'basicity',title:'同一個試劑：進攻碳，還是拔氫？',pages:[365,380,381],visual:'base',demos:[{label:'OH⁻ 進攻碳（取代）',kind:'sn2',example:'sn2-methyl'},{label:'EtO⁻ 拔 β-H（消去）',kind:'e2',example:'e2-butane'}],body:['親核性描述「進攻碳」的能力，鹼性描述「接受質子」的能力。同一個試劑可能兩者都有。','強鹼：OH⁻、RO⁻（如 EtO⁻）、體積大的 t-BuO⁻。良好親核劑但弱鹼：I⁻、Br⁻、CN⁻、HS⁻。弱親核也弱鹼：H₂O、ROH。','強鹼遇到可拔 β-H 的受質，消去（E2）就成為重要選項；弱鹼弱親核的溶劑則讓碳陽離子路徑有機會發生。'],example:'EtO⁻ 的電子對指向 Cα 就是親核進攻；指向 β-H 就是鹼。',check:check('下列哪一個是良好親核劑但弱鹼？',['I⁻','t-BuO⁻','EtO⁻'],0,'I⁻ 很容易進攻碳，卻很難拔走質子；t-BuO⁻ 與 EtO⁻ 都是強鹼。')},
- {id:'solvent',title:'溶劑：質子性與非質子性',pages:[76,77,367],body:['質子性溶劑（水、甲醇、乙醇）有 O–H，可以用氫鍵包住陰離子、穩定離子，也常同時當弱親核劑——有利碳陽離子路徑。','極性非質子性溶劑（acetone、DMSO、DMF）沒有 O–H／N–H，陰離子親核劑不被氫鍵包住、比較「裸露」，有利 SN2。'],example:'NaI 在 acetone 中進行 SN2；三級溴烷在水中走 SN1。',check:check('acetone 有 C–H，為什麼仍算非質子性溶劑？',['它沒有 O–H 或 N–H 氫鍵供體','它完全不含氫','含氧的溶劑都是非質子性'],0,'「非質子性」看的是有沒有能形成氫鍵的 O–H／N–H。')},
- {id:'stereo',title:'立體與產物的三把尺：反轉、R/S、Zaitsev',pages:[161,108,378],body:['R/S：依 CIP 規則排出四個取代基的優先序，從最低優先序的反方向看，1→2→3 順時針是 R、逆時針是 S。','Newman 投影：沿一條 C–C 鍵看過去，前碳的鍵畫成交會於中心，後碳的鍵畫在圓外；用來看 β-H 與脫離基是否呈 180°（anti）。','Zaitsev 規則：有多種 β-H 時，消去通常得到取代較多、較穩定的烯（體積大的鹼例外）。'],example:'2-溴丁烷消去時，2-丁烯（雙取代）通常比 1-丁烯（單取代）多。',check:check('依 Zaitsev 規則，2-溴-2-甲基丁烷消去的主要烯是？',['2-methyl-2-butene（三取代）','2-methyl-1-butene（雙取代）','1-butene'],0,'取代較多的雙鍵較穩定，通常是主要產物。')}
+ {id:'hybrid',group:'structure',title:'混成與形狀：四面體、平面與 π 鍵',pages:[35,37],demos:[{label:'sp³ 四面體碳：從背面進攻（SN2）',kind:'sn2',example:'sn2-methyl'},{label:'C–Br 斷裂後變成 sp² 平面（SN1 第一步）',kind:'sn1',example:'sn1-water',step:0}],body:['連四個原子的碳是 sp³ 混成，四個鍵指向正四面體的四個角，鍵角約 109.5°。脫離基正對面的那一側，就是 SN2 親核劑進攻的位置。','只連三個原子的碳是 sp² 混成：三個鍵在同一平面、約 120°，上下各留一個未混成的 p 軌域。碳陽離子的 p 軌域是空的；烯的兩個 p 軌域重疊成 π 鍵。','形狀決定反應從哪一面發生：四面體碳只能從脫離基的背面被進攻；平面的碳陽離子上下兩面都可以被接住。'],example:'CH₃Br 的碳是 sp³ 四面體；(CH₃)₃C⁺ 的碳是 sp² 平面，空的 p 軌域垂直於這個平面。',check:check('碳陽離子的中心碳是什麼形狀？',['sp² 平面三角形，上下有一個空的 p 軌域','sp³ 四面體','直線形'],0,'只有三個鍵的碳陽離子是 sp² 平面，親核劑可以從上下兩面接近空的 p 軌域。')},
+ {id:'degree',group:'structure',title:'數級數，找 α 碳與 β 碳',pages:[101,375,378],body:['碳的級數看「它直接連了幾個碳」：連一個碳是一級（1°），兩個是二級（2°），三個是三級（3°）；甲基碳不連任何碳。','α 碳是帶脫離基（或帶正電）的碳；β 碳是緊鄰 α 碳的碳，β 碳上的氫叫 β-H。消去反應移走的就是 β-H。'],example:'2-溴丁烷 CH₃CH(Br)CH₂CH₃：帶 Br 的碳連兩個碳，是二級 α 碳；它兩側的 CH₃ 與 CH₂ 都是 β 碳。',check:check('(CH₃)₃C–Br 中帶 Br 的碳是幾級？',['一級','二級','三級'],2,'它直接連了三個甲基碳，所以是三級。')},
+ {id:'sterics',group:'structure',title:'立體障礙：周圍越擠，越難靠近',pages:[363],demos:[{label:'甲基：背面很空',kind:'sn2',example:'sn2-methyl'},{label:'二級：背面較擠',kind:'sn2',example:'sn2-secondary'}],body:['原子與原子團都會佔據空間。反應中心周圍的取代基越多、越大，試劑就越難靠近要進攻的位置，這叫立體障礙（steric hindrance）。','SN2 的親核劑必須從背面直接靠近 α 碳，所以速率是甲基 > 一級 > 二級，三級幾乎不反應。','試劑本身也會擠：t-BuO⁻ 很大，難以靠近碳，卻仍能拔取外側容易接近的氫，所以常當作鹼。'],example:'CH₃Br 的背面只有三個小小的 H；(CH₃)₃CBr 的背面被三個甲基擋住。',check:check('為什麼三級鹵烷幾乎不走 SN2？',['三個烷基擋住背面，親核劑無法靠近 α 碳','三級碳沒有脫離基','三級碳帶負電'],0,'SN2 需要從背面進攻；三個烷基造成的立體障礙把這條路擋住了。')},
+ {id:'arrows',group:'electron',title:'彎箭頭：追蹤電子對',pages:[194,199,200],visual:'polarity',demos:[{label:'C–Br 斷鍵（SN1 第一步）',kind:'sn1',example:'sn1-water',step:0}],body:['有機反應是電子對的重新分配。彎箭頭從一對電子出發：孤對電子，或一條化學鍵；箭頭指向電子要去的地方：缺電子的原子，或兩原子之間即將形成的新鍵。','完整箭頭搬兩個電子。原子本身不會「飛過去」；我們只記錄電子對往哪裡走，再看鍵怎麼形成、怎麼斷裂，以及電荷如何改變。'],example:'C–Br 鍵斷裂時，箭頭從 C–Br 鍵指向 Br：Br 帶走這對電子成為 Br⁻，碳少了電子變成 C⁺。',check:check('彎箭頭的起點應該畫在哪裡？',['可提供的孤對電子或化學鍵','帶正電的原子','產物的位置'],0,'箭頭永遠從一對電子出發；帶正電的原子通常是電子的去處。')},
+ {id:'formal',group:'electron',title:'形式電荷：畫完箭頭就算電荷',pages:[60,61],demos:[{label:'氧鎓離子去質子化（SN1 第三步）',kind:'sn1',example:'sn1-water',step:2}],body:['形式電荷 = 價電子數 −（孤對電子的電子數 ＋ 鍵數）。每條鍵只算一個電子給這個原子。','常見情況：氧有三個鍵、一對孤對電子 → +1（H₃O⁺、R–OH₂⁺）；氧有一個鍵、三對孤對電子 → −1（OH⁻）；碳只有三個鍵、沒有孤對電子 → +1（碳陽離子）。','每畫完一步箭頭就檢查電荷：送出電子對的原子變得更正，接受電子對的原子變得更負；整步反應的總電荷不變。'],example:'水的氧進攻碳陽離子後，有三個鍵與一對孤對電子：6 −（2 ＋ 3）= +1，所以還要再失去一個 H⁺。',check:check('R–OH₂⁺ 中的氧，形式電荷為什麼是 +1？',['三個鍵與一對孤對電子：6 −（2＋3）= +1','氧多得到一個電子','氧沒有任何孤對電子'],0,'價電子 6，減去孤對電子的 2 個電子與三條鍵的 3，得到 +1。')},
+ {id:'nucleophile',group:'electron',title:'親核劑、親電子劑與鍵極性',pages:[56,73,74,199],visual:'nucleophile',demos:[{label:'水進攻碳陽離子（SN1 第二步）',kind:'sn1',example:'sn1-water',step:1}],body:['電負度較大的原子會把共用電子拉向自己：C–Br 中 Br 帶部分負電（δ−）、碳帶部分正電（δ+）；H–Br 中 H 帶 δ+。δ+ 的原子就是親電子劑常見的位置。','親核劑（nucleophile）提供電子對，常見的是帶負電或有孤對電子的原子，例如 I⁻、OH⁻、CN⁻、H₂O 的氧、醇的氧。烯的 π 鍵電子也能當親核劑。','親電子劑（electrophile）接受電子對：帶正電或部分正電、缺電子的原子，例如碳陽離子、C–X 中的碳、HBr 的氫。','判斷反應的第一步：找出誰提供電子、誰接受電子，箭頭就從前者指向後者。'],example:'水的氧有兩對孤對電子，可以進攻帶正電的碳；I⁻ 可以進攻 C–Br 中帶部分正電的碳。',check:check('下列哪一個可以當親核劑？',['H₂O 的氧（有孤對電子）','碳陽離子 (CH₃)₃C⁺','HBr 中的 H'],0,'有孤對電子的氧能提供電子對；碳陽離子與 HBr 的 H 是接受電子的一方。')},
+ {id:'acidbase',group:'stability',title:'酸鹼與 pKa：共軛鹼越穩定，酸越強',pages:[66,68,69],demos:[{label:'酸把質子給醇的氧（醇脫水第 1 步）',kind:'dehydration',example:'dehyd-tertbutanol',step:0}],body:['布忍斯特–洛瑞定義：酸給出 H⁺，鹼接受 H⁺。酸失去 H⁺ 後剩下的部分，是它的共軛鹼。','pKa 越小，酸越強；酸越強，它的共軛鹼越弱、越穩定。HI、HBr、HCl 都是強酸，所以 I⁻、Br⁻、Cl⁻ 都是弱鹼；水的 pKa 約 15.7，所以 OH⁻ 是強鹼。','後面兩張卡都建立在這裡：弱鹼才是好脫離基，強鹼才會去拔 β-H。機構裡也常有酸鹼步驟：H₃O⁺ 給出質子，水拔走質子。'],example:'H₂SO₄ 把 H⁺ 給醇的氧得到 R–OH₂⁺；離開時帶走的是中性、很弱的鹼——水。',check:check('HBr 是強酸，這代表 Br⁻ 是？',['很弱的鹼，因此是好的脫離基','很強的鹼','無法存在的離子'],0,'酸越強，共軛鹼越弱、越穩定；離開後穩定的弱鹼就是好脫離基。')},
+ {id:'leaving',group:'stability',title:'好脫離基：離開後要穩定',pages:[365,366],widget:{kind:'leaving'},demos:[{label:'水帶著電子離開，留下碳陽離子（醇脫水第 2 步）',kind:'dehydration',example:'dehyd-tertbutanol',step:1}],body:['脫離基帶著鍵電子離開，離開後越穩定（越弱的鹼）越容易離開：I⁻ > Br⁻ > Cl⁻。','OH⁻ 是強鹼，所以 –OH 是很差的脫離基。醇要先被酸質子化成 –OH₂⁺，才能以中性水的形式離開——醇的脫水就是這樣開始的。'],example:'(CH₃)₃C–OH 加強酸後變成 (CH₃)₃C–OH₂⁺，水離開後得到 (CH₃)₃C⁺。',check:check('為什麼醇要先質子化才會離開？',['OH⁻ 是強鹼、差的脫離基；質子化後能以中性水離開','因為氧沒有孤對電子','因為碳太穩定'],0,'弱鹼才是好脫離基；–OH₂⁺ 離開時帶走的是中性的水。')},
+ {id:'basicity',group:'stability',title:'同一個試劑：進攻碳，還是拔氫？',pages:[365,380,381],visual:'base',demos:[{label:'OH⁻ 進攻碳（取代）',kind:'sn2',example:'sn2-methyl'},{label:'EtO⁻ 拔 β-H（消去）',kind:'e2',example:'e2-butane'}],body:['親核性描述「進攻碳」的能力，鹼性描述「接受質子」的能力。同一個試劑可能兩者都有。','強鹼：OH⁻、RO⁻（如 EtO⁻）、體積大的 t-BuO⁻。良好親核劑但弱鹼：I⁻、Br⁻、CN⁻、HS⁻。弱親核也弱鹼：H₂O、ROH。','強鹼遇到可拔 β-H 的受質，消去（E2）就成為重要選項；弱鹼弱親核的溶劑則讓碳陽離子路徑有機會發生。'],example:'EtO⁻ 的電子對指向 Cα 就是親核進攻；指向 β-H 就是鹼。',check:check('下列哪一個是良好親核劑但弱鹼？',['I⁻','t-BuO⁻','EtO⁻'],0,'I⁻ 很容易進攻碳，卻很難拔走質子；t-BuO⁻ 與 EtO⁻ 都是強鹼。')},
+ {id:'carbocation',group:'stability',title:'碳陽離子：平面、缺電子、有穩定順序',pages:[244,245,252],widget:{kind:'cation-cloud',initial:'methyl'},body:['碳陽離子是只有三個鍵、帶正電的碳。它是 sp² 平面三角形，上下各有一個空的 p 軌域，所以親核劑可以從上下兩面接近。','穩定性：三級 > 二級 > 一級 > 甲基。相連的烷基越多，越能透過超共軛與誘導效應分散正電。越穩定的碳陽離子越容易形成。','用下面四個模型驗證：甲基、一級、二級、三級並排，中心碳的藍色（缺電子程度）逐格變淡；打開「空 p 軌域與超共軛」可看到能分享電子的鄰近 C–H 鍵變多。','本課程有五種反應會經過碳陽離子：SN1、E1、HX 加成、酸催化加水、醇的脫水；重排也是碳陽離子的行為。'],example:'(CH₃)₃C⁺ 是三級碳陽離子，比 CH₃CH₂⁺（一級）穩定得多。',check:check('哪一個碳陽離子最穩定？',['(CH₃)₃C⁺（三級）','(CH₃)₂CH⁺（二級）','CH₃CH₂⁺（一級）'],0,'相連烷基越多，正電被分散得越好：三級 > 二級 > 一級。')},
+ {id:'energy',group:'pathway',title:'能量圖：過渡態與中間體',pages:[207,208,210],widget:{kind:'energy'},body:['反應進行時，能量先升後降。能量的最高點是過渡態（transition state，‡）：鍵正在斷、也正在形成，無法分離出來。','兩個過渡態之間的谷底是中間體（intermediate），例如碳陽離子：它短暫存在，可以被接住或繼續反應。','一步反應只有一個過渡態、沒有中間體（SN2、E2）；兩步反應中間有中間體（SN1、E1、HX 加成）。能障最高的那一步最慢，叫速率決定步驟。'],example:'SN1 的第一步（C–Br 斷裂、形成碳陽離子）能障最高，所以速率只取決於受質，與親核劑無關。',check:check('碳陽離子在能量圖上位在哪裡？',['兩個過渡態之間的谷底（中間體）','能量最高點（過渡態）','反應物的起點'],0,'中間體在谷底、可以短暫存在；過渡態是最高點，無法分離。')},
+ {id:'solvent',group:'pathway',title:'溶劑：質子性與非質子性',pages:[76,77,367],body:['質子性溶劑（水、甲醇、乙醇）有 O–H，可以用氫鍵包住陰離子、穩定離子，也常同時當弱親核劑——有利碳陽離子路徑。','極性非質子性溶劑（acetone、DMSO、DMF）沒有 O–H／N–H，陰離子親核劑不被氫鍵包住、比較「裸露」，有利 SN2。'],example:'NaI 在 acetone 中進行 SN2；三級溴烷在水中走 SN1。',check:check('acetone 有 C–H，為什麼仍算非質子性溶劑？',['它沒有 O–H 或 N–H 氫鍵供體','它完全不含氫','含氧的溶劑都是非質子性'],0,'「非質子性」看的是有沒有能形成氫鍵的 O–H／N–H。')}
 ];
 
+// Warm-up branches for the path tree; every warm-up card belongs to one.
+export const WARM_GROUPS=[
+ {id:'structure',title:'看懂結構',hint:'反應發生在哪個碳'},
+ {id:'electron',title:'追蹤電子',hint:'箭頭從哪裡來、到哪裡去'},
+ {id:'stability',title:'比較穩定',hint:'越穩定越容易形成'},
+ {id:'pathway',title:'反應怎麼走',hint:'一步完成還是兩步'}
+];
+export const PATH_GOALS={
+ warmup:'還不用背反應，先會看結構、追蹤電子、比較穩定、判斷反應怎麼走。',
+ final:'題目混在一起時，能說出反應類型與依據，寫出產物並畫對箭頭。',
+ assessment:'確認學過的判斷，遇到沒看過的受質也用得上。'
+};
+
 export const STAGES=[
- {id:'s1',title:'取代的兩條路：SN2 與 SN1',short:'SN2／SN1',newTypes:['sn2','sn1'],
+ {id:'s1',title:'取代的兩條路：SN2 與 SN1',short:'SN2／SN1',goal:'看受質級數、親核劑與溶劑，判斷是 SN2 還是 SN1，畫出箭頭，並預測構形（反轉，或從兩面進攻）。',needs:['degree','sterics','hybrid','energy','solvent'],
+  primers:[
+   {id:'rs',title:'R/S 與構形反轉',pages:[161,361],demos:[{label:'背面進攻後構形反轉（SN2）',kind:'sn2',example:'sn2-secondary'}],body:['R/S：依 CIP 規則排出四個取代基的優先序，讓最低優先序朝向遠離你的方向，1→2→3 順時針是 R、逆時針是 S。','SN2 的親核劑從背面進攻時，另外三個取代基會翻到另一側，像雨傘被風吹翻，這叫構形反轉（瓦登反轉）。新基團與舊脫離基的優先序位置相同時，R 會變成 S。','SN1 的碳陽離子是平面，親核劑可以從上下兩面進攻，所以常得到兩種構形的混合物。'],example:'(R)-2-溴丁烷經 SN2 得到 (S)-2-丁醇：OH 與 Br 都是優先序最高的基團，位置翻到另一側。',check:check('立體中心經 SN2 反應後，構形會怎麼變？',['反轉：另外三個基團翻到另一側','保持不變','一定變成兩種構形各半'],0,'親核劑從背面進攻，構形反轉；兩種構形的混合是 SN1 經平面碳陽離子才會出現。')}
+  ],
+  newTypes:['sn2','sn1'],
   concepts:[
    {title:'SN2：一步完成，從背面進攻',pages:[361,363,367],body:['親核劑從脫離基的正背面進攻 α 碳，新鍵形成與舊鍵斷裂在同一步，沒有中間體；反應中心構形反轉（瓦登反轉）。','位阻越小越快：甲基 > 一級 > 二級，三級幾乎不走 SN2。良好親核劑與極性非質子性溶劑（acetone、DMSO）有利。'],example:'CH₃CH₂Br ＋ I⁻（acetone）→ CH₃CH₂I ＋ Br⁻'},
    {title:'SN1：先離開，再接住',pages:[375,385],body:['脫離基先離開，形成平面碳陽離子；接著弱親核劑（常是溶劑本身，如水、甲醇）從上下兩面進攻；若進攻的是中性分子，最後還要去質子化。','三級受質（形成穩定碳陽離子）與質子性溶劑有利；親核劑強弱不影響速率。'],example:'(CH₃)₃CBr ＋ H₂O → (CH₃)₃COH ＋ HBr（經 (CH₃)₃C⁺）'}
@@ -34,7 +55,13 @@ export const STAGES=[
   pairs:[{a:'sn2-ethyl',b:'sn1-water',diff:'換了受質（一級 → 三級）與親核劑／溶劑（I⁻／acetone → 水）'},{a:'sn2-secondary',b:'sn1-tertamyl',diff:'二級＋良好親核劑 對 三級＋水'},{a:'sn2-methyl',b:'sn1-methanol',diff:'甲基＋OH⁻ 對 三級＋甲醇'},{a:'sn2-cyanide',b:'sn1-benzylic',diff:'一級＋CN⁻／DMSO 對 能形成穩定碳陽離子的三級苄基＋水'}],
   branches:[{node:'degree',ids:['degree-low','degree-high'],prompt:'依剛才的對比，「受質是哪一級？」這一格底下該寫什麼？',options:['甲基／1°／2° 搭配良好親核劑 → SN2；3° 搭配弱親核溶劑 → SN1','有鹵素就 SN1，有負電就 SN2','加熱就 SN1，室溫就 SN2'],answer:0,feedback:'受質能不能被背面接近、能不能形成穩定碳陽離子，是分流 SN2 與 SN1 的第一把尺；再搭配親核劑與溶劑。'}],
   arrowKinds:['sn2','sn1'],mixCount:6},
- {id:'s2',title:'加入消去：E2',short:'＋E2',newTypes:['e2'],
+ {id:'s2',title:'加入消去：E2',short:'＋E2',goal:'遇到強鹼就考慮 E2：找出與脫離基 anti 的 β-H，再用 Zaitsev 規則選出主要的烯。',needs:['basicity','acidbase','degree'],
+  primers:[
+   {id:'newman',title:'Newman 投影與 anti 構形',pages:[108,381,382],demos:[{label:'β-H 與 Br 呈 anti 時拔氫（E2）',kind:'e2',example:'e2-butane'}],body:['Newman 投影：沿一條 C–C 鍵看過去，前碳的三個鍵交會於圓心，後碳的三個鍵畫在圓外。轉動這條鍵，就能看到兩個碳上的基團怎麼相對。','E2 中被拔的 β-H 與脫離基最好在同一平面、方向相反（anti-periplanar，Newman 投影中相隔 180°），C–H 鍵的電子才能直接從背面推走 C–X 鍵。'],example:'沿 2-溴丁烷的 C2–C3 看：轉到 H 與 Br 相隔 180° 的構形，E2 才容易發生。',check:check('E2 最容易發生時，β-H 與脫離基在 Newman 投影中相隔幾度？',['180°（anti-periplanar）','60°（gauche）','0°（完全重疊）'],0,'兩者在同一平面、方向相反時，電子能從背面推走脫離基。')},
+   {id:'alkene',title:'烯的穩定性與 Zaitsev 規則',pages:[235,378],body:['雙鍵碳上的烷基越多，烯越穩定：四取代 > 三取代 > 雙取代 > 單取代。','Zaitsev 規則：有多種 β-H 可以拔時，消去通常得到取代較多、較穩定的烯；體積大的鹼（t-BuO⁻）是常見的例外。'],example:'2-溴丁烷消去時，2-丁烯（雙取代）通常比 1-丁烯（單取代）多。',check:check('依 Zaitsev 規則，2-溴-2-甲基丁烷消去的主要烯是？',['2-methyl-2-butene（三取代）','2-methyl-1-butene（雙取代）','1-butene'],0,'取代較多的雙鍵較穩定，通常是主要產物。')},
+   {id:'chair',optional:true,title:'選讀：椅式環己烷上的 E2',pages:[133,383],body:['椅式環己烷的每個碳都有一個軸向（axial，上下直立）與一個赤道（equatorial，向外伸出）位置。','在環上，只有脫離基與 β-H 都在軸向、一上一下時（trans-diaxial），兩者才相隔 180°，E2 才容易發生；脫離基在赤道位置時，要先翻環。'],example:'氯在軸向時，相鄰碳上同樣在軸向、方向相反的 H 才能被拔走。',check:check('在椅式環己烷上，E2 需要脫離基與 β-H 在什麼位置？',['兩者都在軸向、方向相反（trans-diaxial）','兩者都在赤道位置','脫離基在赤道、H 在軸向'],0,'只有 trans-diaxial 時兩者才相隔 180°，符合 anti-periplanar。')}
+  ],
+  newTypes:['e2'],
   concepts:[
    {title:'E2：鹼拔 β-H，三組電子同時動',pages:[380,381,382],body:['強鹼的孤對電子接受 β-H，C–H 鍵電子形成 C=C 的 π 鍵，C–X 鍵電子帶著脫離基離開——三件事在同一步完成，沒有碳陽離子。','常見的構形要求：β-H 與脫離基呈 anti-periplanar（Newman 投影中相隔 180°）。主要產物通常依 Zaitsev 規則；體積大的鹼（t-BuO⁻）較會拔取代較少一側的氫。'],example:'2-溴丁烷 ＋ NaOEt（乙醇、加熱）→ 2-丁烯（主要）'},
    {title:'同一個受質，換試劑就換路徑',pages:[365,381,387],body:['I⁻ 是良好親核劑但弱鹼，遇到二級鹵烷走 SN2；EtO⁻ 是強鹼，遇到同一個二級鹵烷、加熱時以 E2 為主（SN2 仍可競爭）。','三級鹵烷遇到強鹼：背面被擋住無法 SN2，強鹼直接走 E2。'],example:'判斷時先問：試劑是不是強鹼？'}
@@ -42,14 +69,19 @@ export const STAGES=[
   pairs:[{a:'sn2-secondary',b:'e2-butane',diff:'同一個受質 2-溴丁烷，只換試劑與溫度（NaI／acetone → NaOEt／乙醇加熱）'},{a:'sn1-tertamyl',b:'e2-tertamyl',diff:'同一個三級受質，只換試劑（水 → EtO⁻）'},{a:'sn2-cyanide',b:'e2-primary',diff:'一級受質：CN⁻（良好親核劑）對 t-BuO⁻（體積大的強鹼）'}],
   branches:[{node:'base',ids:['base-strong','base-weak'],prompt:'在「受質級數」之前，要先多問哪一個問題？',options:['試劑是不是強鹼？強鹼＋2°／3°（或體積大的鹼）→ E2','試劑有沒有鈉離子？有就 E2','溶劑是不是水？是就 E2'],answer:0,feedback:'強鹼會改變反應方向：先確認鹼性，再看受質級數。'}],
   arrowKinds:['e2'],mixCount:6},
- {id:'s3',title:'碳陽離子的另一條路：E1',short:'＋E1',newTypes:['e1'],
+ {id:'s3',title:'碳陽離子的另一條路：E1',short:'＋E1',goal:'碳陽離子形成後，依溫度與試劑判斷它被接住（SN1）還是失去 β-H（E1）。',needs:['carbocation','energy'],
+  primers:[
+   {id:'heat',title:'為什麼加熱有利消去',pages:[204,205,387],body:['ΔG = ΔH − TΔS。ΔS 描述反應後分子變得多「自由」：粒子數變多時，ΔS 為正。','（教學補充）消去把一個受質變成烯、質子化的鹼與脫離基等更多粒子，ΔS 通常比取代大。溫度 T 越高，−TΔS 這一項越負，消去就越有利；所以 E1 常寫「加熱」，室溫下則 SN1 較多。'],example:'2-溴-2-甲基丁烷在乙醇中：室溫多得 SN1 的醚，加熱後烯的比例提高。',check:check('依 ΔG = ΔH − TΔS，為什麼升溫有利消去？',['消去的 ΔS 較大，T 越大，−TΔS 越負','升溫讓 ΔH 變成零','升溫讓碳陽離子無法形成'],0,'消去產生較多粒子、ΔS 較大；乘上溫度後，對 ΔG 的影響更大。')}
+  ],
+  newTypes:['e1'],
   concepts:[
    {title:'E1：和 SN1 共用同一個碳陽離子',pages:[385,387],body:['先和 SN1 一樣離解形成碳陽離子；接著不是被親核劑接住，而是由弱鹼（溶劑）拔走相鄰的 β-H，形成雙鍵。','三級受質、弱鹼溶劑（如乙醇）、加熱有利 E1；SN1 幾乎總是同時競爭，加熱讓消去比例提高，但不保證唯一產物。'],example:'2-溴-2-甲基丁烷在乙醇中加熱 → 2-methyl-2-butene（主要）＋SN1 醚'}
   ],
   pairs:[{a:'sn1-tertamyl',b:'e1-tertamyl',diff:'同一個受質、同一個碳陽離子：水／室溫 對 乙醇／加熱'},{a:'e1-tertamyl',b:'e2-tertamyl',diff:'同一個受質：乙醇（弱鹼）加熱 對 EtO⁻（強鹼）'},{a:'sn1-water',b:'e1-tertbutyl',diff:'同一個第三丁基溴：水捕捉 對 乙醇加熱消去'},{a:'e1-methylpentane',b:'e2-propane',diff:'三級＋弱鹼加熱 對 二級＋強鹼'},{a:'e1-3methylpentane',b:'sn1-methanol',diff:'加熱求烯 對 室溫溶劑解'}],
   branches:[{node:'cation',ids:['cation-capture','cation-heat'],prompt:'碳陽離子形成以後，怎麼決定是 SN1 還是 E1？',options:['溶劑捕捉（如水、甲醇、室溫）→ SN1；弱鹼溶劑加熱、得到烯 → E1（兩者常競爭）','碳陽離子只會走 SN1','只要是三級就一定 E1'],answer:0,feedback:'SN1 與 E1 分享同一個中間體；條件（加熱、溶劑角色）改變的是兩者的比例。'}],
   arrowKinds:['e1'],mixCount:8},
- {id:'s4',title:'烯當親核劑：三種加成',short:'加成',newTypes:['addhx','hydration','halogenation'],
+ {id:'s4',title:'烯當親核劑：三種加成',short:'加成',goal:'把 π 鍵當作電子來源，判斷中間體是碳陽離子還是鹵鎓離子，依馬可尼可夫規則或反式加成寫出產物。',needs:['nucleophile','carbocation','hybrid'],
+  newTypes:['addhx','hydration','halogenation'],
   concepts:[
    {title:'π 鍵也能提供電子：HX 加成與馬可尼可夫規則',pages:[237,238,240,241,245],widget:{kind:'cation-cloud',initial:'primary'},body:['烯的 π 鍵電子比較鬆散，可以進攻 HX 的氫（親電子劑），形成碳陽離子；接著 X⁻ 接住碳陽離子。','馬可尼可夫規則：H 加到取代較少的雙鍵碳，X 接在取代較多的碳。原因是這樣形成的碳陽離子比較穩定（碳陽離子穩定性決定方向）。'],example:'(CH₃)₂C=CH₂ ＋ HBr → (CH₃)₃CBr'},
    {title:'酸催化加水：同一個碳陽離子，換水來接',pages:[267,268],body:['稀酸、大量水時，H₃O⁺ 先把質子給烯形成碳陽離子，水當親核劑接住，再去質子化得到醇；酸只是催化劑，最後再生。','方向同樣依馬可尼可夫：OH 接在取代較多的碳。'],example:'(CH₃)₂C=CH₂ ＋ H₂O（H₃O⁺）→ (CH₃)₃COH'},
@@ -58,7 +90,11 @@ export const STAGES=[
   pairs:[{a:'addhx-isobutylene',b:'e1-tertbutyl',diff:'起始物不同：烯＋HBr（加成）對 鹵烷在乙醇加熱（消去）——產物方向相反'},{a:'addhx-propene',b:'hyd-isobutylene',diff:'同樣經碳陽離子：HX 由 X⁻ 接住，稀酸水由水接住'},{a:'hyd-methylbutene',b:'halo-cyclopentene',diff:'H₃O⁺（碳陽離子）對 Br₂（溴鎓離子、反式）'},{a:'halo-ethene',b:'addhx-isobutylene',diff:'X₂ 對 HX：三元環中間體 對 碳陽離子'}],
   branches:[{node:'start',ids:['start-alkene'],prompt:'流程圖最上面要先分「起始物是什麼」。烯要接到哪一條？',options:['起始物是烯（C=C）而沒有脫離基 → 看試劑是 X₂、HX 還是稀酸水：加成','烯也要先數受質級數再選 SN1／SN2','烯加 HBr 一定是 E2'],answer:0,feedback:'烯沒有脫離基，π 鍵當親核劑：這是加成的入口。'},{node:'electrophile',ids:['el-x2','el-hx','el-h3o'],prompt:'烯遇到不同試劑時，怎麼分？',options:['X₂ → 鹵鎓離子、反式加成；HX → 碳陽離子、X 接取代多的碳；稀酸＋大量水 → 碳陽離子、加水得醇','三種試劑機構完全相同','X₂ 也經開放碳陽離子，所以可能重排'],answer:0,feedback:'先認出親電子劑，再判斷中間體：鹵鎓離子還是碳陽離子。'}],
   arrowKinds:['addhx','hydration','halogenation'],mixCount:8},
- {id:'s5',title:'碳陽離子的變身與逆反應：重排與脫水',short:'重排／脫水',newTypes:['rearrangement','dehydration'],
+ {id:'s5',title:'碳陽離子的變身與逆反應：重排與脫水',short:'重排／脫水',goal:'判斷碳陽離子能否靠位移變得更穩定；把醇的脫水看成加水的逆反應，由條件決定方向。',needs:['leaving','acidbase','carbocation'],
+  primers:[
+   {id:'equilibrium',title:'平衡移動：同一組反應的兩個方向',pages:[204,205,604],body:['平衡常數告訴我們反應最後停在哪裡：ΔG° 為負，平衡偏向產物。','（教學補充）勒沙特列原理：增加某一邊的物質，平衡往另一邊移動；把產物移走，反應會繼續往產物方向進行。','烯＋水 ⇌ 醇：大量水、稀酸時往醇（加水）；濃酸、加熱並把生成的烯蒸出時，往烯（脫水）。'],example:'2-甲基-2-丁醇加 H₂SO₄ 加熱並蒸出烯，平衡持續往 2-methyl-2-butene 的方向移動。',check:check('想讓醇脫水得到烯，下列哪個做法最有幫助？',['用濃酸、加熱，並把生成的烯蒸出','加入大量的水','降溫並稀釋酸'],0,'移走產物、減少水，平衡就往脫水的方向移動。')}
+  ],
+  newTypes:['rearrangement','dehydration'],
   concepts:[
    {title:'碳陽離子重排：1,2-氫或甲基位移',pages:[245,248,249],widget:{kind:'cation-cloud',initial:'secondary'},body:['若先形成的碳陽離子旁邊的碳上有 H 或烷基，它可以帶著鍵電子對移到帶正電的碳，讓正電轉到相鄰碳。當這樣能把二級變成三級碳陽離子時，重排就會發生。','重排是碳陽離子中間體存在的證據；不經碳陽離子的 X₂ 加成、SN2、E2 不會重排。原文的兩個例子都得到重排與未重排產物的混合物。'],example:'3-甲基-1-丁烯 ＋ HCl → 2-chloro-2-methylbutane（重排）＋ 2-chloro-3-methylbutane'},
    {title:'醇的酸催化脫水：加水的逆反應',pages:[262,604,605],body:['醇在濃酸、加熱下：OH 先質子化成好脫離基 –OH₂⁺，水離開形成碳陽離子，再由水拔 β-H 形成烯——這是 E1。三級醇最容易。','它和酸催化加水是同一組平衡的兩個方向：大量水、稀酸 → 加水；濃酸、加熱、把烯蒸出 → 脫水。產物依 Zaitsev 規則。'],example:'2-甲基-2-丁醇（H₂SO₄、加熱）→ 2-methyl-2-butene（主要）'}
