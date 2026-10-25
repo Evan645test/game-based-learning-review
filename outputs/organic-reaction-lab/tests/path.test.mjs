@@ -81,3 +81,15 @@ test('碳陽離子電子雲：取代越多中心碳越不缺電子；鄰近 C–
  for(const m of models){const c=m.atoms.find(a=>a.center);assert.equal(m.bonds.filter(b=>b[0]==='C').length,3);for(const a of m.atoms)if(a.el==='C'&&!a.center)assert.equal(m.bonds.filter(b=>b.includes(a.id)).length,4);assert.ok(m.atoms.filter(a=>a.id!=='C'&&m.bonds.some(b=>b[0]==='C'&&b[1]===a.id)).every(a=>Math.abs(a.p[1])<1e-9),'陽離子平面');}
  for(const s of [STAGES[3].concepts[0],STAGES[4].concepts[0],WARMUP.find(c=>c.id==='carbocation')])assert.equal(s.widget.kind,'cation-cloud');
 });
+import {paperStep} from '../paper-view.js';
+import {reactionScene3D} from '../reaction-3d.js';
+import {exampleSpec} from '../reaction-examples.js';
+test('書面結構式：每步依箭頭推得的總電荷守恆，且形成的鍵數與三維模型一致',()=>{
+ for(const [kind,list] of Object.entries(REACTION_EXAMPLES))for(const ex of list){const spec=exampleSpec(kind,ex);spec.steps.forEach((st,i)=>{
+  const g=paperStep(st),sum=[...g.delta.values()].reduce((a,b)=>a+b,0);assert.equal(sum,0,`${ex.id} ${i}`);
+  const formed2d=[...g.changes.values()].filter(c=>c.start===0&&c.end>0).length,scene=reactionScene3D(kind,i,'together',.5,spec);
+  const formed3d=scene.bonds.filter(b=>b.forming||['newCN','formingOH'].includes(b.id)).length;
+  if(!['sn2','sn1','e1','e2','chair'].includes(kind))assert.equal(formed2d,formed3d,`${ex.id} ${i}`);
+  assert.ok(formed2d+[...g.changes.values()].filter(c=>c.end<c.start).length>=1,`${ex.id} ${i} 至少一處鍵結改變`);
+ });}
+});

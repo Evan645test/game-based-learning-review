@@ -2,6 +2,7 @@ import {mechanismSpec} from './electron-flow.js';
 import {reactionScene3D} from './reaction-3d.js';
 import {drawReaction3D} from './reaction-3d-view.js';
 import {KIND_LABELS} from './reaction-types.js';
+import {drawPaper} from './paper-view.js';
 
 let serial=0;
 const explanations={
@@ -104,24 +105,24 @@ export function normalizePlaybackState(value,count,fallbackFrame=0){
 
 export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverride=null,initialState=null,segment=null,onStateChange=()=>{},onFrameChange=()=>{},onComplete=()=>{}}={}){
  const spec=specOverride||mechanismSpec(kind),frames=spotlightSegmentFrames(kind,spec,segment),id='spot-'+(++serial),abort=new AbortController(),saved=normalizePlaybackState(initialState,frames.length,frame);
- let current=saved.frame,progress=saved.progress,playing=false,speed=saved.speed,spot=saved.spot,raf=0,last=0,destroyed=false,completed=false,lastSaved=0,drag=null,hydrogens=saved.hydrogens;
+ let showPaper=true,current=saved.frame,progress=saved.progress,playing=false,speed=saved.speed,spot=saved.spot,raf=0,last=0,destroyed=false,completed=false,lastSaved=0,drag=null,hydrogens=saved.hydrogens;
  const camera={...saved.camera},reduced=matchMedia('(prefers-reduced-motion: reduce)'),NS='http://www.w3.org/2000/svg';
  let viewport={width:650,height:410},viewHeight=410;
  const snapshot=()=>({version:1,frame:current,progress,camera:{...camera},speed,spot,hydrogens});
  const persist=()=>{lastSaved=performance.now();onStateChange(snapshot());};
- root.innerHTML=`<section class="spotlight-player" aria-label="聚光燈反應機構動畫">
+ root.innerHTML=`<section class="spotlight-player with-paper" aria-label="聚光燈反應機構動畫">
   <div class="spotlight-meta"><div><strong data-physical-step></strong><span data-frame-count></span></div><button type="button" data-expand aria-expanded="false">放大觀察</button></div>
   <div class="spotlight-layout"><div class="spotlight-main">
-   <div class="molecule-stage"><svg viewBox="0 0 650 410" class="spotlight-canvas" role="img" tabindex="0" aria-roledescription="可旋轉三維分子模型" aria-label="三維球棍反應動畫；拖曳或方向鍵旋轉，加減鍵縮放，Home 重設視角" aria-describedby="${id}-focus ${id}-legend"></svg><svg class="annotation-lines" aria-hidden="true"></svg><div class="molecule-annotations" aria-hidden="true"></div><span class="molecule-stage-hint">拖曳旋轉 · 操作時暫停</span></div>
+   <div class="stage-pair"><div class="molecule-stage"><svg viewBox="0 0 650 410" class="spotlight-canvas" role="img" tabindex="0" aria-roledescription="可旋轉三維分子模型" aria-label="三維球棍反應動畫；拖曳或方向鍵旋轉，加減鍵縮放，Home 重設視角" aria-describedby="${id}-focus ${id}-legend"></svg><svg class="annotation-lines" aria-hidden="true"></svg><div class="molecule-annotations" aria-hidden="true"></div><span class="molecule-stage-hint">拖曳旋轉 · 操作時暫停</span></div><figure class="paper-stage" data-paper-stage><figcaption>書面結構式（與左邊同步）</figcaption><svg class="paper-canvas" viewBox="0 0 650 340" role="img" aria-label="與三維動畫同步的書面結構式與彎箭頭" data-paper-id="${id}"></svg></figure></div>
    <div class="spotlight-transport"><div class="spotlight-controls"><button type="button" data-demo-prev>上一段</button><button type="button" class="primary" data-play>播放動畫</button><button type="button" data-demo-next>下一段</button></div><label class="spotlight-seek">本段進度<input type="range" min="0" max="100" step="1" value="0" data-seek><output data-progress-value>0%</output></label><div class="player-feedback"><p class="player-status" role="status" data-player-status></p><button type="button" class="quiet" data-replay>從頭重播</button></div></div>
   </div><aside class="spotlight-side" aria-label="本段解說與觀察設定">
    <p class="spotlight-kicker">現在只看這件事</p><p class="spotlight-focus" id="${id}-focus" data-current-focus aria-live="polite"></p><details class="spotlight-explanation"><summary>為什麼這樣移動？</summary><p class="spotlight-caption" id="${id}-caption" data-demo-caption></p></details><p class="spotlight-charge" data-charge-note></p>
    <div class="mechanism-legend" id="${id}-legend" aria-label="電子與鍵結圖例"><span><i class="legend-pair" aria-hidden="true"></i>金色光點：電子對</span><span><i class="legend-breaking" aria-hidden="true"></i>橙色虛線：鍵斷裂</span><span><i class="legend-forming" aria-hidden="true"></i>綠色：新鍵／π 鍵</span></div>
-   <details class="view-settings" data-view-settings><summary>視角與播放設定</summary><div class="molecule-camera" aria-label="三維視角操作"><button type="button" data-view-orbit="left" aria-label="向左旋轉">左轉</button><button type="button" data-view-orbit="right" aria-label="向右旋轉">右轉</button><button type="button" data-view-orbit="up" aria-label="向上旋轉">上轉</button><button type="button" data-view-orbit="down" aria-label="向下旋轉">下轉</button><button type="button" data-view-side>反應平面</button><button type="button" data-view-reset>重設視角</button><label class="camera-zoom">縮放<input type="range" min="65" max="150" value="100" data-view-zoom></label><label class="camera-hydrogens"><input type="checkbox" data-show-hydrogens>顯示所有氫</label></div><div class="spotlight-secondary"><label>速度<select data-speed><option value="0.75">0.75 倍</option><option value="1" selected>1 倍</option><option value="1.5">1.5 倍</option></select></label><button type="button" data-spot aria-pressed="true">聚光燈：開</button></div>
+   <details class="view-settings" data-view-settings><summary>視角與播放設定</summary><div class="molecule-camera" aria-label="三維視角操作"><button type="button" data-view-orbit="left" aria-label="向左旋轉">左轉</button><button type="button" data-view-orbit="right" aria-label="向右旋轉">右轉</button><button type="button" data-view-orbit="up" aria-label="向上旋轉">上轉</button><button type="button" data-view-orbit="down" aria-label="向下旋轉">下轉</button><button type="button" data-view-side>反應平面</button><button type="button" data-view-reset>重設視角</button><label class="camera-zoom">縮放<input type="range" min="65" max="150" value="100" data-view-zoom></label><label class="camera-hydrogens"><input type="checkbox" data-show-hydrogens>顯示所有氫</label><label class="camera-hydrogens"><input type="checkbox" data-show-paper checked>書面結構式對照</label></div><div class="spotlight-secondary"><label>速度<select data-speed><option value="0.75">0.75 倍</option><option value="1" selected>1 倍</option><option value="1.5">1.5 倍</option></select></label><button type="button" data-spot aria-pressed="true">聚光燈：開</button></div>
    <div class="molecule-legend" aria-label="原子色彩"><span><i class="atom-c" aria-hidden="true"></i>C 碳</span><span><i class="atom-h" aria-hidden="true"></i>H 氫</span><span><i class="atom-o" aria-hidden="true"></i>O 氧</span><span><i class="atom-n" aria-hidden="true"></i>N 氮</span><span><i class="atom-halogen" aria-hidden="true"></i>Br／Cl／I 鹵素</span></div></details>
   </aside></div><details class="spotlight-model-note"><summary>模型與電子符號說明</summary><p class="spotlight-note">${chloride?'類比示範使用氯代物；推理題使用溴代物。離去能力不同，不由動畫推算速率。':'碳骨架、試劑及轉移的氫以球棍呈現；可展開設定顯示所有氫。'} 三維幾何與電子曲線用於機構解說，並非分子動力學計算；光點表示電子對，不是電子的實測路徑。<span data-motion-note></span></p></details>
  </section><dialog class="spotlight-dialog" aria-label="放大觀察反應機構"></dialog>`;
- const q=s=>root.querySelector(s),svg=q('.spotlight-canvas'),player=q('.spotlight-player'),dialog=q('dialog'),annotationLayer=q('.molecule-annotations'),lines=q('.annotation-lines');
+ const q=s=>root.querySelector(s),paper=root.querySelector('.paper-canvas'),svg=q('.spotlight-canvas'),player=q('.spotlight-player'),dialog=q('dialog'),annotationLayer=q('.molecule-annotations'),lines=q('.annotation-lines');
  const displayLabel=s=>chloride||spec.example?.leaving==='Cl'?s.replaceAll('Br','Cl'):s;
  function labelLayer(labels){
   const {width:w,height:h}=viewport,scale=Math.min(w/650,h/viewHeight),ox=(w-650*scale)/2,oy=(h-viewHeight*scale)/2;
@@ -147,6 +148,7 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
   // Zoom in on electron movement; while playing, ease between frames over the first fifth of each frame.
   const flow=fr=>['focus','together','transform'].includes(fr?.mode)?1:0,target=flow(f),before=current>0?flow(frames[current-1]):0,blend=playing&&!reduced.matches&&before!==target?Math.min(1,progress/.2):1,e=blend*blend*(3-2*blend);
   labelLayer(drawReaction3D(svg,scene,{id,frame:f,required:spec.steps[f.step].required,progress,spot,camera,hydrogens,chloride,viewHeight,focus:before+(target-before)*e}));
+  if(showPaper)drawPaper(paper,spec,{frame:f,progress});
  }
  function status(text){q('[data-player-status]').textContent=text;}
  function show(){
@@ -185,7 +187,7 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
  const rotations={left:[-.3,0],right:[.3,0],up:[0,-.2],down:[0,.2]};for(const button of root.querySelectorAll('[data-view-orbit]'))button.onclick=()=>orbit(...rotations[button.dataset.viewOrbit]);
  q('[data-view-reset]').onclick=()=>{interact();Object.assign(camera,{yaw:-.3,pitch:.36,zoom:1});q('[data-view-zoom]').value=100;draw();persist();};
  q('[data-view-side]').onclick=()=>{interact();Object.assign(camera,{yaw:0,pitch:kind==='chair'?1.05:0});draw();persist();};
- q('[data-view-zoom]').oninput=e=>{interact();camera.zoom=Number(e.target.value)/100;draw();persist();};q('[data-show-hydrogens]').onchange=e=>{interact();hydrogens=e.target.checked;draw();persist();};
+ q('[data-view-zoom]').oninput=e=>{interact();camera.zoom=Number(e.target.value)/100;draw();persist();};q('[data-show-paper]').onchange=e=>{showPaper=e.target.checked;q('[data-paper-stage]').hidden=!showPaper;player.classList.toggle('with-paper',showPaper);draw();};q('[data-show-hydrogens]').onchange=e=>{interact();hydrogens=e.target.checked;draw();persist();};
  svg.addEventListener('pointerdown',e=>{if(e.button!==0)return;interact();drag={id:e.pointerId,x:e.clientX,y:e.clientY};svg.setPointerCapture(e.pointerId);svg.focus({preventScroll:true});},{signal:abort.signal});
  svg.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;orbit(dx*.009,dy*.009,false);},{signal:abort.signal});
  const release=()=>{if(drag){drag=null;persist();}};for(const event of ['pointerup','pointercancel','lostpointercapture'])svg.addEventListener(event,release,{signal:abort.signal});
