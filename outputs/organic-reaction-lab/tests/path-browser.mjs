@@ -47,7 +47,8 @@ await page.reload();assert.equal(await page.locator('#course-notice').isHidden()
 // 2. Warm-up: eight concepts with instant checks; first answer wrong on card 1.
 assert.equal(await page.locator('[data-learning-path]').getAttribute('data-stage'),'warmup');await overflow('暖身 390px');await page.screenshot({path:out+'/01-warmup-390.png',fullPage:false});
 for(const [i,c] of WARMUP.entries()){
- if(c.widget){
+ if(c.widget?.kind==='leaving'){assert.equal(await page.locator('[data-ion]').count(),3);assert.equal(await page.locator('[data-leaving-row]').count(),2);await page.locator('[data-leaving-visual]').scrollIntoViewIfNeeded();await overflow('脫離基圖解 390px');await page.locator('[data-leaving-visual]').screenshot({path:out+'/01d-leaving-390.png'});ok('脫離基圖解：鹵離子比較與 –OH 質子化對照');}
+ if(c.widget?.kind==='cation-cloud'){
   await page.locator('[data-cation-cloud]').scrollIntoViewIfNeeded();assert.equal(await page.locator('[data-cation-panel]').count(),4);
   const clouds=await page.locator('[data-halo="C"]').evaluateAll(n=>n.map(x=>Number(x.dataset.cloud)));assert.ok(clouds.every((v,k)=>!k||v<clouds[k-1]),'中心碳藍色應逐格變淡 '+clouds);
   assert.equal(await page.locator('[data-p-lobe]').count(),0);await page.locator('[data-show-orbital]').check();assert.equal(await page.locator('[data-p-lobe]').count(),8);

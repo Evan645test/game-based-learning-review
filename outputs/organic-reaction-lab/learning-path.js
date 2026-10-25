@@ -4,6 +4,7 @@ import {mountSpotlight} from './spotlight-demo.js';
 import {mountArrowEditor} from './arrow-editor.js';
 import {mountVisual} from './concept-visuals.js';
 import {mountCationCloud} from './cation-cloud.js';
+import {leavingHTML} from './leaving-visual.js';
 import {newMechanism,validWork} from './electron-flow.js';
 import {gradedHint,firstArrowResult,aiArrowHint} from './graded-hints.js';
 import {esc,sourceLinks} from './reason-workbench.js';
@@ -57,7 +58,7 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  }
  const go=(stageId)=>{state.stage=stageId;save();draw(true);};
  function conceptCard(c,{index,total}){return `<p class="course-part">${index}／${total}</p><h2 tabindex="-1">${esc(c.title)}</h2>${c.body.map(p=>`<p>${esc(p)}</p>`).join('')}${c.demos?`<section class="concept-3d" data-concept-3d><p class="teacher-note">三維模型：拖曳旋轉、加減鍵縮放，可逐段播放電子移動。</p>${c.demos.length>1?`<div class="check-tools">${c.demos.map((d,k)=>`<button type="button" data-concept-demo="${k}" aria-pressed="${k===0}">${esc(d.label)}</button>`).join('')}</div>`:''}<div data-concept-player></div></section>`:''}${c.visual?`<details class="concept-flat"><summary>看平面示意圖</summary><div class="concept-visual guide-concept" data-path-visual></div></details>`:''}${c.widget?'<div class="concept-widget" data-cation-host></div>':''}<p class="concept-example">${esc(c.example)}</p>`;}
- const mountWidget=c=>{if(c.widget?.kind==='cation-cloud')children.push(mountCationCloud($('[data-cation-host]'),{initial:c.widget.initial}));};
+ const mountWidget=c=>{if(c.widget?.kind==='leaving')$('[data-cation-host]').innerHTML=leavingHTML();if(c.widget?.kind==='cation-cloud')children.push(mountCationCloud($('[data-cation-host]'),{initial:c.widget.initial}));};
 
  function warmup(panel){
   const i=Math.min(state.warm.index,WARMUP.length-1),c=WARMUP[i],answered=state.warm.checks[c.id];
