@@ -23,35 +23,35 @@ export function cationModel(id,twist=0){
  }
  return {cation:c,atoms,bonds,parallel:atoms.filter(a=>a.parallel).length,neighborCH:atoms.filter(a=>a.neighborCH).length};
 }
-const blueFill=b=>`rgba(${Math.round(255-170*b)},${Math.round(255-110*b)},255,${.25+.45*b})`;
+const halo=b=>`rgba(${Math.round(235-180*b)},${Math.round(240-130*b)},255,${.2+.65*b})`;
 
-export function mountCationCloud(root,{initial='tertiary'}={}){
- let id=initial,cloud=true,orbital=true,twist=0,camera={yaw:-.5,pitch:.42},drag=null;const abort=new AbortController(),NS='http://www.w3.org/2000/svg';
- root.innerHTML=`<section class="cation-cloud" data-cation-cloud><div class="check-tools" role="group" aria-label="選擇碳陽離子">${CATIONS.map(c=>`<button type="button" data-cation="${c.id}" aria-pressed="${c.id===id}">${c.label}</button>`).join('')}</div><div class="cation-stage"><svg viewBox="0 0 650 340" role="img" tabindex="0" aria-label="碳陽離子三維模型；拖曳或方向鍵旋轉" data-cation-svg></svg></div><div class="cation-controls"><label><input type="checkbox" data-show-cloud checked>電子雲（藍＝缺電子）</label><label><input type="checkbox" data-show-orbital checked>空 p 軌域與超共軛</label><label class="cation-twist">轉動甲基<input type="range" min="0" max="120" value="0" data-twist></label><button type="button" data-cation-reset>重設視角</button></div><div class="cation-legend" aria-hidden="true"><span class="swatch strong"></span>較缺電子<span class="swatch weak"></span>較不缺電子<span class="swatch parallel"></span>與空 p 軌域大致平行的鄰近 C–H</div><p class="cation-readout" data-cation-readout role="status"></p><p class="teacher-note">顏色依教科書靜電位圖的趨勢製作（原文第 245 頁），用來比較「誰比較缺電子」，不是量子化學計算出的電荷。</p></section>`;
- const $=s=>root.querySelector(s),svg=$('[data-cation-svg]');
- function draw(){
-  const m=cationModel(id,twist),raw=p=>projectPoint(p,{...camera,zoom:1}),pts=m.atoms.map(a=>raw(a.p)),xs=pts.map(p=>p.x),ys=pts.map(p=>p.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,fit=Math.min(2.1,560/Math.max(1,Math.max(...xs)-Math.min(...xs)),250/Math.max(1,Math.max(...ys)-Math.min(...ys)));
-  const proj=p=>{const q=raw(p);return {x:325+(q.x-cx)*fit,y:170+(q.y-cy)*fit,z:q.z,s:q.scale*fit};},P=new Map(m.atoms.map(a=>[a.id,proj(a.p)])),items=[];
-  svg.replaceChildren();svg.dataset.current=id;svg.dataset.yaw=String(camera.yaw);svg.dataset.parallel=String(m.parallel);
-  const el=(tag,attrs)=>{const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));return n;};
-  svg.append(el('rect',{width:650,height:340,rx:12,fill:'#f1f6f4'}));
-  if(orbital){for(const sign of [1,-1]){const a=proj([0,0,0]),b=proj(mul(P_AXIS,1.9*sign)),dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1,ang=Math.atan2(dy,dx)*180/Math.PI;items.push({z:proj(mul(P_AXIS,.9*sign)).z,node:el('ellipse',{cx:(a.x+b.x)/2,cy:(a.y+b.y)/2,rx:len/2+6,ry:24*fit,transform:`rotate(${ang} ${(a.x+b.x)/2} ${(a.y+b.y)/2})`,fill:'rgba(255,255,255,.35)',stroke:'#6b7f9a','stroke-width':2,'stroke-dasharray':'6 4','data-p-lobe':sign})});}}
-  for(const [a,b] of m.bonds){const p=P.get(a),q=P.get(b),atom=m.atoms.find(x=>x.id===b),hot=orbital&&atom.parallel;items.push({z:(p.z+q.z)/2+.01,node:el('line',{x1:p.x,y1:p.y,x2:q.x,y2:q.y,stroke:hot?'#c9851f':'#5d6f78','stroke-width':hot?7:5,'stroke-linecap':'round',...(hot?{'data-parallel-bond':b}:{})})});}
-  for(const a of m.atoms){const p=P.get(a.id),r=(a.el==='C'?17:10)*p.s,g=el('g',{'data-cation-atom':a.id});
-   if(cloud)g.append(el('circle',{cx:p.x,cy:p.y,r:(a.el==='C'?46:26)*p.s,fill:blueFill(a.blue),'data-cloud':a.blue.toFixed(2)}));
-   g.append(el('circle',{cx:p.x,cy:p.y,r,fill:a.el==='C'?'#536575':'#eef1f2',stroke:'#fff',...(a.center?{'stroke-width':2.5}:{})}));
-   if(a.center){const t=el('text',{x:p.x,y:p.y+5,'text-anchor':'middle',fill:'#fff','font-size':14,'font-weight':700});t.textContent='C⁺';g.append(t);}
-   items.push({z:p.z,node:g});}
+/** Four cations side by side; dragging any panel turns all of them together. */
+export function mountCationCloud(root,{initial='methyl'}={}){
+ let orbital=false,twist=0,camera={yaw:-.5,pitch:.42},drag=null;const abort=new AbortController(),NS='http://www.w3.org/2000/svg';
+ root.innerHTML=`<section class="cation-cloud" data-cation-cloud><p class="cation-howto"><strong>怎麼看：</strong>中心碳 C⁺ 外圍的藍色光暈越深，代表它越缺電子、越不穩定。比較四格，看藍色怎麼隨著連接的甲基（CH₃）變多而變淡。</p><div class="cation-grid">${CATIONS.map(c=>`<figure class="cation-panel${c.id===initial?' focus':''}" data-cation-panel="${c.id}"><figcaption>${c.label}</figcaption><svg viewBox="0 0 300 240" role="img" tabindex="0" aria-label="${c.label} 三維模型；拖曳或方向鍵旋轉" data-cation-svg></svg><div class="cation-meter" aria-label="缺電子程度（示意）"><span>缺電子</span><i style="--level:${Math.round(c.blue*100)}%"></i></div><p data-cation-count></p></figure>`).join('')}</div><p class="cation-scale" aria-hidden="true"><span>較不穩定</span><span>→</span><span>較穩定</span></p><div class="cation-controls"><label><input type="checkbox" data-show-orbital>顯示空 p 軌域與超共軛</label><label class="cation-twist" hidden>轉動甲基<input type="range" min="0" max="120" value="0" data-twist></label><button type="button" data-cation-reset>重設視角</button></div><p class="cation-orbital-note" hidden>虛線兩瓣是 C⁺ 上空的 p 軌域；橘色是大致與它平行的鄰近 C–H 鍵，可以把電子分享給空軌域（超共軛）。轉動甲基時，平行的鍵數會改變。</p><p class="teacher-note">藍色深淺依教科書靜電位圖的趨勢繪製（原文第 245 頁），用來比較「誰比較缺電子」，不是計算出的電荷。拖曳任一格可同時旋轉四個模型。</p></section>`;
+ const $=s=>root.querySelector(s),el=(tag,attrs,text)=>{const n=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))n.setAttribute(k,String(v));if(text)n.textContent=text;return n;};
+ function drawPanel(panel){
+  const id=panel.dataset.cationPanel,m=cationModel(id,twist),svg=panel.querySelector('svg'),raw=p=>projectPoint(p,{...camera,zoom:1});
+  const extent=[...m.atoms.map(a=>a.p),[0,1.5,0],[0,-1.5,0],[2.15,0,0],[-2.15,0,0],[0,0,2.15],[0,0,-2.15]].map(raw),xs=extent.map(p=>p.x),ys=extent.map(p=>p.y),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,fit=Math.min(270/(Math.max(...xs)-Math.min(...xs)),215/(Math.max(...ys)-Math.min(...ys)));
+  const proj=p=>{const q=raw(p);return {x:150+(q.x-cx)*fit,y:122+(q.y-cy)*fit,z:q.z,s:q.scale*fit};},P=new Map(m.atoms.map(a=>[a.id,proj(a.p)])),items=[],c=P.get('C');
+  svg.replaceChildren();Object.assign(svg.dataset,{current:id,yaw:String(camera.yaw),parallel:String(m.parallel)});svg.append(el('rect',{width:300,height:240,rx:10,fill:'#f7faf8'}));
+  svg.append(el('circle',{cx:c.x,cy:c.y,r:46*c.s,fill:halo(m.cation.blue),'data-cloud':m.cation.blue.toFixed(2),'data-halo':'C'}));
+  if(orbital)for(const sign of [1,-1]){const a=proj(mul(P_AXIS,.25*sign)),b=proj(mul(P_AXIS,1.45*sign)),dx=b.x-a.x,dy=b.y-a.y,len=Math.hypot(dx,dy)||1,ang=Math.atan2(dy,dx)*180/Math.PI;items.push({z:proj(mul(P_AXIS,.8*sign)).z,node:el('ellipse',{cx:(a.x+b.x)/2,cy:(a.y+b.y)/2,rx:len/2+4,ry:16*c.s,transform:`rotate(${ang} ${(a.x+b.x)/2} ${(a.y+b.y)/2})`,fill:'rgba(255,255,255,.55)',stroke:'#5b6f8c','stroke-width':1.6,'stroke-dasharray':'5 3','data-p-lobe':sign})});}
+  for(const [a,b] of m.bonds){const p=P.get(a),q=P.get(b),hot=orbital&&m.atoms.find(x=>x.id===b).parallel;items.push({z:(p.z+q.z)/2+.01,node:el('line',{x1:p.x,y1:p.y,x2:q.x,y2:q.y,stroke:hot?'#c9851f':'#6c7d86','stroke-width':hot?7:5,'stroke-linecap':'round',...(hot?{'data-parallel-bond':b}:{})})});}
+  for(const a of m.atoms){const p=P.get(a.id),g=el('g',{'data-cation-atom':a.id}),r=(a.center?21:a.el==='C'?15:8)*p.s;g.append(el('circle',{cx:p.x,cy:p.y,r,fill:a.el==='C'?'#4f6170':'#ffffff',stroke:a.el==='C'?'#fff':'#9aa8b0','stroke-width':1.2}));
+   const label=a.center?'C⁺':a.el==='C'?'CH₃':a.id.includes('H')&&a.neighborCH?'':'H';if(label)g.append(el('text',{x:p.x,y:p.y+(a.el==='C'?6:-(r+4)),'text-anchor':'middle','font-size':a.el==='C'?17:15,'font-weight':700,fill:a.el==='C'?'#fff':'#41535d'},label));items.push({z:p.z,node:g});}
   items.sort((a,b)=>b.z-a.z).forEach(i=>svg.append(i.node));
-  $('[data-cation-readout]').textContent=`${m.cation.label}：中心碳缺電子程度（示意）${'●'.repeat(Math.round(m.cation.blue*5))}${'○'.repeat(5-Math.round(m.cation.blue*5))}。鄰近 C–H 共 ${m.neighborCH} 條，目前大致平行於空 p 軌域的有 ${m.parallel} 條。${m.cation.note}`;
+  panel.querySelector('[data-cation-count]').textContent=orbital?`與空 p 軌域大致平行的 C–H：${m.parallel} 條`:(m.cation.methyls?`連接 ${m.cation.methyls} 個甲基`:'沒有連接碳');
  }
- root.querySelectorAll('[data-cation]').forEach(b=>b.onclick=()=>{id=b.dataset.cation;root.querySelectorAll('[data-cation]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));draw();});
- $('[data-show-cloud]').onchange=e=>{cloud=e.target.checked;draw();};$('[data-show-orbital]').onchange=e=>{orbital=e.target.checked;draw();};
+ const draw=()=>root.querySelectorAll('[data-cation-panel]').forEach(drawPanel);
+ $('[data-show-orbital]').onchange=e=>{orbital=e.target.checked;$('.cation-twist').hidden=!orbital;$('.cation-orbital-note').hidden=!orbital;draw();};
  $('[data-twist]').oninput=e=>{twist=Number(e.target.value)*Math.PI/180;draw();};$('[data-cation-reset]').onclick=()=>{camera={yaw:-.5,pitch:.42};draw();};
  const orbit=(dx,dy)=>{camera.yaw+=dx;camera.pitch=Math.max(-1.35,Math.min(1.35,camera.pitch+dy));draw();};
- svg.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY};svg.setPointerCapture(e.pointerId);},{signal:abort.signal});
- svg.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;orbit((e.clientX-drag.x)*.009,(e.clientY-drag.y)*.009);drag.x=e.clientX;drag.y=e.clientY;},{signal:abort.signal});
- for(const ev of ['pointerup','pointercancel','lostpointercapture'])svg.addEventListener(ev,()=>{drag=null;},{signal:abort.signal});
- svg.addEventListener('keydown',e=>{const k={ArrowLeft:[-.15,0],ArrowRight:[.15,0],ArrowUp:[0,-.15],ArrowDown:[0,.15]}[e.key];if(k){e.preventDefault();orbit(...k);}},{signal:abort.signal});
+ for(const svg of root.querySelectorAll('[data-cation-svg]')){
+  svg.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY};svg.setPointerCapture(e.pointerId);},{signal:abort.signal});
+  svg.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;orbit((e.clientX-drag.x)*.012,(e.clientY-drag.y)*.012);drag.x=e.clientX;drag.y=e.clientY;},{signal:abort.signal});
+  for(const ev of ['pointerup','pointercancel','lostpointercapture'])svg.addEventListener(ev,()=>{drag=null;},{signal:abort.signal});
+  svg.addEventListener('keydown',e=>{const k={ArrowLeft:[-.15,0],ArrowRight:[.15,0],ArrowUp:[0,-.15],ArrowDown:[0,.15]}[e.key];if(k){e.preventDefault();orbit(...k);}},{signal:abort.signal});
+ }
  draw();return {destroy(){abort.abort();}};
 }
