@@ -1,40 +1,38 @@
 // Island exploration: course stations are islands, their steps are landmarks, and a small chemist walks them.
-import {PREP,STAGES,DIAGNOSED} from './course-path.js';
+import {BOOK,CARD_STATIONS,STAGES} from './course-path.js';
+import {FIGURES} from './figures-v3.js';
 import {esc} from './reason-workbench.js';
 
-// Thirteen islands in textbook order, grouped into four archipelagos for the two-layer world map.
-export const ARCHIPELAGOS=[
- {id:'prep',name:'先備群島',theme:'prep',chapters:'第 1–6 章',islands:PREP.map(p=>p.id)},
- {id:'alkene',name:'烯的加成群島',theme:'alkene',chapters:'第 7–8 章',islands:['addhx','rearr','halo','hydration']},
- {id:'subelim',name:'取代與消去群島',theme:'subelim',chapters:'第 11 章',islands:['sn2','sn1','e2','e1']},
- {id:'summit',name:'醇與總整理群島',theme:'summit',chapters:'第 17 章與總整理',islands:['dehydration','final']}
-];
-const archipelagoOf=id=>ARCHIPELAGOS.find(a=>a.islands.includes(id)).id;
-export const ISLANDS=[...PREP.map(p=>({id:p.id,name:p.name,full:`先備：${p.name}`,chapter:p.chapters})),...STAGES.map(s=>({id:s.id,name:s.short,full:s.title,chapter:s.chapter})),{id:'final',name:'總混合',full:'總混合練習',chapter:'11.12'}].map(i=>({...i,archipelago:archipelagoOf(i.id)}));
-const isPrep=id=>PREP.some(p=>p.id===id);
+// Stations in book order. Each keeps the "island" data shape (landmarks → screens) so progress and detours work unchanged.
+const CARD_IDS=new Set(CARD_STATIONS.map(c=>c.id));
+export const ISLANDS=BOOK.flatMap(sp=>sp.stations.map(st=>{
+ const stage=STAGES.find(s=>s.id===st.id),c=CARD_STATIONS.find(x=>x.id===st.id);
+ const name=stage?stage.short:st.id==='final'?'判斷表':c.title.split('：')[0];
+ return {id:st.id,section:st.section,spread:sp.id,name,full:stage?stage.title:st.id==='final'?'總複習：判斷表':c.title,kind:stage?'reaction':st.id==='final'?'review':'card'};
+}));
+const isCardStation=id=>CARD_IDS.has(id);
 // The final island never runs out of items; it counts as walked after one round of the nine reaction types.
 export const FINAL_COUNT=9;
 
 // Check cards: warm-up cards, stage entry primers, and product-detail cards shown inside a reaction concept.
 const detailsOf=st=>st.concepts.flatMap(c=>c.details||[]);
-const CARD=new Map([...PREP.flatMap(p=>p.cards),...STAGES.flatMap(s=>[...(s.primers||[]),...detailsOf(s)])].map(c=>[c.id,c]));
+const CARD=new Map([...CARD_STATIONS,...STAGES.flatMap(s=>[...(s.primers||[]),...detailsOf(s)])].map(c=>[c.id,c]));
 const stageOf=id=>STAGES.find(s=>s.id===id);
 
 /** Landmarks on an island, in walking order. */
 export function islandNodes(id){
- if(isPrep(id)){const p=PREP.find(x=>x.id===id);return [{id:'cards',kind:'cards',label:p.name,cards:p.cards.map(c=>c.id)}];}
- if(id==='final')return [{id:'table',kind:'table',label:'完成判斷表'},{id:'final',kind:'final',label:'總混合練習'}];
+ if(isCardStation(id))return [{id:'card',kind:'cards',label:CARD.get(id).title.split('：')[0],cards:[id]}];
+ if(id==='final')return [{id:'table',kind:'table',label:'完成判斷表'}];
  const st=stageOf(id);
  return [...(st.primers?.length?[{id:'primers',kind:'cards',label:'入口小暖身',cards:st.primers.map(p=>p.id)}]:[]),
-  {id:'concepts',kind:'concepts',label:'概念'},{id:'contrast',kind:'contrast',label:'對比觀察'},{id:'branches',kind:'branches',label:'補流程圖'},{id:'arrows',kind:'arrows',label:'畫電子箭頭'},{id:'mixed',kind:'mixed',label:'混合練習'}];
+  {id:'concepts',kind:'concepts',label:'概念'},{id:'contrast',kind:'contrast',label:'對比觀察'},{id:'branches',kind:'branches',label:'補流程圖'},{id:'arrows',kind:'arrows',label:'畫電子箭頭'},...(st.mixCount?[{id:'mixed',kind:'mixed',label:'混合練習'}]:[])];
 }
 
 /** One screen per thing: read, figure, 3D, check for a card; one pair, branch, mechanism or item per screen elsewhere. */
 export function nodeScreens(islandId,node){
  const st=stageOf(islandId);
- // Diagnosed cards open with a diagnosis and end with a different follow-up item; a correct diagnosis skips the rest.
- const body=c=>[{type:'read',card:c.id},...(c.widget||c.visual?[{type:'figure',card:c.id}]:[]),...(c.demos?[{type:'demo',card:c.id}]:[])];
- const cardScreens=c=>DIAGNOSED.has(c.id)?[{type:'diagnose',card:c.id},...body(c),{type:'recheck',card:c.id}]:[...body(c),...(c.check?[{type:'check',card:c.id}]:[])];
+ // Every card: read → figure (its own diagram or model) → 3D demos → check.
+ const cardScreens=c=>[{type:'read',card:c.id},...(c.widget||c.visual||FIGURES[c.id]?[{type:'figure',card:c.id}]:[]),...(c.demos?[{type:'demo',card:c.id}]:[]),...(c.check?[{type:'check',card:c.id}]:[])];
  switch(node.kind){
   case 'cards':return node.cards.flatMap(id=>cardScreens(CARD.get(id)));
   case 'concepts':return st.concepts.flatMap((c,i)=>[{type:'concept',index:i},...(c.widget?[{type:'concept-figure',index:i}]:[]),...(c.details||[]).flatMap(d=>cardScreens(d).map(s=>({...s,concept:i})))]);
@@ -57,7 +55,7 @@ export function compareLocation(id){
 }
 export function cardLocation(id){
  const c=CARD.get(id);if(!c)return null;
-const island=PREP.find(p=>p.cards.includes(c))?.id||STAGES.find(s=>(s.primers||[]).includes(c)||detailsOf(s).includes(c)).id,nodes=islandNodes(island),node=nodes.findIndex(n=>n.cards?.includes(id)||n.kind==='concepts'&&detailsOf(stageOf(island)).includes(c));
+const island=isCardStation(id)?id:STAGES.find(s=>(s.primers||[]).includes(c)||detailsOf(s).includes(c)).id,nodes=islandNodes(island),node=nodes.findIndex(n=>n.cards?.includes(id)||n.kind==='concepts'&&detailsOf(stageOf(island)).includes(c));
  return {island,node,screen:nodeScreens(island,nodes[node]).findIndex(s=>s.card===id)};
 }
 

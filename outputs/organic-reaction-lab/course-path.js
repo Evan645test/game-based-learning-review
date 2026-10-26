@@ -17,26 +17,32 @@ export const TYPES={
 import {CARDS_V2,CONCEPTS_V2} from './cards-v2.js';
 const card=id=>{const c=CARDS_V2[id];if(!c)throw new Error(`missing card ${id}`);return c;};
 
-// Three prerequisite islands (textbook chapters 1–6). Every card starts with a diagnosis; a learner who answers it is ready.
-export const PREP=[
- {id:'w1',name:'結構與電子',chapters:'第 1–2 章',cards:['lewis','formal','polarity','hybrid','resonance','acidbase'].map(card)},
- {id:'w2',name:'命名與空間',chapters:'第 3–5 章',cards:['functional','naming','skeletal','degree','conformation','chair','chirality'].map(card)},
- {id:'w3',name:'反應語言',chapters:'第 6 章',cards:['reactions','nucleophile','arrows','energy'].map(card)}
-];
-export const WARMUP=PREP.flatMap(i=>i.cards);
-// Cards whose first screen is a diagnosis: all prerequisite cards and the naming primers.
-export const DIAGNOSED=new Set([...WARMUP.map(c=>c.id),'alkene-name','alcohol-name','halide-name']);
+// The book map: seven spreads, each a run of stations in textbook section order. A station is one section (or a few):
+// either a single card, a reaction (STAGES), or the review table. Reaction stations keep their own small cards as primers.
+// early: a section taught ahead of its chapter (alcohol naming, 17.1, sits with the other naming on spread 2).
+// art: the page illustration for the spread.
+export const BOOK=[
+ {id:'sp1',title:'結構與電子',chapters:'第 1–2 章',art:1,stations:[['lewis','1.4'],['hybrid','1.6–1.8'],['skeletal','1.12'],['polarity','2.1–2.2'],['formal','2.3'],['resonance','2.4–2.6'],['acidbase','2.7–2.11']]},
+ {id:'sp2',title:'命名與空間',chapters:'第 3–5 章',art:2,stations:[['functional','3.1–3.3'],['degree','3.3'],['naming','3.4'],['alcohol-name','17.1',true],['conformation','3.6–3.7'],['chair','4.5–4.8'],['chirality','5.1–5.5']]},
+ {id:'sp3',title:'反應語言',chapters:'第 6 章',art:3,stations:[['reactions','6.1–6.3'],['nucleophile','6.4'],['arrows','6.5'],['energy','6.9–6.10']]},
+ {id:'sp4',title:'烯的加成',chapters:'第 7–8 章',art:4,stations:[['alkene-name','7.3–7.6'],['addhx','7.7–7.8'],['carbocation','7.9'],['rearr','7.11'],['halo','8.2'],['hydration','8.4']]},
+ {id:'sp5',title:'取代與消去',chapters:'第 10–11、17 章',art:5,stations:[['halide-name','10.1'],['sn2','11.2–11.3'],['sn1','11.4–11.5'],['e2','11.7–11.9'],['e1','11.10'],['dehydration','17.6']]},
+ {id:'sp6',title:'總複習',chapters:'檢核',art:7,stations:[['final','11.12']]}
+].map(sp=>({...sp,stations:sp.stations.map(([id,section,early])=>({id,section,...(early?{early:true}:{})}))}));
+const STAGE_IDS=['addhx','rearr','halo','hydration','sn2','sn1','e2','e1','dehydration'];
+// Stations that are a single card (everything except reactions and the review).
+export const CARD_STATIONS=BOOK.flatMap(sp=>sp.stations).filter(st=>!STAGE_IDS.includes(st.id)&&st.id!=='final').map(st=>card(st.id));
+export const WARMUP=CARD_STATIONS;
 export const PATH_GOALS={
- prep:'還不用背反應：先確認讀得懂結構、名稱、空間與反應語言。會的直接過，不會的再讀卡。',
  final:'先自己完成整張「受質 × 試劑」判斷表，再在混在一起的題目中說出反應類型與依據，寫出產物並畫對箭頭。',
  assessment:'確認學過的判斷，遇到沒看過的受質也用得上。'
 };
 // Handbook groups: every prerequisite card, entry primer and product-detail card belongs to exactly one.
 // uses: islands where the group is put to work (shown as "現在正在用" there).
 export const COMPETENCIES=[
- {id:'structure',title:'結構與電子',hint:'路易士結構、電荷、極性、共振、酸鹼',ability:'畫出路易士結構，算形式電荷，判斷極性、共振與酸鹼強弱。',task:'完成「結構與電子」島的診斷。',cards:['lewis','formal','polarity','hybrid','resonance','acidbase'],uses:['w1','addhx','sn1','e2','dehydration']},
- {id:'naming',title:'命名與空間',hint:'官能基、命名、構形與立體',ability:'由名稱畫出結構，判斷級數、構形、椅式與 R/S。',task:'完成「命名與空間」島的診斷，以及各島入口的命名卡。',cards:['functional','naming','skeletal','degree','conformation','chair','chirality','alkene-name','alcohol-name','halide-name'],uses:['w2','addhx','hydration','sn2','sn1','e2']},
- {id:'language',title:'反應語言',hint:'反應類型、親核親電、箭頭、能量圖',ability:'說出誰提供電子、誰接受，畫彎箭頭並讀懂能量圖。',task:'完成「反應語言」島的診斷。',cards:['reactions','nucleophile','arrows','energy'],uses:['w3','addhx','rearr','halo','hydration','sn2','sn1','e2','e1','dehydration','final']},
+ {id:'structure',title:'結構與電子',hint:'路易士結構、電荷、極性、共振、酸鹼',ability:'畫出路易士結構，算形式電荷，判斷極性、共振與酸鹼強弱。',task:'讀完第 1–2 章的站，完成各站的即時檢查。',cards:['lewis','formal','polarity','hybrid','resonance','acidbase'],uses:['sp1','addhx','sn1','e2','dehydration']},
+ {id:'naming',title:'命名與空間',hint:'官能基、命名、構形與立體',ability:'由名稱畫出結構，判斷級數、構形、椅式與 R/S。',task:'讀完第 3–5 章的站與各反應前的命名站。',cards:['functional','naming','skeletal','degree','conformation','chair','chirality','alkene-name','alcohol-name','halide-name'],uses:['sp2','addhx','hydration','sn2','sn1','e2']},
+ {id:'language',title:'反應語言',hint:'反應類型、親核親電、箭頭、能量圖',ability:'說出誰提供電子、誰接受，畫彎箭頭並讀懂能量圖。',task:'讀完第 6 章的站，完成各站的即時檢查。',cards:['reactions','nucleophile','arrows','energy'],uses:['sp3','addhx','rearr','halo','hydration','sn2','sn1','e2','e1','dehydration','final']},
  {id:'substrate',title:'看受質',hint:'碳陽離子、立體障礙',ability:'判斷碳陽離子穩不穩定、背面擋不擋得住。',task:'比較碳陽離子穩定性與 SN2 速率。',cards:['carbocation','sterics'],uses:['addhx','rearr','sn2','sn1','e1']},
  {id:'reagent',title:'看試劑與脫離基',hint:'強鹼、良好親核劑、脫離基',ability:'分清試劑是親核劑還是強鹼，判斷脫離基好不好。',task:'把 I⁻、EtO⁻、t-BuO⁻、H₂O 分類；排出脫離基能力。',cards:['leaving','basicity'],uses:['sn2','sn1','e2','e1','dehydration','final']},
  {id:'conditions',title:'看條件',hint:'溶劑、溫度、平衡',ability:'依溶劑、溫度與平衡判斷路徑。',task:'說出溶劑與加熱各偏向哪一種反應。',cards:['solvent','heat','equilibrium'],uses:['sn2','sn1','e1','dehydration','final']},
@@ -45,7 +51,6 @@ export const COMPETENCIES=[
 
 // The short task that shows a station was understood (the map shows it next to the goal).
 export const PATH_TASKS={
- prep:'每張卡先答一題診斷；答對就過，答錯讀卡後再換一題確認。',
  final:'判斷表 16 格全部填對；九種反應交錯出題：選出反應類型與依據、寫出產物、畫出箭頭。',
  assessment:'後測或延後測：不提示、不給正誤，遇到沒看過的受質也要能判斷。'
 };
@@ -60,53 +65,53 @@ export const ARROW_REVIEW=['arrows','formal','acidbase'];
 const concepts=id=>CONCEPTS_V2[id].map(c=>({...c,details:(c.details||[]).map(card)}));
 const stage=(id,o)=>({id,...o,primers:(o.primers||[]).map(card),concepts:concepts(id)});
 export const STAGES=[
- stage('addhx',{title:'烯的親電加成：HX 與馬可尼可夫規則',short:'HX 加成',chapter:'7.7–7.9',goal:'把 π 鍵當作電子來源，依碳陽離子穩定性判斷 X 接在哪個碳（馬可尼可夫規則）。',task:'比較兩個 HX 加成、補上「烯遇到 HX」分支、畫出 HX 加成的箭頭，完成 4 題混合練習。',needs:['nucleophile','arrows','energy'],
-  primers:['alkene-name','carbocation'],newTypes:['addhx'],
+ stage('addhx',{title:'烯的親電加成：HX 與馬可尼可夫規則',short:'HX 加成',chapter:'7.7–7.8',goal:'把 π 鍵當作電子來源，依碳陽離子穩定性判斷 X 接在哪個碳（馬可尼可夫規則）。',task:'比較兩個 HX 加成、補上「烯遇到 HX」分支、畫出 HX 加成的箭頭。',needs:['nucleophile','arrows','energy'],
+  newTypes:['addhx'],
   pairs:[{a:'addhx-isobutylene',b:'addhx-propene',diff:'都是烯＋HX：比較兩個烯先形成的碳陽離子是幾級，X 接在哪個碳'}],
   branches:[{node:'start',ids:['start-alkene'],prompt:'流程圖最上面先分「起始物是什麼」。烯要接到哪一條？',options:['起始物是烯（C=C）而沒有脫離基 → 看試劑是哪一種親電子劑：加成','烯也要先數受質級數再選 SN1／SN2','烯加 HBr 一定是 E2'],answer:0,feedback:'烯沒有脫離基，π 鍵當親核劑：這是加成的入口。'},{node:'electrophile',ids:['el-hx'],prompt:'烯遇到 HX 時，中間體與方向怎麼判斷？',options:['HX 的 H 先加上去形成碳陽離子，X 接在取代較多（碳陽離子較穩定）的碳','HX 一步加上去，沒有中間體','X 一定接在取代較少的碳'],answer:0,feedback:'先形成較穩定的碳陽離子，X⁻ 再接上去：這就是馬可尼可夫規則的原因。'}],
-  arrowKinds:['addhx'],mixCount:4}),
- stage('rearr',{title:'碳陽離子重排：1,2-氫或甲基位移',short:'重排',chapter:'7.11',goal:'碳陽離子形成後多檢查一步：旁邊的 H 或甲基移過來，能不能變成更穩定的碳陽離子？',task:'比較會不會重排、補上「重排」分支、畫出重排的箭頭，完成 4 題混合練習（每題多問「會不會重排？」）。',needs:['carbocation','arrows'],
+  arrowKinds:['addhx'],mixCount:0}),
+ stage('rearr',{title:'碳陽離子重排：1,2-氫或甲基位移',short:'重排',chapter:'7.11',goal:'碳陽離子形成後多檢查一步：旁邊的 H 或甲基移過來，能不能變成更穩定的碳陽離子？',task:'比較會不會重排、補上「重排」分支、畫出重排的箭頭。',needs:['carbocation','arrows'],
   newTypes:[],shift:true,
   pairs:[{a:'rearr-hydride',b:'addhx-propene',diff:'都是烯＋HX：先得到的二級碳陽離子旁邊，有沒有能讓它變三級的 H'},{a:'rearr-methyl',b:'addhx-isobutylene',diff:'甲基位移變成三級 對 一開始就是三級碳陽離子'}],
   branches:[{node:'shift',ids:['shift-yes','shift-no'],prompt:'碳陽離子形成以後，還要多檢查哪一件事？',options:['旁邊的 H 或甲基移過來能不能得到更穩定的碳陽離子？能 → 重排後再被接住','所有碳陽離子一定重排','只有 SN2 會重排'],answer:0,feedback:'重排的動力是「變得更穩定」，例如二級 → 三級。'}],
-  arrowKinds:['rearrangement'],mixCount:4}),
- stage('halo',{title:'X₂ 加成：鹵鎓離子造成反式加成',short:'X₂ 加成',chapter:'8.2',goal:'判斷 Br₂、Cl₂ 加成經過鹵鎓離子而不是開放碳陽離子，所以反式加成、不重排。',task:'比較 X₂ 與 HX、補上「烯遇到 X₂」分支、畫出 X₂ 加成的箭頭，完成 4 題混合練習。',needs:['nucleophile','chirality'],
+  arrowKinds:['rearrangement'],mixCount:0}),
+ stage('halo',{title:'X₂ 加成：鹵鎓離子造成反式加成',short:'X₂ 加成',chapter:'8.2',goal:'判斷 Br₂、Cl₂ 加成經過鹵鎓離子而不是開放碳陽離子，所以反式加成、不重排。',task:'比較 X₂ 與 HX、補上「烯遇到 X₂」分支、畫出 X₂ 加成的箭頭。',needs:['nucleophile','chirality'],
   newTypes:['halogenation'],
   pairs:[{a:'halo-ethene',b:'addhx-isobutylene',diff:'X₂ 對 HX：三元環中間體 對 碳陽離子'},{a:'halo-cyclopentene',b:'addhx-propene',diff:'環烯＋Br₂ 得反式產物 對 烯＋HX 依馬可尼可夫'}],
   branches:[{node:'electrophile',ids:['el-x2'],prompt:'烯遇到 X₂（Br₂、Cl₂）時，中間體是什麼？',options:['三元環的鹵鎓離子；第二個 X⁻ 從背面進攻，反式加成','開放的碳陽離子，可能重排','不經任何中間體'],answer:0,feedback:'鹵鎓離子擋住一面，X⁻ 只能從背面進攻。'}],
-  arrowKinds:['halogenation'],mixCount:4}),
- stage('hydration',{title:'酸催化加水：同一個碳陽離子，換水來接',short:'加水',chapter:'8.4',goal:'稀酸與大量水時，H₃O⁺ 先質子化烯形成碳陽離子，水接住後去質子化得到醇。',task:'比較加水與 HX、X₂、補上「稀酸水」分支、畫出加水的箭頭，完成 6 題混合練習。',needs:['acidbase','carbocation'],
-  primers:['alcohol-name'],newTypes:['hydration'],
+  arrowKinds:['halogenation'],mixCount:0}),
+ stage('hydration',{title:'酸催化加水：同一個碳陽離子，換水來接',short:'加水',chapter:'8.4',goal:'稀酸與大量水時，H₃O⁺ 先質子化烯形成碳陽離子，水接住後去質子化得到醇。',task:'比較加水與 HX、X₂、補上「稀酸水」分支、畫出加水的箭頭。',needs:['acidbase','carbocation'],
+  newTypes:['hydration'],
   pairs:[{a:'addhx-propene',b:'hyd-isobutylene',diff:'同樣經碳陽離子：HX 由 X⁻ 接住，稀酸水由水接住'},{a:'hyd-methylbutene',b:'halo-cyclopentene',diff:'H₃O⁺（碳陽離子）對 Br₂（溴鎓離子、反式）'}],
   branches:[{node:'electrophile',ids:['el-h3o'],prompt:'烯在稀酸、大量水中會怎樣？',options:['H₃O⁺ 先給 H⁺ 形成碳陽離子，水接住、去質子化得醇（馬可尼可夫方向）','水直接進攻 C=C','酸催化只會讓烯消失'],answer:0,feedback:'酸只是催化劑：質子化 → 水進攻 → 去質子化。'}],
-  arrowKinds:['hydration'],mixCount:6}),
- stage('sn2',{title:'取代的第一條路：SN2',short:'SN2',chapter:'11.2–11.3',goal:'看受質級數、親核劑與溶劑，判斷 SN2 能不能發生，並預測組態反轉。',task:'比較 SN2 的速率、補上「鹵烷遇到良好親核劑」分支、畫出 SN2 的箭頭，完成 6 題混合練習。',needs:['degree','nucleophile','chirality'],
-  primers:['halide-name','leaving','sterics','solvent'],newTypes:['sn2'],
+  arrowKinds:['hydration'],mixCount:0}),
+ stage('sn2',{title:'取代的第一條路：SN2',short:'SN2',chapter:'11.2–11.3',goal:'看受質級數、親核劑與溶劑，判斷 SN2 能不能發生，並預測組態反轉。',task:'比較 SN2 的速率、補上「鹵烷遇到良好親核劑」分支、畫出 SN2 的箭頭。',needs:['degree','nucleophile','chirality'],
+  primers:['sterics','leaving','solvent'],newTypes:['sn2'],
   pairs:[{a:'sn2-methyl',b:'sn2-secondary',diff:'甲基 對 二級：背面越擠越慢'},{a:'sn2-ethyl',b:'sn2-cyanide',diff:'一級受質：I⁻／acetone 對 CN⁻／DMSO，都是良好親核劑＋非質子性溶劑'}],
   branches:[{node:'start',ids:['start-halide'],prompt:'起始物是鹵烷（C–X）時，接到哪一題？',options:['鹵烷有脫離基 → 下一步先看試劑是哪一類','鹵烷一定走 SN1','先看溶劑顏色'],answer:0,feedback:'鹵烷是取代與消去的起點：先分試劑。'},{node:'reagent',ids:['r-nuc'],prompt:'試劑是良好親核劑、弱鹼（I⁻、CN⁻）時，下一步看什麼？',options:['看受質級數：甲基、1°、2° → SN2；3° 背面被擋住','一律 SN1','一律 E2'],answer:0,feedback:'良好親核劑要從背面進攻：級數決定擋不擋得住。'},{node:'degree-nuc',ids:['dn-low'],prompt:'良好親核劑遇到甲基、1° 或 2° 受質？',options:['SN2：背面進攻、組態反轉','SN1：先形成碳陽離子','不反應'],answer:0,feedback:'背面夠空，親核劑一步進攻。'}],
-  arrowKinds:['sn2'],mixCount:6}),
- stage('sn1',{title:'取代的第二條路：SN1',short:'SN1',chapter:'11.4–11.5',goal:'三級受質在弱親核的質子性溶劑中先形成碳陽離子，再被接住；和 SN2 比較，說出為何走這條路。',task:'看兩組比較動畫、比較 SN2 與 SN1、補上「只有溶劑」分支、畫出 SN1 的箭頭，完成 6 題混合練習。',needs:['carbocation','solvent','energy'],
+  arrowKinds:['sn2'],mixCount:0}),
+ stage('sn1',{title:'取代的第二條路：SN1',short:'SN1',chapter:'11.4–11.5',goal:'三級受質在弱親核的質子性溶劑中先形成碳陽離子，再被接住；和 SN2 比較，說出為何走這條路。',task:'看兩組比較動畫、比較 SN2 與 SN1、補上「只有溶劑」分支、畫出 SN1 的箭頭。',needs:['carbocation','solvent','energy'],
   newTypes:['sn1'],compare:['primary-sn2-vs-sn1','tertiary-sn1-vs-sn2'],
   pairs:[{a:'sn2-ethyl',b:'sn1-water',diff:'換了受質（一級 → 三級）與親核劑／溶劑（I⁻／acetone → 水）'},{a:'sn2-secondary',b:'sn1-tertamyl',diff:'二級＋良好親核劑 對 三級＋水'},{a:'sn2-methyl',b:'sn1-methanol',diff:'甲基＋OH⁻ 對 三級＋甲醇'},{a:'sn2-cyanide',b:'sn1-benzylic',diff:'一級＋CN⁻／DMSO 對 能形成穩定碳陽離子的三級苄基＋水'}],
   branches:[{node:'reagent',ids:['r-solvent'],prompt:'試劑只有弱親核的質子性溶劑（H₂O、ROH）時，下一步看什麼？',options:['看受質能不能形成穩定碳陽離子：3°（或烯丙、苄基）才行','一律 SN2','一律 E2'],answer:0,feedback:'溶劑太弱無法背面進攻，只能等脫離基先離開。'},{node:'degree-solv',ids:['ds-low','ds-high'],prompt:'只有質子性溶劑時，不同級數怎麼分？',options:['甲基、1°、一般 2° 幾乎不反應；3°（或烯丙、苄基）形成碳陽離子','所有級數都走 SN1','1° 最快'],answer:0,feedback:'原文：三級在中性條件下走 SN1；一般二級很慢。'},{node:'cation',ids:['cation-capture'],prompt:'碳陽離子形成後，室溫時溶劑會怎麼做？',options:['溶劑（H₂O、MeOH）從兩面接住：SN1','一定失去 β-H','碳陽離子回到原料'],answer:0,feedback:'平面碳陽離子兩面都能被接住。'}],
-  arrowKinds:['sn1'],mixCount:6}),
- stage('e2',{title:'加入消去：E2 與 Zaitsev 規則',short:'E2',chapter:'11.7–11.9',goal:'遇到強鹼就考慮 E2：找出與脫離基 anti 的 β-H，再用 Zaitsev 規則選出主要的烯。',task:'看比較動畫、比較取代與消去、補上「強鹼」分支、畫出 E2 的箭頭，完成 8 題混合練習。',needs:['degree','acidbase','conformation'],
+  arrowKinds:['sn1'],mixCount:0}),
+ stage('e2',{title:'加入消去：E2 與 Zaitsev 規則',short:'E2',chapter:'11.7–11.9',goal:'遇到強鹼就考慮 E2：找出與脫離基 anti 的 β-H，再用 Zaitsev 規則選出主要的烯。',task:'看比較動畫、比較取代與消去、補上「強鹼」分支、畫出 E2 的箭頭。',needs:['degree','acidbase','conformation'],
   primers:['basicity'],newTypes:['e2'],compare:['bulky-e2-vs-sn2'],
   pairs:[{a:'sn2-secondary',b:'e2-butane',diff:'同一個受質 2-溴丁烷，只換試劑與溫度（NaI／acetone → NaOEt／乙醇加熱）'},{a:'sn1-tertamyl',b:'e2-tertamyl',diff:'同一個三級受質，只換試劑（水 → EtO⁻）'},{a:'sn2-cyanide',b:'e2-primary',diff:'一級受質：CN⁻（良好親核劑）對 t-BuO⁻（體積大的強鹼）'}],
   branches:[{node:'reagent',ids:['r-strong'],prompt:'試劑是強鹼（OH⁻、EtO⁻、t-BuO⁻）時，下一步看什麼？',options:['看受質：有沒有 β-H、級數多少、鹼的體積大不大','一律 SN2','一律 SN1'],answer:0,feedback:'強鹼會去拔 β-H；甲基沒有 β-H 只能取代。'},{node:'degree-base',ids:['db-low','db-high'],prompt:'強鹼遇到不同受質怎麼分？',options:['甲基，或 1° 遇到體積小的強鹼 → SN2；2°、3°，或 1° 遇到 t-BuO⁻ → E2','所有受質都 E2','所有受質都 SN2'],answer:0,feedback:'與判斷表（原文 11.12）一致：背面空又沒有障礙時取代，否則拔 β-H。'},{node:'degree-nuc',ids:['dn-high'],prompt:'良好親核劑遇到 3° 受質呢？',options:['背面被擋住無法 SN2；原文：三級遇到鹼以 E2 為主','SN2 最快','一定不反應'],answer:0,feedback:'CN⁻ 鹼性不強，實際也可能伴隨 SN1／E1。'}],
-  arrowKinds:['e2'],mixCount:8}),
- stage('e1',{title:'碳陽離子的另一條路：E1',short:'E1',chapter:'11.10',goal:'碳陽離子形成後，依溫度與試劑判斷它被接住（SN1）還是失去 β-H（E1）。',task:'看比較動畫、比較 SN1 與 E1、補上「加熱」分支、畫出 E1 的箭頭，完成 8 題混合練習。',needs:['carbocation','energy','zaitsev'],
+  arrowKinds:['e2'],mixCount:0}),
+ stage('e1',{title:'碳陽離子的另一條路：E1',short:'E1',chapter:'11.10',goal:'碳陽離子形成後，依溫度與試劑判斷它被接住（SN1）還是失去 β-H（E1）。',task:'看比較動畫、比較 SN1 與 E1、補上「加熱」分支、畫出 E1 的箭頭。',needs:['carbocation','energy','zaitsev'],
   primers:['heat'],newTypes:['e1'],compare:['heat-e1-vs-sn1'],
   pairs:[{a:'sn1-tertamyl',b:'e1-tertamyl',diff:'同一個受質、同一個碳陽離子：水／室溫 對 乙醇／加熱'},{a:'e1-tertamyl',b:'e2-tertamyl',diff:'同一個受質：乙醇（弱鹼）加熱 對 EtO⁻（強鹼）'},{a:'sn1-water',b:'e1-tertbutyl',diff:'同一個第三丁基溴：水捕捉 對 乙醇加熱消去'},{a:'e1-methylpentane',b:'e2-propane',diff:'三級＋弱鹼加熱 對 二級＋強鹼'},{a:'e1-3methylpentane',b:'sn1-methanol',diff:'加熱求烯 對 室溫溶劑解'}],
   branches:[{node:'cation',ids:['cation-heat'],prompt:'碳陽離子形成後加熱，會偏向哪邊？',options:['弱鹼溶劑拔 β-H 形成烯：E1（SN1 仍競爭）','一定 SN1','回到原料'],answer:0,feedback:'SN1 與 E1 分享同一個中間體；加熱改變兩者的比例。'}],
-  arrowKinds:['e1'],mixCount:8}),
- stage('dehydration',{title:'醇的酸催化脫水：加水的逆反應',short:'醇脫水',chapter:'17.6',goal:'把醇的脫水看成加水的逆反應：–OH 先質子化才能離開，由條件決定平衡方向。',task:'比較脫水與加水、補上「醇＋濃酸」分支、畫出脫水的箭頭，完成 8 題混合練習。',needs:['leaving','acidbase','zaitsev'],
+  arrowKinds:['e1'],mixCount:0}),
+ stage('dehydration',{title:'醇的酸催化脫水：加水的逆反應',short:'醇脫水',chapter:'17.6',goal:'把醇的脫水看成加水的逆反應：–OH 先質子化才能離開，由條件決定平衡方向。',task:'比較脫水與加水、補上「醇＋濃酸」分支、畫出脫水的箭頭。',needs:['leaving','acidbase','zaitsev'],
   primers:['equilibrium'],newTypes:['dehydration'],
   pairs:[{a:'dehyd-tertbutanol',b:'hyd-isobutylene',diff:'互為逆反應：醇＋濃酸加熱 對 烯＋稀酸大量水'},{a:'dehyd-tertamyl',b:'e2-tertamyl',diff:'同樣得到 2-methyl-2-butene：醇經碳陽離子（E1）對 鹵烷＋強鹼（E2）'}],
   branches:[{node:'start',ids:['start-alcohol'],prompt:'起始物是醇＋濃酸、加熱時，接到哪裡？',options:['醇的酸催化脫水（E1）：質子化 → 失水 → 失 β-H','醇的 OH 直接被 SN2 取代','醇＋酸一定加水'],answer:0,feedback:'OH 先質子化才能離開；加熱、濃酸讓平衡偏向烯。'}],
-  arrowKinds:['dehydration'],mixCount:8})
+  arrowKinds:['dehydration'],mixCount:0})
 ];
-// Carbocation reactions get an extra "does it rearrange?" question once the rearrangement island is reached.
+// Carbocation reactions; kept for the review check (next round), which asks whether a carbocation rearranges.
 export const CARBOCATION_TYPES=['addhx','hydration','sn1','e1','dehydration'];
 
 // Capstone judgment table on the final island: substrate degree × reagent → reaction type.
@@ -150,7 +155,7 @@ export const FLOW=[
  {id:'degree-base',stage:'e2',question:'受質與鹼的組合？',branches:[{id:'db-low',stage:'e2',label:'甲基（沒有 β-H），或 1° 遇到體積小的強鹼',to:'sn2'},{id:'db-high',stage:'e2',label:'2°、3°，或 1° 遇到 t-BuO⁻',to:'e2'}]},
  {id:'cation',stage:'sn1',question:'碳陽離子形成後，條件偏向哪邊？',branches:[{id:'cation-capture',stage:'sn1',label:'室溫，溶劑（H₂O、MeOH）接住',to:'sn1'},{id:'cation-heat',stage:'e1',label:'加熱，弱鹼溶劑拔 β-H 得到烯',to:'e1'}]}
 ];
-export const stageIndex=id=>PREP.some(p=>p.id===id)?-1:id==='final'?STAGES.length:STAGES.findIndex(s=>s.id===id);
+export const stageIndex=id=>CARD_STATIONS.some(c=>c.id===id)?-1:id==='final'?STAGES.length:STAGES.findIndex(s=>s.id===id);
 /** Whether the rearrangement check is part of practice at this island. */
 export const shiftUnlocked=stageId=>stageIndex(stageId)>=STAGES.findIndex(s=>s.shift);
 export const unlockedTypes=stageId=>STAGES.slice(0,Math.min(STAGES.length,stageIndex(stageId)+1)).flatMap(s=>s.newTypes);

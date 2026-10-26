@@ -452,5 +452,42 @@
       "學生試用",
       "Codex 標註待人工核對：heat 的熵解釋、大體積鹼與 Hofmann 的概括範圍"
     ]
+  },
+  "v3_book_flow": {
+    "at": "2026-10-26T16:38:48+08:00",
+    "agents": {
+      "codex": "figures-v3.js 與 7 張書頁圖（codex/book-v3 9cd8c7d、235c7d3）、main 測試改寫",
+      "cursor": "book-map.js、figure-view.js（cursor/book-v3 521ae82…594d290，整合修正 e4208d3、4ac726b）",
+      "gemini": "站點順序審查、配圖審查（前 6 項已由 Codex 修正）",
+      "claude": "線性書本流程、反應頁配機構、整合驗收"
+    },
+    "results": {
+      "node": "140/140",
+      "python": "OK",
+      "path-browser": "ALL PASSED",
+      "interface-browser": "ALL PASSED",
+      "art-browser": "ALL PASSED",
+      "orbital-browser": "ALL PASSED",
+      "alignment-browser": "ALL PASSED",
+      "comparison-browser": "15 checks",
+      "book-figure-browser": "ALL PASSED",
+      "git_diff_check": "pass"
+    },
+    "fixes_on_acceptance": [
+      "書頁插畫網址引號與 style 屬性衝突，插畫不顯示",
+      "命名圖主鏈編號依 id 排序而錯誤，改依資料列出的主鏈順序",
+      "拖曳偵測以整頁座標判斷，吞掉固定的「繼續」按鈕點擊（構形站卡住）",
+      "椅式環軸放錯座標軸，永遠從正上方看成六邊形",
+      "伺服器白名單缺 48 個新引用頁碼",
+      "手機翻頁未記錄頁面時誤判為左頁",
+      "書頁圖 PNG 共約 32 MB，改 JPEG 約 4.5 MB",
+      "3 處回看連結指向後面的站"
+    ],
+    "not_verified": [
+      "實體手機",
+      "VoiceOver",
+      "學生試用",
+      "Codex 標註待人工核對：三維 R 組態、Newman 角度基準、翻環保留上下"
+    ]
   }
 }

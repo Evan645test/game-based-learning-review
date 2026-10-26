@@ -1,5 +1,5 @@
-// The textbook-order islands (v4) replace every earlier course, assessment and PK record (user decision, 2026-10-26).
-export const DATA_VERSION_KEY='organic-data-version',DATA_VERSION='4',PK_DATABASE='organic-reaction-pk-v1';
+// The book map (v5) replaces every earlier course, assessment and PK record (user decision, 2026-10-26).
+export const DATA_VERSION_KEY='organic-data-version',DATA_VERSION='5',PK_DATABASE='organic-reaction-pk-v1';
 export const RESET_SIGNAL_KEY='organic-reset-generation';
 
 // Explicit user reset; unlike the one-time migration, failures must reach the caller.

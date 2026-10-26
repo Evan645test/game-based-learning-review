@@ -1,7 +1,6 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {WARMUP,COMPETENCIES} from '../course-path.js';
-import {CARDS_V2} from '../cards-v2.js';
+import {cardScreen} from './book-navigation.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const out='/private/tmp/organic-orbital-verification';
 await fs.mkdir(out,{recursive:true});
@@ -10,25 +9,9 @@ const page=await browser.newPage({viewport:{width:1280,height:1000}});
 const errors=[],checks=[];
 page.on('pageerror',e=>errors.push(String(e)));
 const ok=name=>{checks.push(name);console.log('✓',name);};
-// Reach a card through the explorer's handbook, stay there, then step to the wanted screen ('' read, '三維', '圖解', '即時檢查').
-async function cardScreen(id,part=''){
- const lp=page.locator('[data-learning-path]');await lp.waitFor();
- if(await lp.getAttribute('data-view')==='name')await page.locator('[data-name-skip]').click();
- if(await lp.getAttribute('data-view')==='learn')await page.locator('[data-exit-learn]').click();
- await page.locator('[data-book]').click();
- const comp=COMPETENCIES.find(c=>c.cards.includes(id)).id,h=page.locator(`[data-comp-toggle="${comp}"]`);if(await h.getAttribute('aria-expanded')!=='true')await h.click();
- await page.locator(`[data-map-card="${id}"]`).click();await page.locator(`[data-competency] [data-map-go="${id}"]`).click();await page.locator("[data-review-dismiss]").click();
- // A diagnosed card opens with its diagnosis: answer it wrong so the card's reading screens follow. Bounded so a missing screen fails fast.
- for(let i=0;part&&i<15&&!(await page.locator('[data-path-panel] .course-part').first().innerText()).includes(part);i++){
-  const form=page.locator('[data-diag-form]');
-  if(await form.count()&&await form.locator('button[type=submit]').count()){const answer=CARDS_V2[id].diagnose[0].answer;await form.locator(`input[value]:not([value="${answer}"])`).first().check();await form.locator('button[type=submit]').click();await page.locator('[data-diag-feedback]').waitFor();}
-  await page.locator('[data-continue-screen]').click();
- }
- if(part)assert.match(await page.locator('[data-path-panel] .course-part').first().innerText(),new RegExp(part),`reached ${id} ${part}`);
-}
 try{
  await page.goto(process.env.ORGANIC_URL||'http://127.0.0.1:8768/academy.html');
- await cardScreen('hybrid','三維');
+ await cardScreen(page,'hybrid','demo');
  await page.locator('[data-representation="orbital"]').first().click();
  const model=page.locator('.spotlight-canvas').first();
  assert.equal(await model.getAttribute('data-representation'),'orbital');
@@ -38,7 +21,7 @@ try{
  await page.locator('[data-representation="ball"]').first().click();
  assert.equal(await model.locator('[data-orbital]').count(),0);
  ok('真實暖身入口切換球棍／軌域，重載保留模式');
- await cardScreen('degree','圖解');
+ await cardScreen(page,'degree','figure');
  await page.locator('.degree-diagram').waitFor();
  for(const width of [320,390,1280]){
   await page.setViewportSize({width,height:1000});

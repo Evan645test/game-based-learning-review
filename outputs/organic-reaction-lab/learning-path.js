@@ -1,4 +1,4 @@
-import {PREP,DIAGNOSED,CARBOCATION_TYPES,itemType,shiftUnlocked,JUDGE_TABLE,TABLE_REVIEW,TYPES,WARMUP,PATH_GOALS,PATH_TASKS,REVIEW_BY_TYPE,ARROW_REVIEW,COMPETENCIES,STAGES,FLOW,ITEMS,stageIndex,unlockedTypes,pickItem,mastery,shuffled} from './course-path.js';
+import {BOOK,CARBOCATION_TYPES,itemType,shiftUnlocked,JUDGE_TABLE,TABLE_REVIEW,TYPES,WARMUP,PATH_GOALS,PATH_TASKS,REVIEW_BY_TYPE,ARROW_REVIEW,COMPETENCIES,STAGES,FLOW,ITEMS,stageIndex,unlockedTypes,pickItem,mastery,shuffled} from './course-path.js';
 import {REACTION_EXAMPLES,exampleSpec} from './reaction-examples.js';
 import {mountSpotlight} from './spotlight-demo.js';
 import {mountArrowEditor} from './arrow-editor.js';
@@ -9,26 +9,27 @@ import {energyHTML} from './energy-visual.js';
 import {newMechanism,validWork} from './electron-flow.js';
 import {gradedHint,firstArrowResult,aiArrowHint} from './graded-hints.js';
 import {esc,sourceLinks} from './reason-workbench.js';
-import {ISLANDS,FINAL_COUNT,islandNodes,nodeScreens,cardLocation,ARCHIPELAGOS,islandViewHTML,chemistSVG,spotFor,motionToggleHTML,ambientHTML,islandBuildings,currentBuilding,walkingRoute,compareLocation} from './island-map.js';
+import {ISLANDS,FINAL_COUNT,islandNodes,nodeScreens,cardLocation,chemistSVG,motionToggleHTML,ambientHTML,islandBuildings,currentBuilding,walkingRoute,compareLocation} from './island-map.js';
 import {comparisonHTML,mountComparison} from './comparison-view.js';
 import {COMPARISONS} from './comparisons.js';
-import {worldMapHTML,archipelagoHTML} from './archipelago-art.js';
+import {bookHTML} from './book-map.js';
+import {figureHTML,mountFigure} from './figure-view.js';
+import {FIGURES} from './figures-v3.js';
 
-export const PATH_KEY='organic-path-v4';
+export const PATH_KEY='organic-path-v5';
 const ORDER=ISLANDS.map(i=>i.id);
 const freshStage=()=>({step:0,concept:0,pair:0,predictions:{},revealed:{},branches:{},arrowKind:0,arrows:{},mixed:{done:0,current:null}});
 // explore: where the learner stands on each island, which landmarks are walked, and which islands were visited.
 const freshExplore=()=>({pos:Object.fromEntries(ISLANDS.map(i=>[i.id,{node:0,screen:0}])),done:Object.fromEntries(ISLANDS.map(i=>[i.id,{}])),seen:{[ISLANDS[0].id]:true},buildings:1});
-// diag: per diagnosed card, the first diagnosis (pre) and the follow-up after reading (post): {choice,right}.
-export const freshPath=()=>({version:4,stage:ISLANDS[0].id,explore:freshExplore(),warm:{index:0,checks:{}},diag:{},stages:Object.fromEntries(STAGES.map(s=>[s.id,freshStage()])),final:{current:null},table:freshTable(),attempts:[]});
+export const freshPath=()=>({version:5,stage:ISLANDS[0].id,explore:freshExplore(),warm:{index:0,checks:{}},stages:Object.fromEntries(STAGES.map(s=>[s.id,freshStage()])),final:{current:null},table:freshTable(),attempts:[]});
 function freshTable(){return {cells:{},checks:0,first:null};}
 const plain=o=>Boolean(o&&typeof o==='object'&&!Array.isArray(o));
 const validExplore=(e,current)=>plain(e)&&plain(e.pos)&&plain(e.done)&&plain(e.seen)&&ISLANDS.every(i=>plain(e.pos[i.id])&&Number.isInteger(e.pos[i.id].node)&&e.pos[i.id].node>=0&&(!current||e.pos[i.id].node<islandNodes(i.id).length)&&Number.isInteger(e.pos[i.id].screen)&&e.pos[i.id].screen>=0&&plain(e.done[i.id]));
 export function validPath(s){
- if(s?.version!==4||!validExplore(s.explore,true)||(s.diag!==undefined&&!plain(s.diag))||!ORDER.includes(s.stage)||!plain(s.warm)||!Number.isInteger(s.warm.index)||!plain(s.stages)||!Array.isArray(s.attempts)||!plain(s.final)||(s.table!==undefined&&!plain(s.table?.cells)))return false;
+ if(s?.version!==5||!validExplore(s.explore,true)||!ORDER.includes(s.stage)||!plain(s.warm)||!Number.isInteger(s.warm.index)||!plain(s.stages)||!Array.isArray(s.attempts)||!plain(s.final)||(s.table!==undefined&&!plain(s.table?.cells)))return false;
  return STAGES.every(st=>{const r=s.stages[st.id];return plain(r)&&Number.isInteger(r.step)&&r.step>=0&&r.step<=4&&Number.isInteger(r.concept)&&Number.isInteger(r.pair)&&['predictions','revealed','branches','arrows','mixed'].every(k=>plain(r[k]))&&Object.entries(r.arrows).every(([k,a])=>plain(a)&&validWork(k,a.work));})&&s.attempts.every(a=>plain(a)&&typeof a.item==='string'&&typeof a.type==='string'&&typeof a.mech==='boolean');
 }
-// v4 (textbook-order islands) starts everyone fresh; earlier saved paths are cleared by legacy-data.js.
+// v5 (the book map) starts everyone fresh; earlier saved paths are cleared by legacy-data.js.
 const validReview=v=>plain(v)&&plain(v.from)&&ISLANDS.some(i=>i.id===v.from.stage)&&plain(v.from.pos)&&ISLANDS.every(i=>plain(v.from.pos[i.id])&&Number.isInteger(v.from.pos[i.id].node)&&Number.isInteger(v.from.pos[i.id].screen));
 export function exampleById(id){for(const [kind,list] of Object.entries(REACTION_EXAMPLES)){const e=list.find(e=>e.id===id);if(e)return {kind,example:e};}return null;}
 export function itemSpec(item){const found=item.example&&exampleById(item.example);return found&&found.kind===item.type?exampleSpec(found.kind,found.example):null;}
@@ -48,7 +49,7 @@ export function flowHTML(stageId,{highlight=[],pending=[]}={}){
 }
 
 // Every check card by id: warm-up cards and stage entry primers.
-const CARDS=new Map([...PREP.flatMap(p=>p.cards.map((c,i)=>[c.id,{card:c,stage:p.id,at:i,prep:true}])),...STAGES.flatMap(st=>[...(st.primers||[]),...st.concepts.flatMap(c=>c.details||[])].map((p,j)=>[p.id,{card:p,stage:st.id,at:j}]))]);
+const CARDS=new Map([...WARMUP.map((c,i)=>[c.id,{card:c,stage:c.id,at:i,prep:true}]),...STAGES.flatMap(st=>[...(st.primers||[]),...st.concepts.flatMap(c=>c.details||[])].map((p,j)=>[p.id,{card:p,stage:st.id,at:j}]))]);
 export const cardTitle=id=>CARDS.get(id).card.title.replace(/^選讀：/,'').split('：')[0];
 /** 'right' or 'wrong' from the latest answer to a card's check; null when unanswered. */
 const CELL_KEYS=JUDGE_TABLE.rows.flatMap(r=>JUDGE_TABLE.cols.map(c=>`${r.id}|${c.id}`));
@@ -60,11 +61,8 @@ export function tableResult(table){
 }
 export const tableSolved=state=>{const r=tableResult(state.table);return r.missing.length===0&&r.wrong.length===0;};
 export function checkStatus(state,id){
- if(DIAGNOSED.has(id)){const d=state.diag?.[id],last=d?.post||d?.pre;return last?(last.right?'right':'wrong'):null;}
  const a=state.warm.checks[id],c=CARDS.get(id)?.card;return a&&c?(a.choice===c.check.answer?'right':'wrong'):null;
 }
-/** Prerequisite badge for a diagnosed island: ready when every card is right, review when any is wrong. */
-export function prepBadge(state,islandId){const p=PREP.find(x=>x.id===islandId);if(!p)return null;const s=p.cards.map(c=>checkStatus(state,c.id));return s.includes('wrong')?'review':s.every(x=>x==='right')?'ready':null;}
 const COMP_OF=new Map(COMPETENCIES.flatMap(c=>c.cards.map(id=>[id,c])));
 const COMP_STATUS={mastered:'已掌握',review:'需回看',active:'進行中',todo:'未開始'},CHECK_TEXT={right:'已做對',wrong:'需回看'};
 export function competencyStatus(state,comp){const s=comp.cards.map(id=>checkStatus(state,id));return s.includes('wrong')?'review':s.every(x=>x==='right')?'mastered':s.includes('right')?'active':'todo';}
@@ -100,11 +98,13 @@ export function worldProgress(state){
  return ISLANDS.map((isl,i)=>{const done=islandDone(state,isl.id),open=i===0||done||Boolean(state.explore.seen[isl.id])||islandDone(state,ISLANDS[i-1].id);return {...isl,state:done?'done':open?'open':'fog',flag:islandProgress(state,isl.id).some(n=>n.flag),current:state.stage===isl.id};});
 }
 
-/** Archipelagos for the world map: walked islands, fog, flags and the current one. */
-export function archipelagoProgress(state){
- const w=worldProgress(state);
- return ARCHIPELAGOS.map(a=>{const isl=w.filter(i=>a.islands.includes(i.id)),done=isl.filter(i=>i.state==='done').length;return {...a,state:done===isl.length?'done':isl.some(i=>i.state!=='fog')?'open':'fog',flag:isl.some(i=>i.flag),current:isl.some(i=>i.current),progress:{done,total:isl.length},islands:isl.map(i=>({...i,prep:prepBadge(state,i.id)}))};});
+/** The book map: spreads with their stations in order; a station is done when all its landmarks are walked. */
+export function bookProgress(state){
+ const w=worldProgress(state),next=w.find(i=>i.state!=='done')?.id;
+ return BOOK.map(sp=>({id:sp.id,title:sp.title,chapters:sp.chapters,art:`book-spread-${sp.art}.jpg`,nodes:sp.stations.map(st=>{const x=w.find(i=>i.id===st.id);return {id:st.id,section:st.early?`提前：${st.section}`:st.section,title:x.name,state:x.state==='done'?'done':st.id===next?'next':'todo',flag:x.flag};})}));
 }
+const stationIndex=id=>ISLANDS.findIndex(i=>i.id===id);
+export const spreadOf=id=>BOOK.findIndex(sp=>sp.stations.some(st=>st.id===id));
 export const snapshot=state=>({stage:state.stage,pos:structuredClone(state.explore.pos)});
 const screenAt=f=>{const nodes=islandNodes(f.stage),p=f.pos[f.stage],node=nodes[Math.min(p.node,nodes.length-1)],screens=nodeScreens(f.stage,node);return {node,screen:screens[Math.min(p.screen,screens.length-1)]};};
 /** The check card shown at a location snapshot, or null on a non-card screen. */
@@ -132,7 +132,7 @@ export const EXPLORER_KEY='organic-explorer-v1';
 /** The explorer's name and guide preference; null until the learner names the chemist (or skips). */
 export function readExplorer(){try{const v=JSON.parse(localStorage.getItem(EXPLORER_KEY));if(plain(v)&&typeof v.name==='string')return {name:v.name.trim().slice(0,10)||'探險家',guide:v.guide!==false};}catch{}return null;}
 // Guide lines are fixed sentence templates; chemistry wording only ever comes from the checked course text.
-const LINES={diag:'先試一題！答對就代表你已經會了，可以直接跳過。',diagReady:'太好了，這張卡你已具備！',compare:'同一組受質和試劑，兩條路一起播。看看輸的那條路卡在哪裡！',table:'把學過的線索整理成一張表！每格選出反應類型。',tableWrong:'紅框的格子看看提示，改完再檢查一次。',tableRight:'整張表都對了！你已經能自己判斷這四種反應。',read:'我們先讀這段，等一下會用到！',figure:'看這張圖，對照剛才讀到的重點。',demo:'拖曳轉一轉；播放時注意電子從哪裡出發。',check:'換你判斷！選好再按「檢查」。',checkRight:'答對了！我們往下走。',checkWrong:'差一點！看看下面的提示，也可以先回看再回來。',concept:'這是這座島的新反應，先把重點讀熟。',conceptFigure:'用這張圖比一比，看出差別在哪裡。',pair:'先猜甲、乙各是哪一種反應，再揭曉。',pairShown:'選一張卡片看動畫，比一比差在哪裡。',branch:'把剛學到的判斷補進流程圖。',branchDone:'補好了！流程圖又長大一點。',branchWrong:'還不對，再對照剛才的對比想一想。',arrow:'先畫完每一步再檢查；箭頭要從電子出發。',arrowRight:'電子都走對了！',arrowWrong:'有一步要修，照提示找找看。',item:'這題是哪一種反應？先看受質、試劑和條件。',itemRight:'全對！這種反應你抓到訣竅了。',itemWrong:'沒關係，看看哪裡想錯了，也可以先回看。'};
+const LINES={compare:'同一組受質和試劑，兩條路一起播。看看輸的那條路卡在哪裡！',table:'把學過的線索整理成一張表！每格選出反應類型。',tableWrong:'紅框的格子看看提示，改完再檢查一次。',tableRight:'整張表都對了！你已經能自己判斷這四種反應。',read:'我們先讀這段，等一下會用到！',figure:'看這張圖，對照剛才讀到的重點。',demo:'拖曳轉一轉；播放時注意電子從哪裡出發。',check:'換你判斷！選好再按「檢查」。',checkRight:'答對了！我們往下走。',checkWrong:'差一點！看看下面的提示，也可以先回看再回來。',concept:'這是這座島的新反應，先把重點讀熟。',conceptFigure:'用這張圖比一比，看出差別在哪裡。',pair:'先猜甲、乙各是哪一種反應，再揭曉。',pairShown:'選一張卡片看動畫，比一比差在哪裡。',branch:'把剛學到的判斷補進流程圖。',branchDone:'補好了！流程圖又長大一點。',branchWrong:'還不對，再對照剛才的對比想一想。',arrow:'先畫完每一步再檢查；箭頭要從電子出發。',arrowRight:'電子都走對了！',arrowWrong:'有一步要修，照提示找找看。',item:'這題是哪一種反應？先看受質、試劑和條件。',itemRight:'全對！這種反應你抓到訣竅了。',itemWrong:'沒關係，看看哪裡想錯了，也可以先回看。'};
 
 export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},loadView=()=>null,saveView=()=>{},onView=()=>{},mode='student'}={}){
  let state=memory||freshPath(),children=[],request=null,timers=[],walkRequest=null;
@@ -142,7 +142,7 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  if(mode==='teacher')state=teacherMemory||copyPathLocation(studentState,{...freshPath(),explore:structuredClone(studentState.explore)});
  memory=studentState;
  // A reload resumes the last map or learning screen.
- let prefs=readExplorer(),view=mode==='student'&&!prefs?'name':['world','archipelago','island','learn'].includes(state.explore.at)?state.explore.at:'island',anim=null,nodePick=null,fogPick=null,archPick=null,book={open:null,pick:null,back:'island'},gate=null,nameBack='world';
+ let prefs=readExplorer(),view=mode==='student'&&!prefs?'name':['map','learn'].includes(state.explore.at)?state.explore.at:'map',anim=null,nodePick=null,fogPick=null,book={open:null,pick:null,back:'map'},gate=null,nameBack='map';
  const readView=id=>mode==='teacher'?null:loadView(id),writeView=(id,value)=>{if(mode==='student')saveView(id,value);};
  const save=()=>{if(mode==='teacher'){teacherMemory=state;return;}memory=state;if(blocked)return;try{localStorage.setItem(PATH_KEY,JSON.stringify(state));}catch{blocked=true;onNotice('學習進度暫存於本頁，重新整理後可能無法保留。');}};
  const savePrefs=()=>{try{localStorage.setItem(EXPLORER_KEY,JSON.stringify(prefs));}catch{}};
@@ -153,11 +153,11 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  const radios=(name,list,checked)=>list.map(({v,i},n)=>`<label class="choice"><input type="radio" name="${name}" value="${i}" ${checked===i?'checked':''}><span>${esc(v)}</span></label>`).join('');
 
  // Review detour: snapshot every location and the view, jump to the card, and come back (also with the browser Back button).
- const where=()=>({...snapshot(state),view:view==='book'?book.back:view==='learn'||view==='island'||view==='world'?view:'island'});
+ const where=()=>({...snapshot(state),view:view==='book'?book.back:view==='learn'?'learn':'map'});
  const reviewLinks=ids=>ids?.length?`<p class="review-links" data-review-links><span>建議回看：</span>${ids.map(id=>`<button type="button" class="tree-chip${CARDS.get(id).prep?'':' primer'}" data-review="${id}">${esc(cardTitle(id))}</button>`).join('')}</p>`:'';
  // Clue cards open with what they help decide; reaction concepts list clues as 看到 → 偏向 → 回看 instead of re-explaining them.
  const judgeLine=c=>c.judge?`<p class="judge-line" data-judge-line><span class="judge-tag">${esc(c.cue==='產物'?'產物細節':c.cue?`線索：${c.cue}`:'判斷準備')}</span>${esc(c.judge)}</p>`:'';
- const cueList=c=>c.cues?.length?`<ul class="cue-list" data-cue-list aria-label="判斷線索">${c.cues.map(q=>`<li><span class="cue-see">${esc(q.see)}</span><span class="cue-arrow" aria-hidden="true">→</span><span class="cue-lean">${esc(q.lean)}</span>${q.review.map(id=>`<button type="button" class="tree-chip${CARDS.get(id).prep?'':' primer'}" data-review="${id}">回看${esc(cardTitle(id))}</button>`).join('')}</li>`).join('')}</ul>`:'';
+ const cueList=c=>c.cues?.length?`<ul class="cue-list" data-cue-list aria-label="判斷線索">${c.cues.map(q=>`<li><span class="cue-see">${esc(q.see)}</span><span class="cue-arrow" aria-hidden="true">→</span><span class="cue-lean">${esc(q.lean)}</span>${q.review.map(id=>{const ahead=stationIndex(cardLocation(id).island)>stationIndex(state.stage);return `<button type="button" class="tree-chip${CARDS.get(id).prep?'':' primer'}" data-review="${id}">${ahead?'下一節預告：':'回看'}${esc(cardTitle(id))}</button>`;}).join('')}</li>`).join('')}</ul>`:'';
  // via: 'map' for jumps from the explorer's handbook, 'review' for links after a wrong answer.
  function startReview(id,via='review'){
   const loc=cardLocation(id)||compareLocation(id);if(!loc)return;
@@ -168,7 +168,7 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  }
  function endReview(){
   const f=validReview(state.review)?state.review.from:null;state.review=null;
-  if(f){state.stage=f.stage;state.explore.pos=structuredClone(f.pos);view=f.view||'island';}
+  if(f){state.stage=f.stage;state.explore.pos=structuredClone(f.pos);view=f.view==='learn'?'learn':'map';}
   save();draw(true);
  }
  function detourBar(){
@@ -185,30 +185,10 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  function nameView(){
   return `<section class="explore-name" data-explore-name><div class="explore-hero">${chemistSVG(110)}</div><h1 tabindex="-1">幫你的小化學家取個名字</h1><p>不必填真實姓名，名字只存在這台裝置。</p><form data-name-form novalidate><label for="explorer-name">小化學家的名字</label><input id="explorer-name" name="name" maxlength="10" autocomplete="off" placeholder="探險家" value="${esc(prefs?.name&&prefs.name!=='探險家'?prefs.name:'')}"><p class="field-error" data-name-error role="alert" hidden></p><div class="explore-actions"><button type="button" data-name-skip>先叫探險家</button><button type="submit" class="primary">開始探險</button></div></form></section>`;
  }
- function worldView(){
-  const arch=archipelagoProgress(state),cur=arch.find(a=>a.current)||arch[0];
-  const line=anim?.type==='reveal'?'下一座島出現了！':`我們在「${cur.name}」。點一個群島看看吧！`;
-  return `${detourBar()}${topBar('',`${esc(explorer())}的探險`,`<span class="explore-tools"><button type="button" data-book>探險手冊</button>${guideToggle()}</span>`)}${guideRow(line,true)}${worldMapHTML({archipelagos:arch,boat:cur.id})}<div class="explore-actions arch-extra"><button type="button" data-lighthouse>評量燈塔：選做後測與延後測</button></div>`;
- }
- function archipelagoView(){
-  const arch=archipelagoProgress(state),a=arch.find(x=>x.id===archPick)||arch.find(x=>x.current)||arch[0],w=worldProgress(state);
-  const line=a.id==='prep'?'先確認先備：每張卡先答一題，會的直接過。':`${a.chapters}：點一座島看看吧！`;
-  return `${detourBar()}${topBar('',esc(a.name),`<span class="explore-tools"><button type="button" data-book>探險手冊</button>${guideToggle()}</span>`)}${guideRow(line,true)}${archipelagoHTML({archipelago:a,islands:a.islands,boat:state.stage})}${fogPick?`<div class="explore-sheet" data-fog-sheet role="dialog" aria-label="霧中的島"><p>這座島還在霧裡。建議先完成「${esc(w[Math.max(0,ISLANDS.findIndex(i=>i.id===fogPick)-1)].full)}」，這裡會用到它的觀念。</p><div class="explore-actions"><button type="button" data-fog-cancel>先不要</button><button type="button" class="primary" data-fog-go>仍要前往</button></div></div>`:''}`;
- }
- function islandView(){
-  const isl=state.stage,info=ISLANDS.find(i=>i.id===isl),p=buildingProgress(state,isl),next=p.findIndex(n=>n.state==='next'),done=next<0,walk=anim?.type==='walk'?anim:null;
-  const st=STAGES.find(s=>s.id===isl),goal=!st&&isl!=='final'?PATH_GOALS.prep:isl==='final'?PATH_GOALS.final:st.goal,task=!st&&isl!=='final'?PATH_TASKS.prep:isl==='final'?PATH_TASKS.final:st.task;
-  const line=done?'整座島走完了！回世界地圖，看看下一座島。':walk?'走吧，下一站！':p.some(n=>n.flag)?'紅旗代表有觀念要回看，點那棟房子就能補。':next===0?'從第一棟開始吧！點房子可以先看看裡面有什麼。':'走得很穩！準備好就繼續。';
-  const pick=nodePick!==null?p[nodePick]:null;
-  return `${detourBar()}${topBar('<button type="button" data-go-world>‹ 世界地圖</button>',esc(info.full),'<button type="button" data-book>手冊</button>')}${guideRow(line,true)}${islandViewHTML({island:isl,nodes:p,hero:walk?walk.from:done?p.length-1:next})}${pick?nodeSheet(isl,nodePick,pick):''}<section class="island-brief"><p><strong>這座島要學會：</strong>${esc(goal)}</p><p><strong>短任務：</strong>${esc(task)}</p><button type="button" class="primary" data-node-go="${done?p.length-1:next}">${done?'再走一次最後一站':`前往下一站：${esc(p[next].label)}`}</button></section>`;
- }
- function nodeSheet(isl,i,n){
-  const building=islandBuildings(isl)[i],what=building.card?cardTitle(building.card):`${building.end-building.screen+1} 個畫面，一次一件事`;
-  return `<div class="explore-sheet" data-node-sheet="${i}" role="dialog" aria-label="${esc(n.label)}"><p class="sheet-head"><strong>${esc(n.label)}</strong><span>${n.state==='done'?'已走過':n.state==='next'?'下一站':'還沒到'}</span></p><p>${esc(what)}</p>${n.flag?`<p class="sheet-flag">⚑ 需回看：${n.wrong.map(id=>esc(cardTitle(id))).join('、')}</p>`:''}<div class="explore-actions"><button type="button" data-node-close>關閉</button><button type="button" class="primary" data-node-go="${i}">${n.state==='done'?'再走一次':'開始'}</button></div></div>`;
- }
- function completeView(){
-  const isl=state.stage,info=ISLANDS.find(i=>i.id===isl),st=STAGES.find(s=>s.id===isl);
-  return `<section class="explore-complete" data-island-complete="${isl}"><div class="explore-hero">${chemistSVG(110)}</div><h1 tabindex="-1">${esc(info.full)} 走完了！</h1>${guideRow(ISLANDS.at(-1).id===isl?'九種反應都練過一輪了！還想練可以再進來。':'下一座島的霧要散開了，我們搭船過去吧！',true)}${st?masteryHTML(unlockedTypes(st.id)):''}<div class="explore-actions"><button type="button" class="primary" data-complete-world>回世界地圖</button></div></section>`;
+ function mapView(){
+  const spreads=bookProgress(state),spread=Math.max(0,Math.min(spreads.length-1,state.explore.spread??spreadOf(state.stage))),sp=spreads[spread],next=spreads.flatMap(s=>s.nodes).find(n=>n.state==='next');
+  const line=anim?.type==='walk'?'走吧，下一節！':!next?'整本書都走完了！':sp.nodes.some(n=>n.flag)?'紅旗代表有觀念要回看，點那一節就能補。':`下一節是 ${next.section}：${next.title}。`;
+  return `${detourBar()}${topBar('',`${esc(explorer())}的有機化學筆記`,`<span class="explore-tools"><button type="button" data-book>探險手冊</button>${guideToggle()}</span>`)}${guideRow(line,true)}${bookHTML({spreads,spread,hero:state.stage,side:state.explore.side})}`;
  }
  function bookView(){
   const flags=[...CARDS.keys()].filter(id=>checkStatus(state,id)==='wrong'),here=book.back==='learn'?snapshot(state):null;
@@ -223,21 +203,13 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
 
  function draw(focus=false){
   clear();gate=null;onView(view);
-  if(['world','archipelago','island','learn'].includes(view)&&state.explore.at!==view){state.explore.at=view;save();}
-  const html={name:nameView,world:worldView,archipelago:archipelagoView,island:islandView,learn:learnView,book:bookView,complete:completeView}[view]();
+  if(['map','learn'].includes(view)&&state.explore.at!==view){state.explore.at=view;save();}
+  const html={name:nameView,map:mapView,learn:learnView,book:bookView}[view]();
   root.innerHTML=`<section class="guided-lesson learning-path explore" data-learning-path data-stage="${state.stage}" data-view="${view}" data-arrival="${anim?.type==='reveal'?'reveal':'none'}">${ambientHTML()}${html}</section>`;
   if(view==='learn')renderScreen();
   if(view==='name')bindName();
   if(mode==='teacher'&&view==='learn')teachingControls($('[data-path-panel]'));
-  if(anim?.type==='walk'){
-   const a=anim,el=$('[data-hero]'),n=islandBuildings(state.stage).length,points=walkingRoute(n,a.from,a.to);anim=null;
-   if(el&&motion()){
-    el.classList.add('is-walking');const distances=points.slice(1).map((p,i)=>Math.hypot(p.x-points[i].x,p.y-points[i].y)),total=distances.reduce((x,y)=>x+y,0),start=performance.now();
-    const tick=now=>{let d=(motion()?Math.min(1,(now-start)/1100):1)*total,k=0;while(k<distances.length-1&&d>distances[k])d-=distances[k++];const t=distances[k]?d/distances[k]:1,p=points[k],q=points[Math.min(k+1,points.length-1)];el.style.left=((p.x+(q.x-p.x)*t)/720*100).toFixed(2)+'%';el.style.top=((p.y+(q.y-p.y)*t)/840*100).toFixed(2)+'%';if(motion()&&now-start<1100&&el.isConnected)walkRequest=requestAnimationFrame(tick);else{walkRequest=null;el.classList.remove('is-walking');}};
-    walkRequest=requestAnimationFrame(tick);
-   }else if(el){const p=spotFor(n,a.to);el.style.left=p.left;el.style.top=p.top;}
-   later(()=>say('到了！準備好就按下面的按鈕開始。'),motion()?1150:0);
-  }
+  if(anim?.type==='walk'){anim=null;later(()=>say('到了！點這一節就能開始。'),motion()?600:0);}
   else if(anim?.type==='reveal')anim=null;
   if(focus){root.querySelector('h1,h2')?.focus({preventScroll:true});root.scrollIntoView({block:'start',behavior:'instant'});}
  }
@@ -254,13 +226,16 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
   if(node.kind==='mixed'){const m=state.stages[isl].mixed;if(done){m.done=0;m.current=null;}pos.screen=Math.min(m.done,nodeScreens(isl,node).length-1);}
   state.explore.seen[isl]=true;save();go('learn');
  }
+ function enterStation(id){
+  state.stage=id;state.explore.spread=spreadOf(id);state.explore.side=undefined;state.explore.seen[id]=true;
+  const p=buildingProgress(state,id),i=p.findIndex(b=>b.state!=='done');enterNode(i<0?0:i);
+ }
  function finishNode(){
   const isl=state.stage,pos=state.explore.pos[isl],from=currentBuilding(isl,pos),building=islandBuildings(isl)[from];
   // The judgment table never blocks the way on, but it only counts as walked once all cells are right.
-  if(building.kind==='table'&&!tableSolved(state)){const b=islandBuildings(isl)[from+1];pos.node=b.node;pos.screen=b.screen;anim={type:'walk',from,to:from+1};save();go('island');return;}
-  const next=completeBuilding(state,isl,from);
-  if(next<0){pos.screen=0;save();go('complete');return;}
-  const b=islandBuildings(isl)[next];pos.node=b.node;pos.screen=b.screen;anim={type:'walk',from,to:next};save();go('island');
+  const next=building.kind==='table'&&!tableSolved(state)?-1:completeBuilding(state,isl,from);
+  if(next>=0){const b=islandBuildings(isl)[next];pos.node=b.node;pos.screen=b.screen;save();go('learn');return;}
+  pos.screen=0;const i=ISLANDS.findIndex(x=>x.id===isl);if(i<ISLANDS.length-1){state.stage=ISLANDS[i+1].id;state.explore.spread=spreadOf(state.stage);state.explore.side=undefined;}anim={type:'walk'};save();go('map');
  }
  function advance(){
   const ok=gate?.()??true;
@@ -269,7 +244,6 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
   if(node.kind==='final'){state.final.current=null;if(finalCount()>=FINAL_COUNT)state.explore.done.final.final=true;save();draw(true);return;}
   if(node.kind==='mixed'){const m=state.stages[isl].mixed;m.done++;m.current=null;}
   const b=islandBuildings(isl)[currentBuilding(isl,pos)],scr=screens[pos.screen];
-  if(scr?.type==='diagnose'&&state.diag[scr.card]?.pre?.right){pos.screen=b.end;finishNode();return;}
   if(pos.screen<b.end){pos.screen++;save();draw(true);return;}
   finishNode();
  }
@@ -281,16 +255,16 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
   if(scr.card){
    const c=CARDS.get(scr.card).card,tag=`${node.label}${scr.concept!==undefined?' · 產物細節':''}${c.optional?'（選讀）':''}`;
    if(scr.type==='read'){panel.innerHTML=`${head(tag,c.title)}${judgeLine(c)}${c.body.map(p=>`<p data-teacher-hint>${esc(p)}</p>`).join('')}<p class="concept-example" data-teacher-result>${esc(c.example)}</p><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;say(LINES.read);}
-   else if(scr.type==='figure'){panel.innerHTML=`${head(tag+' · 圖解',c.title)}${c.visual?'<div class="concept-visual guide-concept" data-path-visual></div>':''}${c.widget?'<div class="concept-widget" data-cation-host></div>':''}`;if(c.visual)mountVisual($('[data-path-visual]'),c.visual);mountWidget(c);say(LINES.figure);}
+   else if(scr.type==='figure'){const figs=[].concat(FIGURES[c.id]||[]);panel.innerHTML=`${head(tag+' · 圖解',c.title)}${figs.map((f,k)=>`<div class="concept-figure" data-figure-host="${k}">${figureHTML(f)}</div>`).join('')}${c.visual?'<div class="concept-visual guide-concept" data-path-visual></div>':''}${c.widget?'<div class="concept-widget" data-cation-host></div>':''}`;figs.forEach((f,k)=>{const stop=mountFigure($(`[data-figure-host="${k}"]`),f);children.push({destroy:stop});});if(c.visual)mountVisual($('[data-path-visual]'),c.visual);mountWidget(c);say(LINES.figure);}
    else if(scr.type==='demo'){panel.innerHTML=`${head(tag+' · 三維',c.title)}<section class="concept-3d" data-concept-3d><p class="teacher-note">三維模型：拖曳旋轉、加減鍵縮放，可逐段播放電子移動。</p>${c.demos.length>1?`<div class="check-tools">${c.demos.map((d,k)=>`<button type="button" data-concept-demo="${k}" aria-pressed="${k===0}">${esc(d.label)}</button>`).join('')}</div>`:''}<div data-concept-player></div></section>`;mountDemos(c);say(LINES.demo);}
-   else if(scr.type==='diagnose'||scr.type==='recheck'){const which=scr.type==='diagnose'?'pre':'post';panel.innerHTML=`${head(tag+(which==='pre'?' · 先備診斷':' · 讀完再確認'),c.title)}${diagForm(c,which)}`;bindDiag(c,which);const r=state.diag[c.id]?.[which];say(r?(r.right?(which==='pre'?LINES.diagReady:LINES.checkRight):LINES.checkWrong):which==='pre'?LINES.diag:LINES.check);gate=()=>state.diag[c.id]?.[which]?true:'先選一個答案，按「檢查」後再繼續。';}
    else{panel.innerHTML=`${head(tag+' · 即時檢查',c.title)}${checkForm(c)}`;bindCheck(c);const a=state.warm.checks[c.id];say(a?(a.choice===c.check.answer?LINES.checkRight:LINES.checkWrong):LINES.check);gate=()=>state.warm.checks[c.id]?true:'先選一個答案，按「檢查」後再繼續。';}
    return;
   }
   if(scr.type==='concept'||scr.type==='concept-figure'){
    const c=st.concepts[scr.index];
-   if(scr.type==='concept'){panel.innerHTML=`${head(`概念 ${scr.index+1}／${st.concepts.length}`,c.title)}${c.body.map(p=>`<p data-teacher-hint>${esc(p)}</p>`).join('')}${cueList(c)}<p class="concept-example" data-teacher-result>${esc(c.example)}</p><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;say(LINES.concept);}
+   if(scr.type==='concept'){const mech=scr.index===0?conceptExample(st):null;panel.innerHTML=`${head(`概念 ${scr.index+1}／${st.concepts.length}`,c.title)}${c.body.map(p=>`<p data-teacher-hint>${esc(p)}</p>`).join('')}${mech?`<section class="concept-3d concept-mechanism" data-concept-mechanism><p class="teacher-note">代表例子：${esc(mech.example.substrate)} ＋ ${esc(mech.example.reagent)}。拖曳旋轉，逐段播放電子移動；旁邊是同步的結構式。</p><div data-concept-player></div></section>`:''}${cueList(c)}<p class="concept-example" data-teacher-result>${esc(c.example)}</p><details class="learning-sources"><summary>原文來源</summary>${sourceLinks(c.pages)}</details>`;say(LINES.concept);}
    else{panel.innerHTML=`${head(`概念 ${scr.index+1} · 圖解`,c.title)}<div class="concept-widget" data-cation-host></div>`;mountWidget(c);say(LINES.conceptFigure);}
+   if(scr.type==='concept'&&scr.index===0){const mech=conceptExample(st),key=`concept:${st.id}`;if(mech)children.push(mountSpotlight($('[data-concept-player]'),{kind:mech.kind,specOverride:exampleSpec(mech.kind,mech.example),initialState:readView(key),onStateChange:v=>writeView(key,v)}));}
    return;
   }
   if(scr.type==='compare'){panel.innerHTML=comparisonHTML(scr.id);const stop=mountComparison(panel);children.push({destroy:stop});say(LINES.compare);return;}
@@ -302,13 +276,10 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
   finalPractice(panel);
  }
  const checkForm=c=>{const answered=state.warm.checks[c.id];return `<form class="concept-quiz" data-warm-check><fieldset><legend>即時檢查：${esc(c.check.prompt)}</legend>${radios('warm',shuffled(c.check.options,c.id),answered?.choice)}</fieldset><button type="submit">檢查</button><p class="feedback-box" data-warm-feedback role="status" ${answered?'':'hidden'}>${answered?esc((answered.choice===c.check.answer?'正確。':'再想想。')+c.check.feedback):''}</p><div data-check-review>${answered&&answered.choice!==c.check.answer?reviewLinks(c.review):''}</div></form><p class="teacher-note">不計分，只幫你確認有沒有讀懂。</p>`;};
- // Diagnosis: the first item is asked before reading; a different item confirms after reading. Each answer is kept once.
- const diagItem=(c,which)=>which==='pre'?c.diagnose[0]:c.diagnose[1+(c.id.length%Math.max(1,c.diagnose.length-1))]||c.diagnose[1];
- const diagForm=(c,which)=>{const item=diagItem(c,which),rec=state.diag[c.id]?.[which];return `<form class="concept-quiz" data-diag-form${rec?` data-diag-result="${rec.right?'right':'wrong'}"`:''}><fieldset><legend>${which==='pre'?'先備診斷':'讀完再確認'}：${esc(item.prompt)}</legend>${radios('diag',shuffled(item.options,c.id+which),rec?.choice).replaceAll('type="radio"',rec?'type="radio" disabled':'type="radio"')}</fieldset>${rec?'':'<button type="submit">檢查</button>'}<p class="feedback-box${rec?.right?' correct':''}" data-diag-feedback role="status" ${rec?'':'hidden'}>${rec?esc(diagFeedback(item,which,rec.right)):''}</p><div data-check-review>${rec&&!rec.right&&which==='post'?reviewLinks(c.review):''}</div></form><p class="teacher-note">${which==='pre'?'答對就代表你已具備，可以直接跳過這張卡。':'不計分，答錯會插紅旗提醒你之後回看。'}</p>`;};
- const diagFeedback=(item,which,right)=>which==='pre'?(right?`答對了！${item.feedback} 這張卡你已具備，按「繼續」直接跳過。`:`${item.feedback} 我們讀一下這張卡，讀完換一題再確認。`):(right?`正確。${item.feedback}`:`再想想。${item.feedback}`);
- const bindDiag=(c,which)=>{const form=$('[data-diag-form]');if(!form||state.diag[c.id]?.[which])return;form.onsubmit=e=>{e.preventDefault();const v=new FormData(e.target).get('diag');if(v===null)return;const item=diagItem(c,which),choice=Number(v),right=choice===item.answer;(state.diag[c.id]||={})[which]={choice,right};save();draw();};};
  // Warm-up and entry-primer checks share state.warm.checks, keyed by card id.
  const bindCheck=c=>{$('[data-warm-check]').onsubmit=e=>{e.preventDefault();const v=new FormData(e.target).get('warm');if(v===null)return;const choice=Number(v),right=choice===c.check.answer,first=state.warm.checks[c.id]?.first??right;state.warm.checks[c.id]={choice,first};save();const box=$('[data-warm-feedback]');box.hidden=false;box.textContent=(right?'正確。':'再想想。')+c.check.feedback;$('[data-check-review]').innerHTML=right?'':reviewLinks(c.review);$('[data-learn-gate]').hidden=true;say(right?LINES.checkRight:LINES.checkWrong);};};
+ // A reaction's representative example: the first example of its mechanism kind.
+ const conceptExample=st=>{const kind=st.newTypes[0]||st.arrowKinds[0],example=REACTION_EXAMPLES[kind]?.[0];return example?{kind,example}:null;};
  const mountDemos=c=>{if(!c.demos)return;let spot=null;const play=k=>{if(spot){spot.destroy();children=children.filter(x=>x!==spot);}root.querySelectorAll('[data-concept-demo]').forEach(b=>b.setAttribute('aria-pressed',String(Number(b.dataset.conceptDemo)===k)));const d=c.demos[k],found=exampleById(d.example),key='warm:'+c.id+':'+k;spot=mountSpotlight($('[data-concept-player]'),{kind:d.kind,specOverride:exampleSpec(d.kind,found.example),segment:Number.isInteger(d.step)?{step:d.step}:null,initialState:readView(key),onStateChange:s=>writeView(key,s)});children.push(spot);if(mode==='teacher'&&$('[data-teaching-controls]'))resetTeaching();};root.querySelectorAll('[data-concept-demo]').forEach(b=>b.onclick=()=>play(Number(b.dataset.conceptDemo)));play(0);};
  const mountWidget=c=>{const host=$('[data-cation-host]');if(!host||!c.widget)return;if(c.widget.kind==='skeletal')host.innerHTML=skeletalHTML();if(c.widget.kind==='degree')host.innerHTML=degreeHTML();if(c.widget.kind==='energy')host.innerHTML=energyHTML();if(c.widget.kind==='leaving')host.innerHTML=leavingHTML();if(c.widget.kind==='cation-cloud')children.push(mountCationCloud(host,{initial:c.widget.initial}));};
 
@@ -391,18 +362,21 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
  // Delegated clicks: map, landmarks, handbook, detours and the continue button.
  const onClick=e=>{
   const t=e.target.closest?.('button');if(!t||!root.contains(t))return;const d=t.dataset;
-  if(d.archipelago){archPick=d.archipelago;go('archipelago');return;}
-  if(d.island){const w=worldProgress(state).find(x=>x.id===d.island);if(w.state==='fog'){fogPick=d.island;draw();$('[data-fog-go]')?.focus();return;}state.stage=d.island;state.explore.seen[d.island]=true;save();go('island');return;}
-  if(t.hasAttribute('data-fog-go')){state.stage=fogPick;state.explore.seen[fogPick]=true;save();go('island');return;}
-  if(t.hasAttribute('data-fog-cancel')){const id=fogPick;fogPick=null;draw();$(`[data-island="${id}"]`)?.focus();return;}
+  if(d.station){enterStation(d.station);return;}
+  if(d.bookPage){
+   // On a phone one page shows at a time: turn to the other half first, then to the neighbouring spread.
+   const n=BOOK.length,cur=state.explore.spread??spreadOf(state.stage),side=state.explore.side||$('[data-book-side]')?.dataset.bookSide||'left',phone=matchMedia('(max-width: 759px)').matches,next=d.bookPage==='next';
+   if(phone&&next&&side==='left')state.explore.side='right';
+   else if(phone&&!next&&side==='right')state.explore.side='left';
+   else{const to=Math.max(0,Math.min(n-1,cur+(next?1:-1)));if(to!==cur){state.explore.spread=to;state.explore.side=next?'left':'right';}}
+   save();draw();return;}
   if(t.hasAttribute('data-lighthouse')){onAssessment();return;}
   if(d.node!==undefined){nodePick=Number(d.node);draw();$('[data-node-sheet] [data-node-go]')?.focus();return;}
   if(t.hasAttribute('data-node-close')){const i=nodePick;nodePick=null;draw();$(`[data-node="${i}"]`)?.focus();return;}
   if(d.nodeGo!==undefined){enterNode(Number(d.nodeGo));return;}
-  if(t.hasAttribute('data-go-world')){if(view==='island')archPick=ISLANDS.find(x=>x.id===state.stage).archipelago;return go(view==='island'?'archipelago':'world');}
-  if(t.hasAttribute('data-exit-learn'))return go('island');
+  if(t.hasAttribute('data-go-world'))return go('map');
+  if(t.hasAttribute('data-exit-learn'))return go('map');
   if(t.hasAttribute('data-continue-screen'))return advance();
-  if(t.hasAttribute('data-complete-world')){const i=ISLANDS.findIndex(x=>x.id===state.stage);if(i<ISLANDS.length-1){state.stage=ISLANDS[i+1].id;anim={type:'reveal'};}archPick=ISLANDS.find(x=>x.id===state.stage).archipelago;save();go('archipelago');return;}
   if(t.hasAttribute('data-book')){book.back=view;go('book');return;}
   if(t.hasAttribute('data-book-close'))return go(book.back);
   if(t.hasAttribute('data-guide-toggle')){prefs={name:explorer(),guide:!guideOn()};savePrefs();draw();$('[data-guide-toggle]')?.focus();return;}
@@ -442,6 +416,6 @@ export function mountLearningPath(root,{onNotice=()=>{},onAssessment=()=>{},load
   if(next===mode)return;clear();save();
   if(next==='teacher'){studentState=state;state=copyPathLocation(studentState,teacherMemory||{...freshPath(),explore:structuredClone(studentState.explore)});}
   else{teacherMemory=state;state=copyPathLocation(state,studentState);}
-  mode=next;if(view==='name')view='island';save();draw();
+  mode=next;if(view==='name')view='map';save();draw();
  },destroy({discard=false}={}){root.removeEventListener('click',onClick);window.removeEventListener('popstate',onPop);clear();onView(null);if(discard){memory=null;teacherMemory=null;}else save();}};
 }

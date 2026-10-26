@@ -20,6 +20,8 @@ while(queue.length){
   for(const m of src.matchAll(/['"]([\w-]+\.(?:png|css|json))['"]/g))queue.push(m[1]);
  }
 }
+// Images whose names are built at runtime (book pages) are not visible to the import scan; copy them by pattern.
+for(const file of fs.readdirSync('.'))if(/^book-spread-\d+\.jpg$/.test(file))seen.add(file);
 fs.rmSync(target,{recursive:true,force:true});fs.mkdirSync(target,{recursive:true});
 for(const file of seen)fs.copyFileSync(file,path.join(target,file));
 const page=html.replace('<meta charset="utf-8">','<meta charset="utf-8"><meta name="robots" content="noindex,nofollow">');
