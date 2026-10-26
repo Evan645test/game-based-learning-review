@@ -127,3 +127,7 @@ body[data-art-motion=paused] .voyager{transition:none}
  .judge-table td{margin:6px 0;min-width:0}
  .judge-col-label{display:block;font-weight:700;color:#55705c;font-size:.8rem;margin-bottom:2px}
 }
+
+/* A locked diagnosis shows whether the chosen option was right, so a wrong pick never looks "selected = correct". */
+.concept-quiz[data-diag-result=wrong] .choice:has(input:checked){border-color:#c0584a;background:#fff4f1;color:#7a3a2e}
+.concept-quiz[data-diag-result=right] .choice:has(input:checked){border-color:#5b9a6a;background:#eef7ee}
