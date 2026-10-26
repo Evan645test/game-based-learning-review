@@ -38,7 +38,9 @@ try{
  await page.locator('[data-continue-screen]').click();assert.equal(await page.locator('.concept-quiz').isVisible(),false,'教師示範隱藏學生的檢查表單');
  assert.deepEqual(await pathState(),before);
  await page.locator('[data-exit-learn]').click();await page.locator('[data-go-world]').click();await page.locator('[data-island="s1"]').click();await page.locator('[data-fog-go]').click();
- await page.locator('[data-node="7"]').click();await page.locator('[data-node-sheet] [data-node-go]').click();
+ await page.locator('[data-concept-building="contrast"]').click();await page.locator('[data-node-sheet] [data-node-go]').click();
+ // The contrast landmark opens with the two why-not comparisons before the prediction pairs.
+ await page.locator('[data-comparison]').waitFor();for(let i=0;i<2;i++)await page.locator('[data-continue-screen]').click();
  assert.equal(await page.locator('.spotlight-player').count(),1);
  assert.equal(await page.locator('.contrast-answer').first().isVisible(),false);
  assert.equal(await page.locator('[data-predict]').first().isVisible(),false);
@@ -48,7 +50,7 @@ try{
  await page.locator('[data-watch="1"]').click();assert.equal(await page.locator('.contrast-answer').first().isVisible(),false);
  assert.deepEqual(await pathState(),before);
  const afterBookmarks=await page.evaluate(()=>Object.fromEntries(Object.entries(localStorage).filter(([k])=>k.startsWith('organic-demo-view-v3:'))));assert.deepEqual(afterBookmarks,bookmarks);
- await page.locator('[data-exit-learn]').click();await page.locator('[data-mode=student]').click();const after=await pathState();assert.equal(after.stage,'s1');assert.deepEqual(after.explore.pos.s1,{node:2,screen:0});assert.deepEqual(after.warm.checks,before.warm.checks);assert.deepEqual(after.attempts,before.attempts);assert.deepEqual(after.stages.s1.predictions,{});
+ await page.locator('[data-exit-learn]').click();await page.locator('[data-mode=student]').click();const after=await pathState();assert.equal(after.stage,'s1');assert.deepEqual(after.explore.pos.s1,{node:2,screen:2});assert.deepEqual(after.warm.checks,before.warm.checks);assert.deepEqual(after.attempts,before.attempts);assert.deepEqual(after.stages.s1.predictions,{});
  ok('學生／教師共用位置；教師示範、提示、揭示與觀看不覆寫學生答案和書籤');
  await page.locator('[data-mode=teacher]').click();await page.locator('[data-page=assess]').click();assert.equal(await page.locator('[data-assess-student]').count(),1);assert.equal(await page.locator('[data-assessment-host]').count(),0);
  await page.locator('[data-page=learn]').click();assert.equal(await page.locator('[data-learning-path]').getAttribute('data-stage'),'s1');assert.equal(await page.locator('[data-learning-path]').getAttribute('data-view'),'island');

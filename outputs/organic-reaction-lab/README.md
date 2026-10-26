@@ -50,6 +50,15 @@ curl http://127.0.0.1:8768/health
 
 新版第一次載入時，依使用者決定清除所有舊 `organic-` 開頭的課程進度、評量、觀看書籤及 PK 資料庫（legacy-data.js），只清一次；其他網站資料不受影響。PK 入口已移除，pk-state.js 等程式檔保留以便日後加回。舊 learning-course.js、guided-lesson.js、course-checks.js 不再由入口載入。
 
+## 內容去重、判斷表與比較動畫（2026-10-26）
+
+- 原理只在線索卡講一次：暖身改依判斷線索分四組（基本工具、看受質、看試劑、看脫離基；9 卡，質子轉移併入酸鹼）；入口小暖身標上線索（受質、試劑、條件、路徑）並以一句說明它幫你判斷什麼。
+- 反應概念頁改列「看到 → 偏向 → 回看」線索；R/S 併入 SN2、Newman／烯的穩定性（含 Hofmann 教學補充）／選讀椅式併入 E2，成為概念建築內的「產物細節」畫面。
+- 總混合島第一棟是「完成判斷表」：受質級數 × 試劑 16 格，每格只選反應類型，全部填完再檢查；錯格給說明、回看卡與比較動畫；全對才算走完，但不擋混合練習。格子依原文 §11.12（PDF 第 387 頁）修正，與原圖不同處見《刪改清單-2026-10-26.md》。
+- 比較動畫（comparisons.js、comparison-view.js、comparison.css）：四組「為何走這條路」放在階段 1–3 對比觀察的開頭；輸的路只播嘗試，能量圖為定性示意。
+- 舊進度：layout 4 遷移（layout3.js 凍結舊據點畫面），被合併的建築任一走過就算走過；質子轉移的答案承接到酸鹼。
+- 驗證：`node --test tests/*.test.mjs`（115）、`python3 -m unittest discover -s tests -p 'test_*.py'`、`node tests/comparison-browser.mjs`、path／art／interface／orbital／alignment 瀏覽器測試。
+
 ## 學生／教師介面
 
 採暖色小島探險風的地圖，學習畫面維持同色系的乾淨版面。保留暖身→五階段→總混合練習→選做評量；遊戲化留待後續加入。
@@ -121,6 +130,43 @@ OLLAMA_HOST 選填且只接受 loopback HTTP。本輪未新增模型或服務；
 - 圖片為本輪 AI 生成的原創村落素材。新增美術回歸：`PLAYWRIGHT_MODULE='/Users/evan_1/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/index.mjs' node tests/art-browser.mjs`；七島道路地面採樣、320–1600px 點擊區／全景、動態與進度保留證據在 `/private/tmp/organic-art-verification/`。
 
 ## 驗證
+
+### 獨立比較動畫模組（尚未接入課程）
+
+`comparisons.js` 匯出四組 `COMPARISONS`，以及供測試使用的純函式
+`comparisonScene(id, 'winner' | 'loser', progress)`；進度範圍為 0–1。
+`comparison-view.js` 匯出 `comparisonHTML(id)` 與 `mountComparison(root)`。
+整合時由宿主載入 `comparison.css`，把 HTML 放入 DOM 後呼叫掛載函式；
+它接受單一比較 section 或含多組比較的容器，回傳可重複呼叫的 cleanup。
+替換課程內容前呼叫 cleanup；重新掛載同一 section 也會先清理舊掛載。
+未知 id 會拋出 `RangeError`，不以其他比較代替。
+
+- 四組 id：`primary-sn2-vs-sn1`、`tertiary-sn1-vs-sn2`、
+  `bulky-e2-vs-sn2`、`heat-e1-vs-sn1`。
+- 一次同步播放共 9 秒，按同一按鍵可暫停／繼續／重播；不自動播放。
+  系統減少動態或 `body[data-art-motion="paused"]` 直接顯示終態／嘗試關鍵幀。
+  離屏、頁面隱藏、移除 DOM 或 cleanup 都取消 RAF，返回時不自動續播。
+- 輸的路保留反應物的連接；加熱組只允許共同的第一步離解，分岔後不形成
+  C–O 鍵。乙醇與碳陽離子沿用 E1 幾何，避免把富水環境的 SN1 例子誤作乙醇。
+  SN1 仍可競爭，右側停止成鍵只是比較呈現方式。
+- 1-溴丁烷只有一個 β 碳，產物為 1-butene；此例不能證明 Hofmann／Zaitsev
+  區位偏好。能量圖全部為定性示意，加熱組保留共同第一步的相同能障，
+  不由熵推算活化能或產物比例。
+- 不更動既有 `energyHTML()`；新增的 `comparisonEnergyHTML()` 由比較畫面使用。
+  未更動既有 26 例或三維渲染器，也未接入任何課程入口。
+
+比較瀏覽器測試以攔截入口文件建立記憶體測試頁，JS／CSS 仍由本 worktree
+的白名單伺服器載入，無需新增正式測試頁路由。先在本目錄執行
+`python3 server.py --port 8770`，再執行：
+
+```sh
+PLAYWRIGHT_MODULE='/Users/evan_1/.npm/_npx/e41f203b7505f1fb/node_modules/playwright/index.mjs' ORGANIC_URL=http://127.0.0.1:8770/academy.html node tests/comparison-browser.mjs
+```
+
+截圖及結果輸出至 `/private/tmp/organic-compare-verification/`；測試結束後關閉
+該預覽伺服器。2026-10-26 本輪 Node 回歸已執行；受執行環境沙箱限制，
+Python 綁定 loopback 被拒，Chrome 啟動亦中止，因此 Python／瀏覽器驗收
+與截圖仍待允許這些操作的環境重跑，不宣稱已通過。
 
 2026-10-26 漸進交錯版：
 

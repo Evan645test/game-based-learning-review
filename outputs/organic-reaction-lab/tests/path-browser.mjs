@@ -1,7 +1,7 @@
 // Full walkthrough of the island path in Chrome: legacy clearing, naming, world map, every landmark screen, final practice, assessment, reset.
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
-import {WARMUP,STAGES,ITEMS,PATH_TASKS,REVIEW_BY_TYPE,ARROW_REVIEW,COMPETENCIES} from '../course-path.js';
+import {WARMUP,STAGES,ITEMS,PATH_TASKS,REVIEW_BY_TYPE,ARROW_REVIEW,COMPETENCIES,JUDGE_TABLE} from '../course-path.js';
 import {REACTION_EXAMPLES} from '../reaction-examples.js';
 import {mechanismSpec} from '../electron-flow.js';
 import {ISLANDS,islandNodes,nodeScreens,spotFor,islandBuildings} from '../island-map.js';
@@ -62,7 +62,7 @@ async function reviewDetour(scope,{back=false}={}){
  await page.locator('[data-path-panel] h2').filter({hasText:before}).first().waitFor();assert.equal(await page.locator('[data-review-banner]').count(),0);return id;
 }
 const view=v=>page.locator(`[data-learning-path][data-view="${v}"]`);
-const CARD=new Map([...WARMUP,...STAGES.flatMap(s=>s.primers||[])].map(c=>[c.id,c]));
+const CARD=new Map([...WARMUP,...STAGES.flatMap(s=>[...(s.primers||[]),...s.concepts.flatMap(c=>c.details||[])])].map(c=>[c.id,c]));
 async function answerItem({wrongMech=false,arrows=true}={}){
  // Match each field exactly: substring matching confused 丙烯 with 2-甲基丙烯 and Cl₂ with CH₂Cl₂.
  const fields=await page.locator('.reaction-card p').evaluateAll(ps=>ps.map(p=>p.textContent.replace(/^[^：]*：/,'').trim())),matches=ITEMS.filter(i=>i.substrate===fields[0]&&i.reagent===fields[1]&&i.conditions===fields[2]);assert.equal(matches.length,1,'題目應唯一對應：'+fields.join(' | '));const item=matches[0];
@@ -135,6 +135,7 @@ async function walkNode(islandId,ni,{si=-1,checks={}}={}){
   }
   if(scr.type==='concept')await h2.filter({hasText:st.concepts[scr.index].title}).waitFor();
   if(scr.type==='concept-figure')await page.locator('[data-cation-svg]').first().waitFor();
+  if(scr.type==='compare'){await page.locator(`[data-comparison="${scr.id}"]`).waitFor();await page.locator('[data-comparison-play]').click();}
   if(scr.type==='pair')await doPair(st,si,scr);
   if(scr.type==='branch')await doBranch(st,si,scr);
   if(scr.type==='arrow')await doArrow(st,si,scr);
@@ -173,33 +174,33 @@ await page.locator('[data-island="s2"]').click();await page.locator('[data-fog-s
 await page.locator('[data-guide-toggle]').click();assert.equal(await page.locator('[data-guide]').count(),0);await page.locator('[data-guide-toggle]').click();assert.equal(await page.locator('[data-guide]').count(),1);
 ok('取名後進入世界地圖：暖身開放、其餘在霧中，霧中島先提醒，引導可完全關閉');
 await page.locator('[data-book]').click();await view('book').waitFor();assert.match(await page.locator('[data-explore-book]').innerText(),/目前沒有紅旗/);assert.equal(await page.locator('[data-comp-toggle]').count(),6);
-await page.locator('[data-comp-toggle="space"]').click();assert.equal(await page.locator('[data-competency="space"] [data-map-card]').count(),5);
+await page.locator('[data-comp-toggle="substrate"]').click();assert.equal(await page.locator('[data-competency="substrate"] [data-map-card]').count(),4);
 await page.locator('[data-map-card="sterics"]').click();assert.equal(await view('book').count(),1,'點觀念卡只預覽，不跳走');assert.match(await page.locator('[data-card-preview="sterics"]').innerText(),/階段 1・入口小暖身/);
 await overflow('探險手冊 390px');await page.screenshot({path:out+'/00-handbook-390.png',fullPage:true});
 await page.locator('[data-map-go="sterics"]').click();await view('learn').waitFor();await page.locator('[data-path-panel] h2').filter({hasText:'立體障礙'}).waitFor();
 assert.equal(await page.locator('body').getAttribute('data-explore'),'learn');assert.equal(await page.locator('.course-header').isVisible(),false,'學習畫面只留內容');
-const bar=page.locator('[data-location-bar]');assert.match(await bar.innerText(),/從探險手冊跳來/);assert.match(await bar.innerText(),/回到 暖身・看懂結構：讀結構式/);
-assert.deepEqual(await page.locator('[data-learning-path] .breadcrumb li').allInnerTexts(),['探險手冊','空間判斷','立體障礙']);await page.screenshot({path:out+'/00-detour-390.png'});
-await page.locator('[data-crumb-comp="space"]').click();await view('book').waitFor();assert.equal(await page.locator('[data-comp-toggle="space"]').getAttribute('aria-expanded'),'true');await page.locator('[data-card-preview="sterics"]').waitFor();
-await page.locator('[data-map-card="hybrid"]').click();await page.locator('[data-map-go="hybrid"]').click();await page.locator('[data-path-panel] h2').filter({hasText:CARD.get('hybrid').title}).waitFor();assert.match(await bar.innerText(),/回到 暖身・看懂結構：讀結構式/,'連續跳轉仍記得最初的來源');
+const bar=page.locator('[data-location-bar]');assert.match(await bar.innerText(),/從探險手冊跳來/);assert.match(await bar.innerText(),/回到 暖身・基本工具：讀結構式/);
+assert.deepEqual(await page.locator('[data-learning-path] .breadcrumb li').allInnerTexts(),['探險手冊','看受質','立體障礙']);await page.screenshot({path:out+'/00-detour-390.png'});
+await page.locator('[data-crumb-comp="substrate"]').click();await view('book').waitFor();assert.equal(await page.locator('[data-comp-toggle="substrate"]').getAttribute('aria-expanded'),'true');await page.locator('[data-card-preview="sterics"]').waitFor();
+await page.locator('[data-map-card="hybrid"]').click();await page.locator('[data-map-go="hybrid"]').click();await page.locator('[data-path-panel] h2').filter({hasText:CARD.get('hybrid').title}).waitFor();assert.match(await bar.innerText(),/回到 暖身・基本工具：讀結構式/,'連續跳轉仍記得最初的來源');
 await page.goBack();await view('world').waitFor();assert.equal(await page.locator('[data-location-bar]').count(),0);
 const posNow=await page.evaluate(()=>JSON.parse(localStorage.getItem('organic-path-v3')).explore.pos);assert.deepEqual(posNow.s1,{node:0,screen:0});assert.deepEqual(posNow.warmup,{node:0,screen:0},'返回後所有島都回到原位');
-ok('探險手冊：六項能力原地展開、先預覽再前往、來源列與麵包屑、連續跳轉記得來源、瀏覽器返回回到地圖');
+ok('探險手冊：線索分組原地展開、先預覽再前往、來源列與麵包屑、連續跳轉記得來源、瀏覽器返回回到地圖');
 
-// 3. Warm-up island: six landmarks, one thing per screen; leaving keeps the screen; the chemist walks on.
+// 3. Warm-up island: four clue groups, one thing per screen; leaving keeps the screen; the chemist walks on.
 await page.locator('[data-island="warmup"]').click();await view('island').waitFor();
-assert.equal(await page.locator('[data-node]').count(),10);assert.equal(await page.locator('[data-node="0"]').getAttribute('data-node-state'),'next');await heroAt(10,0);
+assert.equal(await page.locator('[data-node]').count(),9);assert.equal(await page.locator('[data-node="0"]').getAttribute('data-node-state'),'next');await heroAt(9,0);
 await overflow('島嶼 390px');await page.screenshot({path:out+'/00-island-390.png'});
-await page.locator('[data-node="3"]').click();await page.locator('[data-node-sheet="3"]').filter({hasText:'混成與形狀'}).waitFor();await page.locator('[data-node-close]').click();assert.equal(await page.locator('[data-node-sheet]').count(),0,'點據點先預覽，不直接進入');
+await page.locator('[data-node="5"]').click();await page.locator('[data-node-sheet="5"]').filter({hasText:'混成與形狀'}).waitFor();await page.locator('[data-node-close]').click();assert.equal(await page.locator('[data-node-sheet]').count(),0,'點據點先預覽，不直接進入');
 await page.locator('.island-brief [data-node-go]').click();await view('learn').waitFor();await page.screenshot({path:out+'/01-learn-390.png'});
 await page.locator('[data-continue-screen]').click();assert.equal(await page.locator('.learn-count').innerText(),'2／3');await page.locator('[data-exit-learn]').click();await view('island').waitFor();
 await page.locator('.island-brief [data-node-go]').click();await view('learn').waitFor();assert.equal(await page.locator('.learn-count').innerText(),'2／3');ok('中途離開回到島上，再進來接續同一個畫面');
 const warmNodes=islandNodes('warmup');
 for(const ni of warmNodes.keys()){
- if(ni>0){await view('island').waitFor();await heroAt(10,islandBuildings('warmup').findIndex(b=>b.node===ni));assert.equal(await page.locator(`[data-node="${islandBuildings('warmup').findIndex(b=>b.node===ni)-1}"]`).getAttribute('data-node-state'),'done');if(ni===1)ok('走完據點後小化學家走到下一站，前一站標成已走過');await page.locator('.island-brief [data-node-go]').click();}
+ if(ni>0){await view('island').waitFor();await heroAt(9,islandBuildings('warmup').findIndex(b=>b.node===ni));assert.equal(await page.locator(`[data-node="${islandBuildings('warmup').findIndex(b=>b.node===ni)-1}"]`).getAttribute('data-node-state'),'done');if(ni===1)ok('走完據點後小化學家走到下一站，前一站標成已走過');await page.locator('.island-brief [data-node-go]').click();}
  await walkNode('warmup',ni,{checks:{skeletal:'wrong-then-right',formal:'wrong-then-right'}});
 }
-await finishIsland('warmup','s1');ok(`暖身島：六個據點 ${warmNodes.map(n=>nodeScreens('warmup',n).length).reduce((a,b)=>a+b)} 個畫面依序走完，船開到下一座島、霧散開`);
+await finishIsland('warmup','s1');ok(`暖身島：四組據點 ${warmNodes.map(n=>nodeScreens('warmup',n).length).reduce((a,b)=>a+b)} 個畫面依序走完，船開到下一座島、霧散開`);
 
 // 4. Five stage islands. Stage 1 leaves 立體障礙 wrong so its red flag can be followed from the handbook.
 for(const [si,st] of STAGES.entries()){
@@ -228,6 +229,18 @@ for(const [si,st] of STAGES.entries()){
 
 // 5. Final island: interleaved items, mastery of nine types; reload returns to the same island.
 await page.locator('[data-island="final"]').click();await view('island').waitFor();await page.locator('.island-brief [data-node-go]').click();
+// The judgment table comes first: fill every cell (one wrong), check, follow the comparison link, come back, fix it.
+await page.locator('.judge-table').waitFor();
+await page.locator('[data-table-check]').click();assert.match(await page.locator('[data-table-status]').innerText(),/還有 16 格沒填完/);
+for(const [key,cell] of Object.entries(JUDGE_TABLE.cells)){const wrong=key==='tertiary|protic';await page.locator(`[data-cell-type="${key}"]`).selectOption(wrong?'e1':cell.type[0]);}
+await page.locator('[data-table-check]').click();assert.match(await page.locator('[data-table-status]').innerText(),/對了 15／16 格/);assert.equal(await page.locator('td.wrong').count(),1);
+await overflow('判斷表 390px');await page.screenshot({path:out+'/04-table-390.png',fullPage:true});
+await page.locator('td.wrong [data-review="tertiary-sn1-vs-sn2"]').click();await page.locator('[data-comparison="tertiary-sn1-vs-sn2"]').waitFor();await page.locator('[data-review-return]').click();
+await page.locator('.judge-table').waitFor();assert.equal(await page.locator('td.wrong').count(),1,'回來後仍標出要改的格子');
+await page.locator('[data-cell-type="tertiary|protic"]').selectOption('sn1');await page.locator('[data-table-check]').click();assert.match(await page.locator('[data-table-status]').innerText(),/16 格都對了/);
+await page.locator('[data-continue-screen]').click();await view('island').waitFor();assert.equal(await page.locator('[data-node="0"]').getAttribute('data-node-state'),'done');
+ok('判斷表：沒填完不檢查；錯格標紅並可看比較動畫再回來；全對才算走完');
+await page.locator('.island-brief [data-node-go]').click();
 const seen=[];for(let n=0;n<4;n++){await view('learn').waitFor();seen.push((await answerItem({arrows:false})).type);await page.locator('[data-continue-screen]').click();}
 await view('learn').waitFor();assert.ok(new Set(seen).size>=2,'總混合練習應交錯出現不同類型');assert.equal(await page.locator('table.mastery tr[data-mastery]').count(),9);await overflow('總混合練習 390px');await page.screenshot({path:out+'/04-final-390.png',fullPage:true});
 await page.reload();await view('learn').waitFor();assert.equal(await page.locator('[data-learning-path]').getAttribute('data-stage'),'final');ok('總混合練習交錯、九類精熟度、重新整理回到同一個畫面');await page.locator('[data-exit-learn]').click();await view('island').waitFor();

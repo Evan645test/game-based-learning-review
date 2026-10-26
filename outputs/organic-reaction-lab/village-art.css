@@ -99,3 +99,31 @@ body[data-art-motion=paused] .voyager{transition:none}
 @media(max-width:520px){.concept-building .node-dot{width:18px;height:18px;font-size:10px;top:0}.concept-building .node-label{font-size:11px;padding:3px 4px;max-width:125%}.hex-island .walker{width:32px;height:40px}}
 
 .hex-island .walker{transition:none}
+
+/* Clue lines: a clue card says what it helps decide; a reaction concept lists clues as see → lean → review. */
+.judge-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin:0 0 14px;padding:10px 12px;border:1px solid #cfdcc8;border-radius:12px;background:#f3f7ec;color:#38543f;font-weight:600;line-height:1.6}
+.judge-tag{flex:none;font-size:.78rem;font-weight:700;color:#fffdf2;background:#5b8a6c;border-radius:999px;padding:2px 9px}
+.cue-list{list-style:none;margin:12px 0 16px;padding:0;display:grid;gap:8px}
+.cue-list li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:9px 12px;border:1px solid #e3d5b6;border-radius:12px;background:#fffaf0;line-height:1.5}
+.cue-see{font-weight:650;color:#4a5a44}.cue-arrow{color:#b77a4e;font-weight:700}.cue-lean{color:#8a4b2c;font-weight:650;flex:1 1 140px}
+.cue-list .tree-chip{min-height:44px;font-size:.8rem}
+
+/* Judgment table: a real table on wide screens; on phones each substrate row becomes a stack of labelled cells. */
+.judge-table-wrap{overflow-x:auto;margin:8px 0 14px}
+.judge-table{width:100%;border-collapse:separate;border-spacing:6px;font-size:.85rem}
+.judge-table th{background:#f1f3e3;color:#3f5a46;border-radius:10px;padding:8px;text-align:center;font-weight:700;line-height:1.4}
+.judge-table th small{display:block;font-weight:500;color:#6a7560;font-size:.75rem}
+.judge-table td{vertical-align:top;background:#fffdf5;border:1px solid #e1dcc3;border-radius:10px;padding:6px;min-width:120px}
+.judge-table td.right{border-color:#7fae88;background:#f2f8ef}.judge-table td.wrong{border:2px solid #c0584a;background:#fff4f1}
+.judge-table select{width:100%;min-height:44px;margin:2px 0;font-size:.82rem;border-radius:8px;border:1px solid #cdd4bd;background:#fff}
+.judge-col-label{display:none}
+.judge-feedback{font-size:.78rem;line-height:1.5;color:#7a3a2e;margin-top:4px}.judge-feedback p{margin:4px 0}
+.judge-status{font-weight:650;color:#4b6a52;min-height:1.5em}
+@media(max-width:760px){
+ .judge-table,.judge-table tbody,.judge-table tr,.judge-table th,.judge-table td{display:block;width:auto}
+ .judge-table thead{display:none}.judge-table{border-spacing:0}
+ .judge-table tr{margin:0 0 14px;padding:8px;border:1px solid #dcd8bf;border-radius:14px;background:#fbf9ef}
+ .judge-table tbody th{text-align:left;margin-bottom:6px}
+ .judge-table td{margin:6px 0;min-width:0}
+ .judge-col-label{display:block;font-weight:700;color:#55705c;font-size:.8rem;margin-bottom:2px}
+}

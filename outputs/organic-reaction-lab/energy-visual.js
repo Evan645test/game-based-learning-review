@@ -21,3 +21,31 @@ function diagram(id){
 export function energyHTML(){
  return `<section class="energy-visual" data-energy-visual><div class="energy-grid">${diagram('one')}${diagram('two')}</div><ul class="energy-key"><li><span class="energy-dot ts"></span>過渡態：能量最高點，鍵正在斷也正在形成，無法分離。</li><li><span class="energy-dot int"></span>中間體：谷底，可以短暫存在。</li></ul></section>`;
 }
+
+/** Qualitative comparison only. Attempts end before products; shared ionization
+ * retains the same barrier, with the lower illustrated barrier only after branching. */
+export function comparisonEnergyHTML(comparison){
+ const {energy,winner,loser}=comparison;
+ const shared=[[24,138],[85,38],[139,104]];
+ const win=energy.shared?[...shared,[200,78],[276,155]]:
+  energy.winner==='two'?[[24,138],[92,66],[155,114],[210,94],[276,155]]:
+  [[24,138],[142,82],[276,155]];
+ const lose=energy.shared?[...shared,[211,56],[246,90]]:
+  [[24,138],[142,32],[182,49]];
+ const note=energy.shared?
+  '第一步能障相同；圖中只比較分岔後的定性能障，不以熵推算速率或產物比例。SN1 仍可競爭。':
+  '實線為有利路徑；虛線為高能障的嘗試，未延伸至產物，不代表實際反應軌跡。';
+ return `<figure class="comparison-energy" data-comparison-energy>
+  <figcaption>兩條路的定性能量比較</figcaption>
+  <svg viewBox="0 0 300 200" role="img" aria-label="${winner.type.toUpperCase()} 與 ${loser.type.toUpperCase()} 的定性能量圖，示意，非計算值">
+   <path class="comparison-axis" d="M12 12 V174 H290" fill="none"/>
+   <text x="18" y="22">能量</text><text x="286" y="194" text-anchor="end">反應進行 →</text>
+   <path data-energy-curve="winner" class="comparison-curve winner" d="${path(win)}" fill="none"/>
+   <path data-energy-curve="loser" class="comparison-curve loser" d="${path(lose)}" fill="none"/>
+   <text x="25" y="160">反應物</text><text x="274" y="171" text-anchor="end">產物</text>
+   ${energy.shared?'<circle cx="139" cy="104" r="4" class="comparison-intermediate"/><text x="139" y="128" text-anchor="middle">共用碳陽離子</text>':''}
+  </svg>
+  <div class="comparison-energy-key"><span class="winner">實線：${winner.type.toUpperCase()}，${energy.shared?'分岔後':''}能障較低</span><span class="loser">虛線：${loser.type.toUpperCase()} 嘗試</span></div>
+  <p><strong>示意，非計算值。</strong>${note}</p>
+ </figure>`;
+}

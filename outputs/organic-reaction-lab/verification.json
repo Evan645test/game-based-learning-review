@@ -395,5 +395,30 @@
       "orbital-browser",
       "alignment-browser（本次未改動三維與書面式）"
     ]
+  },
+  "dedupe_table_compare": {
+    "at": "2026-10-26T12:32:00+08:00",
+    "agent": "Claude Code（整合）＋Codex（比較動畫模組，分支 codex/compare-anim ef1fb43）",
+    "results": {
+      "node": "115/115",
+      "python": "見 unittest 輸出",
+      "path-browser": "ALL PASSED（含判斷表、比較動畫回看與返回）",
+      "art-browser": "ALL PASSED",
+      "interface-browser": "ALL PASSED",
+      "orbital-browser": "ALL PASSED",
+      "alignment-browser": "ALL PASSED",
+      "comparison-browser": "15 checks passed（worktree）",
+      "git_diff_check": "pass"
+    },
+    "fixes_on_acceptance": [
+      "comparison-view：進度 0.99996 顯示為 1.0000 時仍多排一格動畫，改為結尾吸附到 1",
+      "每組比較加鏡頭角度與縮放，手機標籤不再重疊"
+    ],
+    "not_verified": [
+      "實體手機",
+      "VoiceOver",
+      "學生試用",
+      "判斷表兩格待使用者核對（三級＋NaCN、Hofmann 教學補充）"
+    ]
   }
 }

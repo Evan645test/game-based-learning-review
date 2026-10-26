@@ -6,13 +6,15 @@ export const ISLANDS=[{id:'warmup',name:'暖身',full:'暖身：反應的語言'
 // The final island never runs out of items; it counts as walked after one round of the nine reaction types.
 export const FINAL_COUNT=9;
 
-const CARD=new Map([...WARMUP,...STAGES.flatMap(s=>s.primers||[])].map(c=>[c.id,c]));
+// Check cards: warm-up cards, stage entry primers, and product-detail cards shown inside a reaction concept.
+const detailsOf=st=>st.concepts.flatMap(c=>c.details||[]);
+const CARD=new Map([...WARMUP,...STAGES.flatMap(s=>[...(s.primers||[]),...detailsOf(s)])].map(c=>[c.id,c]));
 const stageOf=id=>STAGES.find(s=>s.id===id);
 
 /** Landmarks on an island, in walking order. */
 export function islandNodes(id){
  if(id==='warmup')return WARM_GROUPS.map(g=>({id:'g-'+g.id,kind:'cards',label:g.title.replace(/^\d．/,''),cards:WARMUP.filter(c=>c.group===g.id).map(c=>c.id)}));
- if(id==='final')return [{id:'final',kind:'final',label:'總混合練習'}];
+ if(id==='final')return [{id:'table',kind:'table',label:'完成判斷表'},{id:'final',kind:'final',label:'總混合練習'}];
  const st=stageOf(id);
  return [...(st.primers?.length?[{id:'primers',kind:'cards',label:'入口小暖身',cards:st.primers.map(p=>p.id)}]:[]),
   {id:'concepts',kind:'concepts',label:'概念'},{id:'contrast',kind:'contrast',label:'對比觀察'},{id:'branches',kind:'branches',label:'補流程圖'},{id:'arrows',kind:'arrows',label:'畫電子箭頭'},{id:'mixed',kind:'mixed',label:'混合練習'}];
@@ -24,8 +26,10 @@ export function nodeScreens(islandId,node){
  const cardScreens=c=>[{type:'read',card:c.id},...(c.widget||c.visual?[{type:'figure',card:c.id}]:[]),...(c.demos?[{type:'demo',card:c.id}]:[]),...(c.check?[{type:'check',card:c.id}]:[])];
  switch(node.kind){
   case 'cards':return node.cards.flatMap(id=>cardScreens(CARD.get(id)));
-  case 'concepts':return st.concepts.flatMap((c,i)=>[{type:'concept',index:i},...(c.widget?[{type:'concept-figure',index:i}]:[])]);
-  case 'contrast':return st.pairs.map((_,i)=>({type:'pair',index:i}));
+  case 'concepts':return st.concepts.flatMap((c,i)=>[{type:'concept',index:i},...(c.widget?[{type:'concept-figure',index:i}]:[]),...(c.details||[]).flatMap(d=>cardScreens(d).map(s=>({...s,concept:i})))]);
+  // Why-not comparisons open the contrast landmark, before the prediction pairs.
+  case 'contrast':return [...(st.compare||[]).map((id,i)=>({type:'compare',index:i,id})),...st.pairs.map((_,i)=>({type:'pair',index:i}))];
+  case 'table':return [{type:'table'}];
   case 'branches':return st.branches.map((_,i)=>({type:'branch',index:i}));
   case 'arrows':return st.arrowKinds.map((_,i)=>({type:'arrow',index:i}));
   case 'mixed':return Array.from({length:st.mixCount},(_,i)=>({type:'item',index:i}));
@@ -34,9 +38,15 @@ export function nodeScreens(islandId,node){
 }
 
 /** Where a check card lives: its island, landmark index and the index of its first screen. */
+/** Where a why-not comparison is shown: its island, the contrast landmark and the screen. */
+export function compareLocation(id){
+ const st=STAGES.find(s=>(s.compare||[]).includes(id));if(!st)return null;
+ const nodes=islandNodes(st.id),node=nodes.findIndex(n=>n.kind==='contrast');
+ return {island:st.id,node,screen:nodeScreens(st.id,nodes[node]).findIndex(s=>s.id===id)};
+}
 export function cardLocation(id){
  const c=CARD.get(id);if(!c)return null;
- const island=WARMUP.includes(c)?'warmup':STAGES.find(s=>(s.primers||[]).includes(c)).id,nodes=islandNodes(island),node=nodes.findIndex(n=>n.cards?.includes(id));
+ const island=WARMUP.includes(c)?'warmup':STAGES.find(s=>(s.primers||[]).includes(c)||detailsOf(s).includes(c)).id,nodes=islandNodes(island),node=nodes.findIndex(n=>n.cards?.includes(id)||n.kind==='concepts'&&detailsOf(stageOf(island)).includes(c));
  return {island,node,screen:nodeScreens(island,nodes[node]).findIndex(s=>s.card===id)};
 }
 
@@ -46,16 +56,18 @@ export function islandBuildings(id){
  return islandNodes(id).flatMap((node,ni)=>{
   const screens=nodeScreens(id,node),groups=[];
   screens.forEach((s,i)=>{
-   const key=s.card||(['concept','concept-figure'].includes(s.type)?'concept-'+s.index:node.id);
+   // Product-detail screens belong to their reaction concept's building.
+   const key=s.concept!==undefined?'concept-'+s.concept:s.card||(['concept','concept-figure'].includes(s.type)?'concept-'+s.index:node.id);
    let b=groups.at(-1);
    if(!b||b.key!==key){
     const title=s.card?CARD.get(s.card).title:s.type.startsWith('concept')?st.concepts[s.index].title:node.label;
-    b={id:node.cards||node.kind==='concepts'?`${node.id}/${key}`:node.id,key,node:ni,screen:i,end:i,kind:node.kind,card:s.card||null,label:title,short:SHORT_CARD[s.card]||title.split(/[：:]/)[0]};groups.push(b);
+    b={id:node.cards||node.kind==='concepts'?`${node.id}/${key}`:node.id,key,node:ni,screen:i,end:i,kind:node.kind,card:s.card||null,cards:[],label:title,short:SHORT_CARD[s.card]||title.split(/[：:]/)[0]};groups.push(b);
    }else b.end=i;
+   if(s.card&&!b.cards.includes(s.card))b.cards.push(s.card);
   });return groups;
  });
 }
-const SHORT_CARD={skeletal:'讀結構式',degree:'碳的級數',formal:'形式電荷',hybrid:'混成與形狀',polarity:'鍵極性',arrows:'彎箭頭',proton:'質子轉移',nucleophile:'親核與親電',acidbase:'酸鹼與 pKa',leaving:'脫離基',sterics:'立體障礙',carbocation:'碳陽離子',energy:'能量圖',solvent:'溶劑',basicity:'進攻碳或拔氫'};
+const SHORT_CARD={skeletal:'讀結構式',degree:'碳的級數',formal:'形式電荷',hybrid:'混成與形狀',polarity:'鍵極性',arrows:'彎箭頭',nucleophile:'親核與親電',acidbase:'酸鹼與質子轉移',leaving:'脫離基',sterics:'立體障礙',carbocation:'碳陽離子',energy:'能量圖',solvent:'溶劑',basicity:'進攻碳或拔氫'};
 export function currentBuilding(id,pos){const all=islandBuildings(id),i=all.findIndex(b=>b.node===pos.node&&pos.screen>=b.screen&&pos.screen<=b.end);return i>=0?i:all.findLastIndex(b=>b.node===pos.node);}
 
 // --- Art: hand-drawn-looking shapes built from seeded wobbly curves, so every island keeps its outline.
