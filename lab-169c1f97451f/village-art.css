@@ -1,0 +1,129 @@
+/* Village art is a presentation layer. Chemical diagrams and stored course data keep their own styles. */
+.academy{--village-paper:#fcf8ec;--village-ink:#384e44;--village-muted:#657062;--village-leaf:#477b68;--village-line:#d6d7bb;--village-shadow:0 6px 0 #d9cfb82b,0 16px 40px #56694e0b;font-family:"PingFang TC","Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;font-feature-settings:"palt";text-rendering:optimizeLegibility}
+.academy[data-explore]:not([data-explore=learn]){background:radial-gradient(ellipse at 15% 10%,#f7edcf88,transparent 55%),#f6f5e9;color:var(--village-ink)}
+.academy .course-header{background:#fffdf3ed;border-bottom:1px solid #d9ddcb}
+.academy .course-brand{color:#3d6656;letter-spacing:.02em}.academy .course-brand span{color:#687b6b}
+.academy button:not(.isle-btn):not(.node-btn){font-family:inherit;border-radius:12px;transition:background-color .18s,color .18s,box-shadow .18s,border-color .18s}
+.academy button:focus-visible{outline:3px solid #255e64;outline-offset:4px}
+.academy .explore button.primary{background:#477b68;border:1px solid #3d6e5b;color:#fffdf2;box-shadow:0 3px 0 #315d4d,inset 0 1px 0 #ffffff30;font-weight:650}
+.academy .explore button.primary:hover{background:#3a6b58}.academy .explore button.primary:active{box-shadow:inset 0 2px 4px #234d3f40}
+.academy .explore button:not(.isle-btn):not(.node-btn):not(.primary){background:#fffdf3;border-color:#cdd4bd;color:#405d4e}
+.academy .explore button:not(.isle-btn):not(.node-btn):not(.primary):hover{background:#eff2e2;border-color:#94af96}
+.academy .explore button:disabled{opacity:.58;cursor:default}
+.explore{position:relative;isolation:isolate;--village-accent:#b87656}
+.explore[data-view=world]{max-width:1160px}.explore[data-view=island]{max-width:620px}.explore[data-view=book]{max-width:800px}
+.explore-bar{gap:12px;padding:0 0 8px}.explore-bar h1{font-size:clamp(1.15rem,2vw,1.6rem);font-weight:750;color:var(--village-ink);letter-spacing:.03em}
+.explore-tools{gap:8px}.academy .explore-bar button{min-height:44px;font-size:.85rem;padding:8px 12px;white-space:nowrap}
+.explore-guide{align-items:center;gap:12px;margin:8px 0 18px}.explore-avatar{width:52px;flex-basis:52px;height:52px;overflow:visible;border:0;background:#e9e4c9;box-shadow:inset 0 0 0 3px #fffdf4,0 2px 6px #7a8b6520}
+.explore-avatar .chemist{position:relative;top:2px}.explore-bubble{position:relative;max-width:680px;border:1px solid #dddcc3;background:#fffdf4;border-radius:6px 20px 20px 20px;padding:11px 18px;font-size:.95rem;box-shadow:0 3px 0 #e4dfc84d;color:#4b5f4e}
+.explore-bubble strong{color:#4d7860}.explore[data-view=world]>.explore-guide{max-width:720px}
+.world-map,.island-view{border:6px solid #fffdf1;border-radius:28px;background:#95d0cb;box-shadow:0 0 0 1px #d3d8c0,0 8px 0 #d7dcc344,0 20px 45px #496b5912;isolation:isolate}
+.world-map{aspect-ratio:360/1080;max-width:520px;margin:0 auto}.world-map .world-art{position:absolute;inset:0;width:100%;height:100%;display:block}.world-map .wide-art{display:none}
+.world-map:after,.island-view:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;border-radius:21px;box-shadow:inset 0 0 45px #4e969620;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23ffffff' opacity='.09' filter='url(%23n)' d='M0 0h160v160H0z'/%3E%3C/svg%3E")}
+.island-waterline{fill:none;stroke:#eef8dd;stroke-width:1.5;opacity:.5;animation:shoreline 5s ease-in-out infinite}
+.village-scene.is-fog .village-tile{opacity:.48;filter:saturate(.5)}
+.island-fog{fill:#f3f6e5;opacity:.85;animation:fog-breathe 8s ease-in-out infinite;animation-delay:var(--delay,0s);transform-box:fill-box;transform-origin:center}
+.sea-ripple{animation:sea-shimmer 5.5s ease-in-out infinite;animation-delay:var(--delay,0s)}
+.sea-birds{animation:bird-drift 13s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.flutter{animation:leaf-sway 4s ease-in-out infinite;animation-delay:var(--delay,0s);transform-box:fill-box;transform-origin:10% 50%}
+.map-title{position:absolute;top:23px;left:23px;display:grid;gap:4px;pointer-events:none;color:#356761;z-index:1}
+.map-title>span{font-size:8px;font-weight:750;letter-spacing:.18em}.map-title>strong{font-size:20px;letter-spacing:.12em;font-weight:750}.map-title>small{font-size:10px;letter-spacing:.04em;color:#496d62}
+.academy .world-map .isle-btn{left:var(--isle-x);top:var(--isle-y);width:45%;height:12.5%;border-radius:30%;z-index:2;align-items:flex-end;overflow:visible}
+.academy .world-map .isle-btn:hover{background:#fffdf219}.academy .world-map .isle-btn:focus-visible{outline:3px solid #2b6660;outline-offset:2px;background:#fffdf21f}
+.world-map .isle-name{display:grid;gap:2px;white-space:normal;width:100%;max-width:160px;transform:translateY(35%);border:1px solid #e3d5b1;border-bottom:3px solid #d3bf97;border-radius:11px;padding:6px 5px;background:#fff9e9f7;box-shadow:0 3px 7px #335d5420;color:#465344;line-height:1.35;text-align:center;text-overflow:clip;overflow:visible}
+.village-title{font-size:13px;font-weight:750;letter-spacing:.08em;color:var(--village-accent)}.isle-course{display:block;font-size:12px;font-weight:550}
+.world-map .isle-btn.current .isle-name{background:#fffdf1;border-color:#5c9177;color:#334e40;box-shadow:0 0 0 3px #fefbe499,0 5px 10px #365d5126}
+.world-map .isle-btn.current .village-title{color:#3e7258}.you-are-here{position:absolute;top:9%;left:50%;transform:translate(-50%,-70%);border-radius:999px;background:#477b68;color:#fffdf0;font-size:10px;white-space:nowrap;padding:3px 9px;border:2px solid #f8f5df;box-shadow:0 2px 4px #315c4d22}
+.map-review-flag{position:absolute;right:4px;top:0;color:#a64132;background:#fff9e9;border-radius:8px;padding:3px 5px;font-size:11px;font-weight:700}
+.academy .world-map .isle-btn.lighthouse{width:30%;height:9%;z-index:3}.lighthouse .isle-name{font-size:11px;transform:translateY(55%)}
+.world-map .voyager{left:var(--boat-x);top:var(--boat-y);z-index:4;width:48px}.voyager .boat{width:100%;height:auto;animation:boat-rock 4s ease-in-out infinite;transform-origin:50% 80%}
+.boat-wake{animation:shoreline 4s ease-in-out infinite}.boat-sail{animation:leaf-sway 5s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 90%}
+.voyager{transition:left 1.1s cubic-bezier(.4,0,.2,1),top 1.1s cubic-bezier(.4,0,.2,1)}
+.explore-legend{justify-content:center;gap:10px 20px;margin:18px 0;color:#5a705c;font-size:.8rem}.explore-legend span{padding:5px 0}.legend-flag{color:#a64132}
+.island-view{max-width:560px;margin:0 auto;aspect-ratio:360/470}.village-sign{position:absolute;left:16px;top:16px;background:#fff9e9ed;color:var(--village-accent);font-size:13px;font-weight:750;letter-spacing:.1em;border:1px solid #e1d5b1;border-radius:9px;padding:5px 12px;z-index:2}
+.academy .island-view .node-btn{z-index:3;min-width:58px;gap:3px}.node-dot{width:42px;height:42px;border:3px solid #fff8e8;background:#e1e6c5;box-shadow:0 3px 0 #809566,0 5px 8px #46674b26;color:#526645}
+.node-btn[data-node-state=done] .node-dot{background:#64966c;box-shadow:0 3px 0 #3f7051,0 5px 8px #46674b26;color:#fffdf1}
+.node-btn[data-node-state=next] .node-dot{background:#cb865b;box-shadow:0 3px 0 #a36744,0 0 0 4px #fff7d16b;color:#fffdf1}
+.node-label{font-size:12px;padding:3px 7px;border:1px solid #e0d6b6;border-radius:7px;color:#4c5c46;box-shadow:0 2px 0 #d5cba54d}.node-flag{background:#fff8e8;border-radius:50%;padding:0 3px;color:#a64132}
+.walker{z-index:4}.chemist{overflow:visible;filter:drop-shadow(0 2px 1px #66553812)}.chemist-body{animation:chemist-breathe 5s ease-in-out infinite;transform-origin:50px 108px}
+.chemist-eyes{animation:chemist-blink 7s infinite;transform-box:fill-box;transform-origin:center}.chemist-head{animation:head-look 11s ease-in-out infinite;transform-origin:50px 60px}
+.explore-hero .chemist-arm.right{animation:chemist-wave 4.8s ease-in-out infinite;transform-origin:69px 65px}
+.pose-observe .chemist-head{animation:head-look 8s ease-in-out infinite}.is-walking .chemist-leg{animation:chemist-step .32s ease-in-out infinite alternate;transform-origin:50px 95px}.is-walking .chemist-leg.right{animation-delay:-.32s}.is-walking .chemist-body{animation:walking-hop .32s ease-in-out infinite alternate}
+.explore-sheet,.island-brief{border:1px solid #d8d8bb;background:var(--village-paper);border-radius:20px;padding:20px;box-shadow:var(--village-shadow);color:#4b5e49}.explore-sheet{border-top:4px solid #83a48b}.island-brief strong{color:#527a5c}.sheet-head>strong{font-size:1.1rem}.explore-actions{gap:10px}.explore-actions button{min-height:46px}
+.explore-name,.explore-complete{position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 0%,#e7f0d3,transparent 65%),var(--village-paper);border:1px solid #d7d9bd;border-radius:30px;padding:38px 24px;box-shadow:var(--village-shadow);color:var(--village-ink)}
+.explore-name:before,.explore-complete:before{content:"";position:absolute;inset:auto -30px -90px;height:200px;border-radius:50%;background:#e9edd45c;pointer-events:none;z-index:-1}.explore-hero{min-height:148px;position:relative}.explore-hero:before{content:"";position:absolute;width:150px;height:150px;border-radius:50%;background:#e6ebd2;box-shadow:0 0 0 12px #ebefd93b;z-index:-1}
+.explore-name h1,.explore-complete h1{font-size:clamp(1.25rem,3vw,1.7rem);letter-spacing:.025em;margin:18px 0 12px;color:#3e5e4e}.explore-name>p{font-size:.9rem;color:#65725c;line-height:1.8}.explore-name form{gap:10px;margin-top:24px}.explore-name label{font-weight:650;font-size:.9rem}.explore-name input{border-color:#c1ccb1;background:#fffef8;height:52px;box-shadow:inset 0 2px 3px #697d5010}
+.explore-name .explore-actions button{flex:1}.explore-book{background:var(--village-paper);border:1px solid #dcdbc2;border-radius:20px;padding:12px 22px 28px;box-shadow:inset 5px 0 0 #e7e1c5,var(--village-shadow)}
+.explore-book h2{color:#51775c;letter-spacing:.04em;margin-top:24px}.explore-book .competency{border-color:#d7d9c1;border-radius:14px;background:#fffef6}.explore-book .competency-head{font-size:.92rem}.explore-book .competency-meter{color:#4f6b53}.explore-book .flag-list li{background:#fff8e9;border:1px solid #e2d5b5;border-radius:12px}.flag-note{color:#6a735c}
+.art-motion-toggle{display:inline-flex;align-items:center;justify-content:center;gap:6px}.art-motion-toggle svg{flex:none}
+.village-ambient{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1;contain:strict}.village-ambient i{position:absolute;width:10px;height:6px;border-radius:100% 0 100% 0;background:#9bb580;opacity:0;animation:ambient-leaf 22s linear infinite}.village-ambient i:nth-child(1){left:8%;animation-delay:-3s}.village-ambient i:nth-child(2){left:91%;animation-delay:-11s}.village-ambient i:nth-child(3){left:74%;animation-delay:-19s}.village-ambient i:nth-child(4){left:24%;animation-delay:-7s;background:#d5ba86}.village-ambient i:nth-child(5){left:52%;animation-delay:-15s;background:#dfbe7f}
+.explore[data-view=learn] .village-ambient{opacity:.45}.explore[data-view=learn] .art-motion-toggle{min-width:44px;min-height:44px;padding:8px}.explore[data-view=learn] .art-motion-toggle span{display:none}
+[data-arrival=reveal] .world-map{animation:arrival-light .9s ease-out both}
+@media(min-width:900px){.world-map{max-width:none;aspect-ratio:1200/690}.world-map .tall-art{display:none}.world-map .wide-art{display:block}.academy .world-map .isle-btn{left:var(--wide-x);top:var(--wide-y);width:20%;height:25%}.world-map .isle-name{max-width:204px;padding:8px 10px;gap:3px}.village-title{font-size:15px}.isle-course{font-size:12px}.academy .world-map .isle-btn.lighthouse{width:15%;height:14%}.world-map .voyager{left:var(--boat-wide-x);top:var(--boat-wide-y);width:55px}.map-title{top:28px;left:32px}.map-title>span{font-size:10px}.map-title>strong{font-size:28px}.map-title>small{font-size:12px}.you-are-here{font-size:11px;padding:4px 12px}.lighthouse .isle-name{font-size:12px}}
+@media(max-width:520px){.explore-bar{gap:8px}.explore-bar h1{flex-basis:160px}.explore-tools{gap:6px}.academy .explore-bar button{padding:7px 10px;font-size:12px}.explore-bubble{font-size:13px;padding:10px 12px}.explore-guide{gap:8px}.world-map,.island-view{border-width:4px;border-radius:22px}.explore-sheet,.island-brief{padding:16px}.explore-book{padding:8px 14px 24px}.explore-book .competency-head{flex-wrap:wrap}.explore-book .competency-meter{flex:1 1 100%}.explore-name,.explore-complete{padding:30px 18px}.learn-top{gap:8px}.node-label{font-size:11.5px}.map-title{left:16px;top:17px}}
+@keyframes sea-shimmer{0%,100%{opacity:.25;translate:0 0}50%{opacity:.75;translate:3px 1px}}
+@keyframes shoreline{0%,100%{opacity:.2;scale:.97}50%{opacity:.6;scale:1.02}}
+@keyframes fog-breathe{0%,100%{opacity:.83;scale:1}50%{opacity:.72;scale:1.03}}
+@keyframes bird-drift{0%,100%{translate:0 0}50%{translate:16px -3px}}
+@keyframes leaf-sway{0%,100%{rotate:-2deg}50%{rotate:3deg}}
+@keyframes boat-rock{0%,100%{rotate:-3deg;translate:0 0}50%{rotate:3deg;translate:0 -2px}}
+@keyframes chemist-breathe{0%,100%{scale:1 1}50%{scale:1.015 1.02}}
+@keyframes chemist-blink{0%,43%,46%,100%{scale:1 1}44.5%{scale:1 .08}}
+@keyframes head-look{0%,40%,100%{rotate:0deg}55%,70%{rotate:4deg}85%{rotate:-2deg}}
+@keyframes chemist-wave{0%,20%,60%,100%{rotate:0deg}30%,45%{rotate:-110deg}37%,52%{rotate:-85deg}}
+@keyframes chemist-step{from{rotate:-13deg}to{rotate:13deg}}
+@keyframes walking-hop{from{translate:0 0}to{translate:0 -3px}}
+@keyframes ambient-leaf{0%{translate:0 -20px;rotate:0deg;opacity:0}10%{opacity:.32}90%{opacity:.32}100%{translate:55px 100vh;rotate:230deg;opacity:0}}
+@keyframes arrival-light{from{filter:brightness(1.12);opacity:.7}to{filter:none;opacity:1}}
+body[data-art-motion=paused] :is(.chemist-body,.chemist-eyes,.chemist-head,.chemist-arm,.chemist-leg,.boat,.boat-wake,.boat-sail,.sea-ripple,.sea-birds,.island-fog,.island-waterline,.flutter,.village-ambient i),body[data-art-motion=paused] [data-arrival=reveal] .world-map{animation:none!important}
+body[data-art-motion=paused] .voyager{transition:none}
+@media(prefers-reduced-motion:reduce){.academy .village-ambient{display:none}.academy :is(.chemist-body,.chemist-eyes,.chemist-head,.chemist-arm,.chemist-leg,.boat,.boat-wake,.boat-sail,.sea-ripple,.sea-birds,.island-fog,.island-waterline,.flutter,[data-arrival=reveal] .world-map){animation:none!important}.academy .voyager{transition:none}}
+
+/* Resizing the map repositions the boat immediately; only actual sailing animates its route. */
+.world-map .voyager{transition:none}.world-map .voyager.is-sailing{transition:left 1.1s cubic-bezier(.4,0,.2,1),top 1.1s cubic-bezier(.4,0,.2,1)}
+.village-tile{overflow:hidden}
+@media(max-width:899px){.map-title{left:auto;right:14px;top:17px;width:116px;text-align:right}.map-title>span{font-size:7px;letter-spacing:.1em}.map-title>strong{font-size:18px}.map-title>small{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.world-map .voyager.is-sailing{transition:none}}
+
+/* Concept settlements: every building shares a hex terrain tile with the road and walking anchor. */
+.explore[data-view=island]{max-width:760px}
+.hex-island{aspect-ratio:720/840;max-width:720px}
+.academy .hex-island .concept-building{width:21%;height:17%;min-width:48px;min-height:48px;transform:translate(-50%,-42%);padding:0;background:transparent;border:0;border-radius:18px;display:block}
+.academy .hex-island .concept-building:hover{background:#fff9da20}
+.concept-building .node-dot{position:absolute;right:2px;top:8px;width:22px;height:22px;border-width:2px;font-size:11px;box-shadow:0 2px 0 #83936b}
+.concept-building .node-label{position:absolute;left:50%;top:83%;transform:translateX(-50%);width:max-content;max-width:118%;white-space:normal;text-align:center;font-size:12px;line-height:1.35;font-weight:650;padding:3px 6px;border-radius:6px;background:#fffdf0f5;box-shadow:0 2px 3px #5f6b4530}
+.concept-building[data-node-state=next] .node-label{border-color:#b77a4e;box-shadow:0 0 0 2px #fff7ce8c,0 2px 4px #5f6b4530}
+.concept-building .node-flag{right:-4px;top:-4px;font-size:16px}
+.hex-island .walker{width:44px;height:55px;transform:translate(-50%,-93%);z-index:5}
+.hex-island .walker>.chemist{width:100%;height:100%;display:block}
+@media(max-width:520px){.concept-building .node-dot{width:18px;height:18px;font-size:10px;top:0}.concept-building .node-label{font-size:11px;padding:3px 4px;max-width:125%}.hex-island .walker{width:32px;height:40px}}
+
+.hex-island .walker{transition:none}
+
+/* Clue lines: a clue card says what it helps decide; a reaction concept lists clues as see → lean → review. */
+.judge-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin:0 0 14px;padding:10px 12px;border:1px solid #cfdcc8;border-radius:12px;background:#f3f7ec;color:#38543f;font-weight:600;line-height:1.6}
+.judge-tag{flex:none;font-size:.78rem;font-weight:700;color:#fffdf2;background:#5b8a6c;border-radius:999px;padding:2px 9px}
+.cue-list{list-style:none;margin:12px 0 16px;padding:0;display:grid;gap:8px}
+.cue-list li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;padding:9px 12px;border:1px solid #e3d5b6;border-radius:12px;background:#fffaf0;line-height:1.5}
+.cue-see{font-weight:650;color:#4a5a44}.cue-arrow{color:#b77a4e;font-weight:700}.cue-lean{color:#8a4b2c;font-weight:650;flex:1 1 140px}
+.cue-list .tree-chip{min-height:44px;font-size:.8rem}
+
+/* Judgment table: a real table on wide screens; on phones each substrate row becomes a stack of labelled cells. */
+.judge-table-wrap{overflow-x:auto;margin:8px 0 14px}
+.judge-table{width:100%;border-collapse:separate;border-spacing:6px;font-size:.85rem}
+.judge-table th{background:#f1f3e3;color:#3f5a46;border-radius:10px;padding:8px;text-align:center;font-weight:700;line-height:1.4}
+.judge-table th small{display:block;font-weight:500;color:#6a7560;font-size:.75rem}
+.judge-table td{vertical-align:top;background:#fffdf5;border:1px solid #e1dcc3;border-radius:10px;padding:6px;min-width:120px}
+.judge-table td.right{border-color:#7fae88;background:#f2f8ef}.judge-table td.wrong{border:2px solid #c0584a;background:#fff4f1}
+.judge-table select{width:100%;min-height:44px;margin:2px 0;font-size:.82rem;border-radius:8px;border:1px solid #cdd4bd;background:#fff}
+.judge-col-label{display:none}
+.judge-feedback{font-size:.78rem;line-height:1.5;color:#7a3a2e;margin-top:4px}.judge-feedback p{margin:4px 0}
+.judge-status{font-weight:650;color:#4b6a52;min-height:1.5em}
+@media(max-width:760px){
+ .judge-table,.judge-table tbody,.judge-table tr,.judge-table th,.judge-table td{display:block;width:auto}
+ .judge-table thead{display:none}.judge-table{border-spacing:0}
+ .judge-table tr{margin:0 0 14px;padding:8px;border:1px solid #dcd8bf;border-radius:14px;background:#fbf9ef}
+ .judge-table tbody th{text-align:left;margin-bottom:6px}
+ .judge-table td{margin:6px 0;min-width:0}
+ .judge-col-label{display:block;font-weight:700;color:#55705c;font-size:.8rem;margin-bottom:2px}
+}
