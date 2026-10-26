@@ -420,5 +420,37 @@
       "學生試用",
       "判斷表兩格待使用者核對（三級＋NaCN、Hofmann 教學補充）"
     ]
+  },
+  "v2_textbook_islands": {
+    "at": "2026-10-26T14:54:20+08:00",
+    "agents": {
+      "claude": "結構（13 島、診斷、重排題、流程圖、清除舊進度）與整合驗收（main）",
+      "codex": "cards-v2.js 內容與診斷題（codex/content-v2 2251d46）、archipelago-atlas.png（487284c）",
+      "cursor": "archipelago-art.js／archipelago.css（cursor/archipelago ac987f0）、測試改寫（main tests/）"
+    },
+    "results": {
+      "node": "113/113",
+      "python": "OK",
+      "path-browser": "ALL PASSED",
+      "interface-browser": "ALL PASSED",
+      "art-browser": "ALL PASSED",
+      "alignment-browser": "ALL PASSED",
+      "orbital-browser": "ALL PASSED（修正診斷畫面無限迴圈後）",
+      "comparison-browser": "15 checks",
+      "archipelago-browser": "ALL PASSED",
+      "git_diff_check": "pass"
+    },
+    "fixes_on_acceptance": [
+      "三個回看連結指向後面島嶼（basicity、heat）改指已學卡，並加單元測試把關",
+      "診斷答錯時選項仍顯示綠色，改為紅色",
+      "archipelago.css 以錯誤 MIME 提供，改 text/css",
+      "orbital-browser 在診斷畫面無限迴圈（測試問題）"
+    ],
+    "not_verified": [
+      "實體手機",
+      "VoiceOver",
+      "學生試用",
+      "Codex 標註待人工核對：heat 的熵解釋、大體積鹼與 Hofmann 的概括範圍"
+    ]
   }
 }

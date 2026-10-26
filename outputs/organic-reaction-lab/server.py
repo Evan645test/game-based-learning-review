@@ -22,14 +22,15 @@ STATIC["reaction-examples.js"] = "text/javascript"
 STATIC["comparisons.js"] = "text/javascript"
 STATIC["comparison-view.js"] = "text/javascript"
 STATIC["comparison.css"] = "text/css"
+STATIC["archipelago.css"] = "text/css"
 STATIC["concept-visuals.js"] = "text/javascript"
-STATIC.update({"village-art.css": "text/css", "hex-village-atlas.png": "image/png"})
+STATIC.update({"village-art.css": "text/css", "hex-village-atlas.png": "image/png", "archipelago-atlas.png": "image/png"})
 STATIC.update({"guided-lesson.js": "text/javascript", "terminology.js": "text/javascript"})
 STATIC.update({name: "text/javascript" for name in (
     "entry.js", "learning-course.js", "course-checks.js", "solvent-visual.js", "assessment.js", "assessment-store.js", "assessment-geometry.js")})
 STATIC.update({"reaction-3d.js": "text/javascript", "reaction-3d-view.js": "text/javascript"})
 STATIC.update({name: "text/javascript" for name in (
-    "reaction-types.js", "course-path.js", "learning-path.js", "graded-hints.js", "exam-items.js", "legacy-data.js", "cation-cloud.js", "leaving-visual.js", "paper-view.js", "energy-visual.js", "island-map.js", "layout3.js")})
+    "reaction-types.js", "course-path.js", "learning-path.js", "graded-hints.js", "exam-items.js", "legacy-data.js", "cation-cloud.js", "leaving-visual.js", "paper-view.js", "energy-visual.js", "island-map.js", "cards-v2.js", "archipelago-art.js")})
 SOURCE_ROOT = ROOT.parent / "Organic_Chemistry_Markdown"
 SOURCE_PAGES = {35, 37, 44, 56, 60, 61, 66, 67, 68, 69, 133, 204, 205, 207, 208, 210, 235, 73, 74, 75, 76, 77, 101, 108, 161, 194, 199, 200, 237, 238, 240, 241, 244, 245, 248, 249, 252, 262, 263, 264, 265, 267, 268,
                 361, 363, 365, 366, 367, 374, 375, 378, 380, 381, 382, 383, 384, 385, 387, 399, 604, 605}

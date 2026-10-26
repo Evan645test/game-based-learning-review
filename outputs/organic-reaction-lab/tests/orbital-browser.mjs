@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {WARMUP,COMPETENCIES} from '../course-path.js';
+import {CARDS_V2} from '../cards-v2.js';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const out='/private/tmp/organic-orbital-verification';
 await fs.mkdir(out,{recursive:true});
@@ -17,7 +18,13 @@ async function cardScreen(id,part=''){
  await page.locator('[data-book]').click();
  const comp=COMPETENCIES.find(c=>c.cards.includes(id)).id,h=page.locator(`[data-comp-toggle="${comp}"]`);if(await h.getAttribute('aria-expanded')!=='true')await h.click();
  await page.locator(`[data-map-card="${id}"]`).click();await page.locator(`[data-competency] [data-map-go="${id}"]`).click();await page.locator("[data-review-dismiss]").click();
- if(part)while(!(await page.locator('[data-path-panel] .course-part').first().innerText()).includes(part))await page.locator('[data-continue-screen]').click();
+ // A diagnosed card opens with its diagnosis: answer it wrong so the card's reading screens follow. Bounded so a missing screen fails fast.
+ for(let i=0;part&&i<15&&!(await page.locator('[data-path-panel] .course-part').first().innerText()).includes(part);i++){
+  const form=page.locator('[data-diag-form]');
+  if(await form.count()&&await form.locator('button[type=submit]').count()){const answer=CARDS_V2[id].diagnose[0].answer;await form.locator(`input[value]:not([value="${answer}"])`).first().check();await form.locator('button[type=submit]').click();await page.locator('[data-diag-feedback]').waitFor();}
+  await page.locator('[data-continue-screen]').click();
+ }
+ if(part)assert.match(await page.locator('[data-path-panel] .course-part').first().innerText(),new RegExp(part),`reached ${id} ${part}`);
 }
 try{
  await page.goto(process.env.ORGANIC_URL||'http://127.0.0.1:8768/academy.html');

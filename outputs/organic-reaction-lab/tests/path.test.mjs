@@ -1,3 +1,4 @@
+/*
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {TYPES,WARMUP,WARM_GROUPS,PATH_GOALS,STAGES,FLOW,ITEMS,unlockedTypes,stageIndex,pickItem,mastery,shuffled} from '../course-path.js';
@@ -246,4 +247,236 @@ test('答錯時的回看連結都指向存在的觀念卡，且每種反應類�
  // Reaction concepts list clues instead of repeating the primer text.
  for(const id of ['SN2','SN1','E2','E1'])assert.ok(STAGES.flatMap(s=>s.concepts).find(c=>c.title.startsWith(id)).cues.length>=3,id);
  assert.ok(WARMUP.slice(1).every(c=>c.review?.length),'第一張以外的暖身卡都有回看去處');
+});
+*/
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {
+  PREP,
+  STAGES,
+  TYPES,
+  FLOW,
+  ITEMS,
+  DIAGNOSED,
+  CARBOCATION_TYPES,
+  itemType,
+  itemsFor,
+  shiftUnlocked,
+  unlockedTypes,
+  pickItem,
+  mastery,
+  shuffled,
+  JUDGE_TABLE,
+} from '../course-path.js';
+import {ARCHIPELAGOS, ISLANDS, islandNodes, nodeScreens, compareLocation} from '../island-map.js';
+import {
+  PATH_KEY,
+  freshPath,
+  validPath,
+  checkStatus,
+  prepBadge,
+  archipelagoProgress,
+  tableResult,
+  tableSolved,
+} from '../learning-path.js';
+import {COMPARISONS} from '../comparisons.js';
+
+test('v4 路徑結構：13 座島、4 群島、9 種反應類型', () => {
+  assert.equal(PATH_KEY, 'organic-path-v4');
+  assert.deepEqual(ARCHIPELAGOS.map(a => a.id), ['prep', 'alkene', 'subelim', 'summit']);
+  assert.deepEqual(ISLANDS.map(i => i.id), [
+    'w1', 'w2', 'w3',
+    'addhx', 'rearr', 'halo', 'hydration',
+    'sn2', 'sn1', 'e2', 'e1',
+    'dehydration', 'final',
+  ]);
+  assert.deepEqual(STAGES.map(s => s.id), ['addhx', 'rearr', 'halo', 'hydration', 'sn2', 'sn1', 'e2', 'e1', 'dehydration']);
+  assert.deepEqual(
+    new Set(unlockedTypes('final')),
+    new Set(Object.keys(TYPES).filter(type => type !== 'rearrangement')),
+  );
+});
+
+test('診斷卡畫面順序：diagnose → read → figure/demo? → recheck', () => {
+  const prepIsland = PREP[0];
+  const screens = nodeScreens(prepIsland.id, islandNodes(prepIsland.id)[0]);
+  for (const card of prepIsland.cards) {
+    const seq = screens.filter(s => s.card === card.id).map(s => s.type);
+    assert.equal(seq[0], 'diagnose', `${card.id} 先做診斷`);
+    assert.equal(seq.at(-1), 'recheck', `${card.id} 讀完再確認`);
+    assert.ok(seq.includes('read'), `${card.id} 必須有閱讀畫面`);
+    if (card.widget || card.visual) assert.ok(seq.includes('figure'), `${card.id} 缺少圖解畫面`);
+    if (card.demos?.length) assert.ok(seq.includes('demo'), `${card.id} 缺少三維畫面`);
+  }
+});
+
+test('DIAGNOSED 集合包含所有 PREP 卡與三張命名引導卡', () => {
+  const prepIds = PREP.flatMap(island => island.cards.map(card => card.id));
+  for (const id of prepIds) assert.ok(DIAGNOSED.has(id), id);
+  for (const id of ['alkene-name', 'alcohol-name', 'halide-name']) assert.ok(DIAGNOSED.has(id), id);
+  const normalPrimer = STAGES.flatMap(stage => stage.primers || []).find(card => !DIAGNOSED.has(card.id));
+  assert.ok(normalPrimer, '需要至少一張非診斷入口卡');
+});
+
+test('checkStatus 與 prepBadge：right / wrong / null、ready / review', () => {
+  const state = freshPath();
+  assert.equal(validPath(state), true);
+  const island = PREP[0];
+  const first = island.cards[0].id;
+  assert.equal(checkStatus(state, first), null);
+  assert.equal(prepBadge(state, island.id), null);
+
+  state.diag[first] = {pre: {choice: 0, right: false}};
+  assert.equal(checkStatus(state, first), 'wrong');
+  assert.equal(prepBadge(state, island.id), 'review');
+
+  for (const card of island.cards) state.diag[card.id] = {pre: {choice: 0, right: true}};
+  assert.equal(prepBadge(state, island.id), 'ready');
+
+  state.diag[first].post = {choice: 1, right: false};
+  assert.equal(checkStatus(state, first), 'wrong');
+  assert.equal(prepBadge(state, island.id), 'review');
+});
+
+test('FLOW 路徑：每題路徑連通，終點對上 itemType（或 shift-yes 的 rearrangement）', () => {
+  const branchById = new Map(FLOW.flatMap(node => node.branches.map(branch => [branch.id, branch])));
+  for (const item of ITEMS) {
+    assert.ok(item.path.length >= 1, `${item.id} path too short`);
+    assert.ok(branchById.has(item.path[0]), `${item.id} first branch missing`);
+    for (let i = 1; i < item.path.length; i += 1) {
+      const prev = branchById.get(item.path[i - 1]);
+      const next = branchById.get(item.path[i]);
+      assert.ok(next, `${item.id} missing branch ${item.path[i]}`);
+      const nextNode = FLOW.find(node => node.branches.some(branch => branch.id === item.path[i]))?.id;
+      assert.equal(nextNode, prev.to, `${item.id} path disconnected at ${item.path[i]}`);
+    }
+
+    const last = branchById.get(item.path.at(-1));
+    const outcome = last.to === 'addhx|hydration'
+      ? (item.path.includes('el-hx') ? 'addhx' : 'hydration')
+      : last.to;
+    if (outcome === 'rearrangement') {
+      assert.equal(item.type, 'rearrangement', `${item.id} shift-yes 只能對應重排題`);
+    } else {
+      assert.equal(outcome, itemType(item), `${item.id} outcome mismatch`);
+    }
+  }
+});
+
+test('重排第 4 題池：shift 鎖定前不出現重排，解鎖後題池含 yes/no', () => {
+  assert.equal(shiftUnlocked('addhx'), false);
+  assert.equal(shiftUnlocked('rearr'), true);
+
+  const lockedPool = itemsFor(['addhx', 'hydration'], {shift: false});
+  assert.equal(lockedPool.some(item => item.type === 'rearrangement'), false);
+
+  const openPool = itemsFor(['addhx', 'hydration'], {shift: true});
+  assert.equal(openPool.some(item => item.type === 'rearrangement'), true);
+
+  const shiftAnswers = openPool
+    .filter(item => CARBOCATION_TYPES.includes(itemType(item)))
+    .map(item => (item.type === 'rearrangement' ? 'yes' : 'no'));
+  assert.ok(shiftAnswers.includes('yes'));
+  assert.ok(shiftAnswers.includes('no'));
+});
+
+test('pickItem 與 mastery：錯誤類型加權、避免重複、精熟度看最近五題', () => {
+  const types = ['sn2', 'sn1', 'e2'];
+  const history = [
+    {item: 'e2-a', type: 'e2', mech: false},
+    {item: 'e2-b', type: 'e2', mech: false},
+    {item: 'e2-c', type: 'e2', mech: false},
+    {item: 'sn2-a', type: 'sn2', mech: true},
+    {item: 'sn1-a', type: 'sn1', mech: true},
+  ];
+  let seed = 1;
+  const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+  const counts = {};
+  for (let i = 0; i < 600; i += 1) {
+    const picked = pickItem(types, history, rand);
+    counts[picked.type] = (counts[picked.type] || 0) + 1;
+  }
+  assert.ok(counts.e2 > counts.sn2 * 2, JSON.stringify(counts));
+
+  const notRepeat = pickItem(types, [...history, {item: 'e2-d', type: 'e2', mech: true}], () => 0);
+  assert.notEqual(notRepeat.id, 'e2-d');
+
+  const m = mastery(
+    ['sn2', 'e2', 'sn1'],
+    [...Array(4)].map((_, idx) => ({item: `x-${idx}`, type: 'sn2', mech: true})).concat([{item: 'y', type: 'e2', mech: false}]),
+  );
+  assert.equal(m.sn2.level, '精熟');
+  assert.equal(m.e2.level, '練習中');
+  assert.equal(m.sn1.level, '尚未練習');
+  assert.deepEqual(shuffled(['a', 'b', 'c'], 'seed').map(x => x.v), shuffled(['a', 'b', 'c'], 'seed').map(x => x.v));
+});
+
+test('archipelagoProgress：狀態、進度、旗標與 prep 徽章', () => {
+  const state = freshPath();
+  const first = archipelagoProgress(state);
+  assert.deepEqual(first.map(a => a.id), ['prep', 'alkene', 'subelim', 'summit']);
+  assert.equal(first[0].state, 'open');
+  assert.equal(first[0].current, true);
+  assert.deepEqual(first[0].progress, {done: 0, total: 3});
+  assert.equal(first[1].state, 'fog');
+
+  const prep = PREP.map(island => island.id);
+  for (const id of prep) {
+    for (const node of islandNodes(id)) state.explore.done[id][node.id] = true;
+  }
+  const afterPrep = archipelagoProgress(state);
+  assert.equal(afterPrep[0].state, 'done');
+  assert.equal(afterPrep[1].state, 'open');
+
+  const wrongCard = PREP[1].cards[0].id;
+  state.diag[wrongCard] = {pre: {choice: 0, right: false}};
+  const withFlag = archipelagoProgress(state);
+  assert.equal(withFlag[0].flag, true);
+  const islandW2 = withFlag[0].islands.find(island => island.id === 'w2');
+  assert.equal(islandW2.prep, 'review');
+});
+
+test('比較動畫 ID：位置在對應島，且兩條反應都已解鎖', () => {
+  assert.deepEqual(STAGES.find(stage => stage.id === 'sn1').compare, ['primary-sn2-vs-sn1', 'tertiary-sn1-vs-sn2']);
+  assert.deepEqual(STAGES.find(stage => stage.id === 'e2').compare, ['bulky-e2-vs-sn2']);
+  assert.deepEqual(STAGES.find(stage => stage.id === 'e1').compare, ['heat-e1-vs-sn1']);
+
+  for (const stage of STAGES) {
+    for (const id of stage.compare || []) {
+      const loc = compareLocation(id);
+      assert.equal(loc.island, stage.id);
+      const cmp = COMPARISONS.find(row => row.id === id);
+      assert.ok(cmp, id);
+      const unlocked = new Set(unlockedTypes(stage.id));
+      assert.ok(unlocked.has(cmp.winner.type), `${id} winner not unlocked`);
+      assert.ok(unlocked.has(cmp.loser.type), `${id} loser not unlocked`);
+    }
+  }
+});
+
+test('final 判斷表固定 16 格：全對才 solved，slow 仍屬有效類型', () => {
+  const keys = JUDGE_TABLE.rows.flatMap(row => JUDGE_TABLE.cols.map(col => `${row.id}|${col.id}`));
+  assert.equal(keys.length, 16);
+  assert.deepEqual(Object.keys(JUDGE_TABLE.cells).sort(), keys.sort());
+
+  const state = freshPath();
+  assert.equal(tableSolved(state), false);
+  assert.equal(tableResult(state.table).missing.length, 16);
+
+  for (const key of keys) state.table.cells[key] = {type: JUDGE_TABLE.cells[key].type[0]};
+  assert.equal(tableSolved(state), true);
+
+  state.table.cells['secondary|protic'] = {type: 'sn1'};
+  assert.deepEqual(tableResult(state.table).wrong, ['secondary|protic']);
+  assert.ok(JUDGE_TABLE.types.some(type => type.id === 'slow'));
+});
+
+test('回看連結只指向同一座島或更早的島，不會帶學生去還沒學的內容',async()=>{
+ const {STAGES,PREP}=await import('../course-path.js');const {ISLANDS,cardLocation}=await import('../island-map.js');
+ const idx=id=>ISLANDS.findIndex(i=>i.id===id),bad=[];
+ const check=(from,ids)=>ids.forEach(r=>{if(idx(cardLocation(r).island)>idx(from))bad.push(`${from}→${r}`);});
+ for(const p of PREP)for(const c of p.cards)check(p.id,c.review||[]);
+ for(const s of STAGES){for(const c of [...s.primers,...s.concepts.flatMap(k=>k.details)])check(s.id,c.review||[]);for(const k of s.concepts)for(const q of k.cues||[])check(s.id,q.review);}
+ assert.deepEqual(bad,[]);
 });
