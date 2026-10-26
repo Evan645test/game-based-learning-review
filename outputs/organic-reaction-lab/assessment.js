@@ -52,5 +52,5 @@ export function mountAssessment(root,{store,initialTab='post',onDone=()=>{},onAc
   $('[data-export-all]').onclick=exportAll;
  }
  const unload=e=>{if(exam){saveDraft();e.preventDefault();e.returnValue='';}};window.addEventListener('beforeunload',unload);show();
- return {destroy(){saveDraft();clear();window.removeEventListener('beforeunload',unload);},get active(){return Boolean(exam);}};
+ return {destroy({discard=false}={}){if(!discard)saveDraft();clear();window.removeEventListener('beforeunload',unload);},get active(){return Boolean(exam);}};
 }

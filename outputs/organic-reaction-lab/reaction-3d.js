@@ -156,7 +156,9 @@ export function reactionScene3D(kind,index,mode,progress,specOverride=null){
  return {atoms,bonds:bonds.filter(b=>b.opacity>0),anchors,bounds,progress:u,kind,step:index};
 }
 
-export function projectPoint(p,{yaw=-.3,pitch=.36,zoom=1}={}){
+export const REFERENCE_VIEW=Object.freeze({yaw:-.85,pitch:-.1,zoom:1});
+
+export function projectPoint(p,{yaw=REFERENCE_VIEW.yaw,pitch=REFERENCE_VIEW.pitch,zoom=1}={}){
  const x=p[0]*Math.cos(yaw)+p[2]*Math.sin(yaw),z=-p[0]*Math.sin(yaw)+p[2]*Math.cos(yaw),y=p[1]*Math.cos(pitch)-z*Math.sin(pitch),depth=p[1]*Math.sin(pitch)+z*Math.cos(pitch),scale=1/(1+depth/22);
  return {x:325+x*49*zoom*scale,y:205-y*49*zoom*scale,z:depth,scale};
 }

@@ -1,6 +1,6 @@
 import {mechanismSpec} from './electron-flow.js';
-import {reactionScene3D} from './reaction-3d.js';
-import {drawReaction3D} from './reaction-3d-view.js';
+import {reactionScene3D,REFERENCE_VIEW} from './reaction-3d.js';
+import {drawReaction3D,carbonOrbitals} from './reaction-3d-view.js';
 import {KIND_LABELS} from './reaction-types.js';
 import {drawPaper} from './paper-view.js';
 
@@ -98,31 +98,43 @@ export function spotlightFocus(kind,frame,specOverride=null){
 
 export function normalizePlaybackState(value,count,fallbackFrame=0){
  const n=(x,f,min,max)=>Number.isFinite(x)?Math.max(min,Math.min(max,x)):f;
- const base={version:1,frame:Math.max(0,Math.min(count-1,Math.floor(Number(fallbackFrame)||0))),progress:0,camera:{yaw:-.3,pitch:.36,zoom:1},speed:1,spot:true,hydrogens:false};
+ const base={version:1,referenceVersion:2,frame:Math.max(0,Math.min(count-1,Math.floor(Number(fallbackFrame)||0))),progress:0,camera:{...REFERENCE_VIEW},speed:1,spot:true,hydrogens:false,orbitals:false,viewMode:'auto',continuous:false};
  if(!value||value.version!==1||typeof value!=='object')return base;
- return {version:1,frame:Math.floor(n(value.frame,base.frame,0,count-1)),progress:n(value.progress,0,0,1),camera:{yaw:n(value.camera?.yaw,-.3,-10000,10000),pitch:n(value.camera?.pitch,.36,-1.35,1.35),zoom:n(value.camera?.zoom,1,.65,1.5)},speed:[.75,1,1.5].includes(value.speed)?value.speed:1,spot:typeof value.spot==='boolean'?value.spot:true,hydrogens:value.hydrogens===true};
+ const oldFixed=value.referenceVersion!==2&&Math.abs((value.camera?.yaw??Infinity)+.3)<1e-8&&Math.abs((value.camera?.pitch??Infinity)-.36)<1e-8;
+ return {version:1,referenceVersion:2,frame:Math.floor(n(value.frame,base.frame,0,count-1)),progress:n(value.progress,0,0,1),camera:{yaw:oldFixed?REFERENCE_VIEW.yaw:n(value.camera?.yaw,REFERENCE_VIEW.yaw,-10000,10000),pitch:oldFixed?REFERENCE_VIEW.pitch:n(value.camera?.pitch,REFERENCE_VIEW.pitch,-1.35,1.35),zoom:n(value.camera?.zoom,1,.65,1.5)},speed:[.75,1,1.5].includes(value.speed)?value.speed:1,spot:typeof value.spot==='boolean'?value.spot:true,hydrogens:value.hydrogens===true,orbitals:value.orbitals===true,viewMode:['auto','three','paper','compare'].includes(value.viewMode)?value.viewMode:'auto',continuous:value.continuous===true};
 }
 
 export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverride=null,initialState=null,segment=null,onStateChange=()=>{},onFrameChange=()=>{},onComplete=()=>{}}={}){
  const spec=specOverride||mechanismSpec(kind),frames=spotlightSegmentFrames(kind,spec,segment),id='spot-'+(++serial),abort=new AbortController(),saved=normalizePlaybackState(initialState,frames.length,frame);
- let showPaper=true,current=saved.frame,progress=saved.progress,playing=false,speed=saved.speed,spot=saved.spot,raf=0,last=0,destroyed=false,completed=false,lastSaved=0,drag=null,hydrogens=saved.hydrogens;
- const camera={...saved.camera},reduced=matchMedia('(prefers-reduced-motion: reduce)'),NS='http://www.w3.org/2000/svg';
+ let viewMode=saved.viewMode,continuous=saved.continuous,settling=0,current=saved.frame,progress=saved.progress,playing=false,speed=saved.speed,spot=saved.spot,raf=0,last=0,destroyed=false,completed=false,lastSaved=0,drag=null,hydrogens=saved.hydrogens,orbitals=saved.orbitals;
+ const camera={...saved.camera},reduced=matchMedia('(prefers-reduced-motion: reduce)'),small=matchMedia('(max-width: 760px)'),NS='http://www.w3.org/2000/svg';
  let viewport={width:650,height:410},viewHeight=410;
- const snapshot=()=>({version:1,frame:current,progress,camera:{...camera},speed,spot,hydrogens});
+ const snapshot=()=>({version:1,referenceVersion:2,frame:current,progress,camera:{...camera},speed,spot,hydrogens,orbitals,viewMode,continuous});
  const persist=()=>{lastSaved=performance.now();onStateChange(snapshot());};
  root.innerHTML=`<section class="spotlight-player with-paper" aria-label="聚光燈反應機構動畫">
-  <div class="spotlight-meta"><div><strong data-physical-step></strong><span data-frame-count></span></div><button type="button" data-expand aria-expanded="false">放大觀察</button></div>
+  <div class="spotlight-meta"><div><strong data-physical-step></strong><span data-frame-count></span></div><div class="comparison-actions"><button type="button" data-align-paper>對齊視角</button><button type="button" data-expand aria-expanded="false">放大觀察</button></div></div>
   <div class="spotlight-layout"><div class="spotlight-main">
-   <div class="stage-pair"><div class="molecule-stage"><svg viewBox="0 0 650 410" class="spotlight-canvas" role="img" tabindex="0" aria-roledescription="可旋轉三維分子模型" aria-label="三維球棍反應動畫；拖曳或方向鍵旋轉，加減鍵縮放，Home 重設視角" aria-describedby="${id}-focus ${id}-legend"></svg><svg class="annotation-lines" aria-hidden="true"></svg><div class="molecule-annotations" aria-hidden="true"></div><span class="molecule-stage-hint">拖曳旋轉 · 操作時暫停</span></div><figure class="paper-stage" data-paper-stage><figcaption>書面結構式（與左邊同步）</figcaption><svg class="paper-canvas" viewBox="0 0 650 340" role="img" aria-label="與三維動畫同步的書面結構式與彎箭頭" data-paper-id="${id}"></svg></figure></div>
-   <div class="spotlight-transport"><div class="spotlight-controls"><button type="button" data-demo-prev>上一段</button><button type="button" class="primary" data-play>播放動畫</button><button type="button" data-demo-next>下一段</button></div><label class="spotlight-seek">本段進度<input type="range" min="0" max="100" step="1" value="0" data-seek><output data-progress-value>0%</output></label><div class="player-feedback"><p class="player-status" role="status" data-player-status></p><button type="button" class="quiet" data-replay>從頭重播</button></div></div>
+   <div class="display-toolbar"><div class="view-tabs" role="group" aria-label="觀察畫面"><button type="button" data-display="three">三維</button><button type="button" data-display="paper">書面式</button><button type="button" data-display="compare"><span class="compare-desktop">並排對照</span><span class="compare-mobile">上下對照</span></button></div><div class="orbital-toolbar" role="group" aria-label="分子顯示方式"><button type="button" data-representation="ball" aria-pressed="true">球棍模型</button><button type="button" data-representation="orbital" aria-pressed="false">混成軌域</button></div></div><p class="orbital-explanation" data-orbital-note hidden></p>
+   <div class="stage-pair"><div class="molecule-stage"><svg viewBox="0 0 650 410" class="spotlight-canvas" role="img" tabindex="0" aria-roledescription="可旋轉三維分子模型" aria-label="三維球棍反應動畫；拖曳或方向鍵旋轉，加減鍵縮放，Home 重設視角" aria-describedby="${id}-focus ${id}-legend"></svg><svg class="annotation-lines" aria-hidden="true"></svg><div class="molecule-annotations" aria-hidden="true"></div><span class="molecule-stage-hint">拖曳旋轉 · 操作時暫停</span></div><figure class="paper-stage" data-paper-stage><figcaption>書面結構式（與反應進度同步）</figcaption><svg class="paper-canvas" viewBox="0 0 650 340" role="img" aria-label="與三維動畫同步的書面結構式與彎箭頭" data-paper-id="${id}"></svg><p class="paper-step-description" data-paper-description></p><p class="paper-stereo-legend">實心楔形：朝向你 · 虛線楔形：背向你 · 細線：紙面內<br>固定視角時兩圖同向；拖曳只旋轉三維，可按「對齊視角」返回。</p></figure></div>
+   <div class="spotlight-transport"><div class="spotlight-controls"><button type="button" data-demo-prev>上一段</button><button type="button" class="primary" data-play>播放動畫</button><button type="button" data-demo-next>下一段</button></div><label class="spotlight-seek">本段進度<input type="range" min="0" max="100" step="1" value="0" data-seek><output data-progress-value>0%</output></label><label class="continuous-control"><input type="checkbox" data-continuous>連續播放（不在每步結構完成時暫停）</label><div class="player-feedback"><p class="player-status" role="status" data-player-status></p><button type="button" class="quiet" data-replay>從頭重播</button></div></div>
   </div><aside class="spotlight-side" aria-label="本段解說與觀察設定">
    <p class="spotlight-kicker">現在只看這件事</p><p class="spotlight-focus" id="${id}-focus" data-current-focus aria-live="polite"></p><details class="spotlight-explanation"><summary>為什麼這樣移動？</summary><p class="spotlight-caption" id="${id}-caption" data-demo-caption></p></details><p class="spotlight-charge" data-charge-note></p>
    <div class="mechanism-legend" id="${id}-legend" aria-label="電子與鍵結圖例"><span><i class="legend-pair" aria-hidden="true"></i>金色光點：電子對</span><span><i class="legend-breaking" aria-hidden="true"></i>橙色虛線：鍵斷裂</span><span><i class="legend-forming" aria-hidden="true"></i>綠色：新鍵／π 鍵</span></div>
-   <details class="view-settings" data-view-settings><summary>視角與播放設定</summary><div class="molecule-camera" aria-label="三維視角操作"><button type="button" data-view-orbit="left" aria-label="向左旋轉">左轉</button><button type="button" data-view-orbit="right" aria-label="向右旋轉">右轉</button><button type="button" data-view-orbit="up" aria-label="向上旋轉">上轉</button><button type="button" data-view-orbit="down" aria-label="向下旋轉">下轉</button><button type="button" data-view-side>反應平面</button><button type="button" data-view-reset>重設視角</button><label class="camera-zoom">縮放<input type="range" min="65" max="150" value="100" data-view-zoom></label><label class="camera-hydrogens"><input type="checkbox" data-show-hydrogens>顯示所有氫</label><label class="camera-hydrogens"><input type="checkbox" data-show-paper checked>書面結構式對照</label></div><div class="spotlight-secondary"><label>速度<select data-speed><option value="0.75">0.75 倍</option><option value="1" selected>1 倍</option><option value="1.5">1.5 倍</option></select></label><button type="button" data-spot aria-pressed="true">聚光燈：開</button></div>
+   <details class="view-settings" data-view-settings><summary>視角與播放設定</summary><div class="molecule-camera" aria-label="三維視角操作"><button type="button" data-view-orbit="left" aria-label="向左旋轉">左轉</button><button type="button" data-view-orbit="right" aria-label="向右旋轉">右轉</button><button type="button" data-view-orbit="up" aria-label="向上旋轉">上轉</button><button type="button" data-view-orbit="down" aria-label="向下旋轉">下轉</button><button type="button" data-view-side>反應平面</button><button type="button" data-view-reset>對齊書面式</button><label class="camera-zoom">縮放<input type="range" min="65" max="150" value="100" data-view-zoom></label><label class="camera-hydrogens"><input type="checkbox" data-show-hydrogens>顯示所有氫</label></div><div class="spotlight-secondary"><label>速度<select data-speed><option value="0.75">0.75 倍</option><option value="1" selected>1 倍</option><option value="1.5">1.5 倍</option></select></label><button type="button" data-spot aria-pressed="true">聚光燈：開</button></div>
    <div class="molecule-legend" aria-label="原子色彩"><span><i class="atom-c" aria-hidden="true"></i>C 碳</span><span><i class="atom-h" aria-hidden="true"></i>H 氫</span><span><i class="atom-o" aria-hidden="true"></i>O 氧</span><span><i class="atom-n" aria-hidden="true"></i>N 氮</span><span><i class="atom-halogen" aria-hidden="true"></i>Br／Cl／I 鹵素</span></div></details>
   </aside></div><details class="spotlight-model-note"><summary>模型與電子符號說明</summary><p class="spotlight-note">${chloride?'類比示範使用氯代物；推理題使用溴代物。離去能力不同，不由動畫推算速率。':'碳骨架、試劑及轉移的氫以球棍呈現；可展開設定顯示所有氫。'} 三維幾何與電子曲線用於機構解說，並非分子動力學計算；光點表示電子對，不是電子的實測路徑。<span data-motion-note></span></p></details>
  </section><dialog class="spotlight-dialog" aria-label="放大觀察反應機構"></dialog>`;
  const q=s=>root.querySelector(s),paper=root.querySelector('.paper-canvas'),svg=q('.spotlight-canvas'),player=q('.spotlight-player'),dialog=q('dialog'),annotationLayer=q('.molecule-annotations'),lines=q('.annotation-lines');
+ function display(){
+  const mode=viewMode==='auto'?(small.matches?'three':'compare'):viewMode;
+  player.dataset.viewMode=mode;q('.molecule-stage').hidden=mode==='paper';q('[data-paper-stage]').hidden=mode==='three';
+  player.classList.toggle('with-paper',mode==='compare');
+  root.querySelectorAll('[data-display]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.display===mode)));
+  draw();
+ }
+ root.querySelectorAll('[data-display]').forEach(b=>b.onclick=()=>{viewMode=b.dataset.display;display();persist();});
+ small.addEventListener('change',display,{signal:abort.signal});
+ q('[data-continuous]').checked=continuous;q('[data-continuous]').onchange=e=>{continuous=e.target.checked;persist();};
  const displayLabel=s=>chloride||spec.example?.leaving==='Cl'?s.replaceAll('Br','Cl'):s;
  function labelLayer(labels){
   const {width:w,height:h}=viewport,scale=Math.min(w/650,h/viewHeight),ox=(w-650*scale)/2,oy=(h-viewHeight*scale)/2;
@@ -142,35 +154,41 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
   existing.forEach(n=>n.remove());
  }
  function progressUI(){const value=Math.round(progress*100);q('[data-seek]').value=value;q('[data-progress-value]').value=value+'%';q('[data-progress-value]').textContent=value+'%';q('[data-seek]').setAttribute('aria-valuetext',`解說第 ${current+1} 段，共 ${frames.length} 段；本段 ${value}%`);}
+ const orbitalEndpoints=new Map();
  function draw(){
   const f=frames[current],scene=reactionScene3D(kind,f.step,f.mode,progress,spec);
+  let models=[];
+  if(orbitals){if(!orbitalEndpoints.has(f.step))orbitalEndpoints.set(f.step,[carbonOrbitals(reactionScene3D(kind,f.step,'overview',0,spec)),carbonOrbitals(reactionScene3D(kind,f.step,'product',1,spec))]);const [a,b]=orbitalEndpoints.get(f.step),u=scene.progress;models=[...a.map(m=>({...m,weight:1-u})),...b.map(m=>({...m,weight:u}))].filter(m=>m.weight>.001);const names=ms=>ms.map(m=>`${m.label} ${m.hybrid}${m.empty?'（空 p）':''}`).join('、');q('[data-orbital-note]').textContent=(u>0&&u<1?`構形轉換中：${names(a)} → ${names(b)}。兩端軌域交淡呈現，過渡態不指定單一混成。`:names(u===1?b:a))+ '｜綠色大瓣／淡紫小瓣：混成軌域；藍／橙兩瓣：同一個 p 軌域的相反相位，顏色不表示電荷。僅顯示反應中心碳，軌域大小非計算值。';}
+  q('[data-orbital-note]').hidden=!orbitals;for(const button of root.querySelectorAll('button[data-representation]'))button.setAttribute('aria-pressed',String((button.dataset.representation==='orbital')===orbitals));
+  svg.setAttribute('aria-label',`${orbitals?'混成軌域與球棍':'三維球棍'}反應動畫；拖曳或方向鍵旋轉，加減鍵縮放，Home 重設視角`);
   viewHeight=dialog.open?Math.max(410,650*viewport.height/viewport.width):410;svg.setAttribute('viewBox',`0 0 650 ${viewHeight}`);
   // Zoom in on electron movement; while playing, ease between frames over the first fifth of each frame.
   const flow=fr=>['focus','together','transform'].includes(fr?.mode)?1:0,target=flow(f),before=current>0?flow(frames[current-1]):0,blend=playing&&!reduced.matches&&before!==target?Math.min(1,progress/.2):1,e=blend*blend*(3-2*blend);
-  labelLayer(drawReaction3D(svg,scene,{id,frame:f,required:spec.steps[f.step].required,progress,spot,camera,hydrogens,chloride,viewHeight,focus:before+(target-before)*e}));
-  if(showPaper)drawPaper(paper,spec,{frame:f,progress});
+  labelLayer(drawReaction3D(svg,scene,{id,frame:f,required:spec.steps[f.step].required,progress,spot,camera,hydrogens,chloride,viewHeight,orbitals,orbitalModels:models,focus:orbitals?0:before+(target-before)*e}));
+  drawPaper(paper,spec,{frame:f,progress,scene});
  }
  function status(text){q('[data-player-status]').textContent=text;}
  function show(){
-  const f=frames[current];q('[data-physical-step]').textContent=`${KIND_LABELS[kind]||kind.toUpperCase()}｜實際機構第 ${f.step+1}／${spec.steps.length} 步`;
+  const f=frames[current];player.dataset.frameMode=f.mode;q('[data-paper-description]').textContent=displayLabel(f.mode==='product'?'本步產物：'+spec.steps[f.step].product:`第 ${f.step+1} 步：${spec.steps[f.step].title}`);q('[data-physical-step]').textContent=`${KIND_LABELS[kind]||kind.toUpperCase()}｜實際機構第 ${f.step+1}／${spec.steps.length} 步`;
   q('[data-frame-count]').textContent=`解說 ${current+1}／${frames.length}`;q('[data-demo-caption]').textContent=displayLabel(f.text);q('[data-current-focus]').textContent=displayLabel(spotlightFocus(kind,f,spec));
-  q('[data-demo-prev]').disabled=current===0;q('[data-demo-next]').disabled=current===frames.length-1;q('[data-play]').textContent=playing?'暫停':'播放動畫';q('[data-play]').setAttribute('aria-pressed',String(playing));progressUI();
+  q('[data-demo-prev]').disabled=current===0;q('[data-demo-next]').disabled=current===frames.length-1;q('[data-play]').textContent=playing?'暫停':frames[current].mode==='product'?(current<frames.length-1?'繼續下一步':'重新播放'):'播放動畫';q('[data-play]').setAttribute('aria-pressed',String(playing));progressUI();
   q('[data-charge-note]').textContent=f.step>0&&['sn1','e1'].includes(kind)?displayLabel('前一步離去的 Br⁻ 仍在溶液中，此步不重畫；總電荷須連同該離子一起計算。'):'';
   draw();onFrameChange(current);persist();
   if(current===frames.length-1&&!completed){completed=true;onComplete();}
  }
- function stop(reason=''){playing=false;cancelAnimationFrame(raf);last=0;q('[data-play]').textContent='播放動畫';q('[data-play]').setAttribute('aria-pressed','false');if(reason)status(reason);persist();}
+ function stop(reason=''){playing=false;cancelAnimationFrame(raf);cancelAnimationFrame(settling);settling=0;last=0;q('[data-play]').textContent=frames[current].mode==='product'?(current<frames.length-1?'繼續下一步':'重新播放'):'播放動畫';q('[data-play]').setAttribute('aria-pressed','false');if(reason)status(reason);persist();}
  function interact(){if(settling){cancelAnimationFrame(settling);settling=0;status('已停止切換視角，可自由旋轉。');}if(playing)stop('操作視角時已暫停，按播放動畫繼續；播放時會先回到建議視角。');}
  function move(n){stop();current=Math.max(0,Math.min(frames.length-1,n));progress=0;status('逐段觀察中，可播放本段。');show();}
  function tick(now){
   if(!playing||destroyed)return;
   const dt=last?Math.min(now-last,100):0;last=now;progress+=dt*speed/(frames[current].mode==='product'?2400:4000);
-  if(progress>=1){if(current===frames.length-1){progress=1;stop('已看完本例，可重播或換一個例子。');show();return;}current++;progress=0;show();}
+  if(progress>=1){if(current===frames.length-1){progress=1;stop('已看完本例，可重播或換一個例子。');show();return;}current++;progress=0;if(frames[current].mode==='product'&&!continuous){stop(current===frames.length-1?'本步產物已形成。可旋轉查看，或從頭重播。':'本步結構已形成，先觀察鍵結與電荷，再按「繼續下一步」。');show();return;}show();}
   else{progressUI();draw();if(now-lastSaved>1000)persist();}raf=requestAnimationFrame(tick);
  }
+ for(const button of root.querySelectorAll('button[data-representation]'))button.onclick=()=>{interact();orbitals=button.dataset.representation==='orbital';draw();persist();};
  q('[data-demo-prev]').onclick=()=>move(current-1);q('[data-demo-next]').onclick=()=>move(current+1);q('[data-replay]').onclick=()=>move(0);
  // Playback always starts from the recommended viewpoint so every learner sees the same motion.
- const VIEW={yaw:-.3,pitch:.36,zoom:1};let settling=0;
+ const VIEW=REFERENCE_VIEW;
  const atView=()=>Math.abs(camera.yaw-VIEW.yaw)<1e-3&&Math.abs(camera.pitch-VIEW.pitch)<1e-3&&Math.abs(camera.zoom-VIEW.zoom)<1e-3;
  function settleCamera(done){
   // Shortest turn back to the preset yaw, then start.
@@ -181,13 +199,14 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
   const t0=performance.now(),step=now=>{if(destroyed)return;const t=Math.min(1,(now-t0)/450),e=t*t*(3-2*t);camera.yaw=from.yaw+(VIEW.yaw-from.yaw)*e;camera.pitch=from.pitch+(VIEW.pitch-from.pitch)*e;camera.zoom=from.zoom+(VIEW.zoom-from.zoom)*e;draw();if(t<1)settling=requestAnimationFrame(step);else finish();};
   settling=requestAnimationFrame(step);
  }
- q('[data-play]').onclick=()=>{if(settling)return;if(playing){stop('已暫停，可旋轉模型查看。');return;}if(reduced.matches){settleCamera(()=>{});q('[data-motion-note]').textContent=' 已啟用減少動態：以逐段切換閱讀。';if(segment&&current===frames.length-1){progress=1;show();}else move(current===frames.length-1?0:current+1);status('減少動態模式：已切到下一段。');return;}settleCamera(()=>{if(current===frames.length-1&&progress>=1){current=0;progress=0;}playing=true;last=0;status('播放中（建議視角）；旋轉或調整視角會暫停。');show();raf=requestAnimationFrame(tick);});};
+ q('[data-play]').onclick=()=>{if(settling)return;if(playing){stop('已暫停，可旋轉模型查看。');return;}if(reduced.matches){settleCamera(()=>{});q('[data-motion-note]').textContent=' 已啟用減少動態：以逐段切換閱讀。';if(segment&&current===frames.length-1){progress=1;show();}else move(current===frames.length-1?0:current+1);status('減少動態模式：已切到下一段。');return;}settleCamera(()=>{if(current===frames.length-1&&(progress>=1||frames[current].mode==='product')){current=0;progress=0;}else if(frames[current].mode==='product'&&!continuous){current++;progress=0;}playing=true;last=0;status('播放中（建議視角）；旋轉或調整視角會暫停。');show();raf=requestAnimationFrame(tick);});};
  q('[data-speed]').onchange=e=>{speed=Number(e.target.value);persist();};q('[data-spot]').onclick=e=>{spot=!spot;e.target.textContent=`聚光燈：${spot?'開':'關'}`;e.target.setAttribute('aria-pressed',String(spot));draw();persist();};q('[data-seek]').oninput=e=>{stop('已停在指定位置，可旋轉查看。');progress=Number(e.target.value)/100;progressUI();draw();persist();};
  const orbit=(dx,dy=0,save=true)=>{interact();camera.yaw+=dx;camera.pitch=Math.max(-1.35,Math.min(1.35,camera.pitch+dy));draw();if(save)persist();};
  const rotations={left:[-.3,0],right:[.3,0],up:[0,-.2],down:[0,.2]};for(const button of root.querySelectorAll('[data-view-orbit]'))button.onclick=()=>orbit(...rotations[button.dataset.viewOrbit]);
- q('[data-view-reset]').onclick=()=>{interact();Object.assign(camera,{yaw:-.3,pitch:.36,zoom:1});q('[data-view-zoom]').value=100;draw();persist();};
+ q('[data-view-reset]').onclick=()=>{interact();Object.assign(camera,REFERENCE_VIEW);q('[data-view-zoom]').value=100;draw();persist();};
+ q('[data-align-paper]').onclick=()=>{q('[data-view-reset]').click();status('已回到與書面式同向的固定視角。');};
  q('[data-view-side]').onclick=()=>{interact();Object.assign(camera,{yaw:0,pitch:kind==='chair'?1.05:0});draw();persist();};
- q('[data-view-zoom]').oninput=e=>{interact();camera.zoom=Number(e.target.value)/100;draw();persist();};q('[data-show-paper]').onchange=e=>{showPaper=e.target.checked;q('[data-paper-stage]').hidden=!showPaper;player.classList.toggle('with-paper',showPaper);draw();};q('[data-show-hydrogens]').onchange=e=>{interact();hydrogens=e.target.checked;draw();persist();};
+ q('[data-view-zoom]').oninput=e=>{interact();camera.zoom=Number(e.target.value)/100;draw();persist();};q('[data-show-hydrogens]').onchange=e=>{interact();hydrogens=e.target.checked;draw();persist();};
  svg.addEventListener('pointerdown',e=>{if(e.button!==0)return;interact();drag={id:e.pointerId,x:e.clientX,y:e.clientY};svg.setPointerCapture(e.pointerId);svg.focus({preventScroll:true});},{signal:abort.signal});
  svg.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;orbit(dx*.009,dy*.009,false);},{signal:abort.signal});
  const release=()=>{if(drag){drag=null;persist();}};for(const event of ['pointerup','pointercancel','lostpointercapture'])svg.addEventListener(event,release,{signal:abort.signal});
@@ -196,10 +215,11 @@ export function mountSpotlight(root,{kind='sn2',frame=0,chloride=false,specOverr
  q('[data-expand]').onclick=()=>{interact();if(dialog.open){dialog.close();restore(true);}else{dialog.append(player);dialog.showModal();q('[data-expand]').textContent='回到課程';q('[data-expand]').setAttribute('aria-expanded','true');}};
  dialog.addEventListener('close',()=>restore(true),{signal:abort.signal});
  const observer=new ResizeObserver(entries=>{const r=entries[0].contentRect;if(r.width>0&&r.height>0){viewport={width:r.width,height:r.height};if(!destroyed)draw();}});observer.observe(svg);
+ let lastPaperWidth=0;const paperObserver=new ResizeObserver(entries=>{const width=entries[0].contentRect.width;if(width>0&&Math.abs(width-lastPaperWidth)>.5){lastPaperWidth=width;if(!destroyed)draw();}});paperObserver.observe(paper);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop('頁面離開前已暫停。');},{signal:abort.signal});window.addEventListener('pagehide',persist,{signal:abort.signal});reduced.addEventListener('change',()=>{if(reduced.matches)stop('減少動態模式：請逐段觀察。');},{signal:abort.signal});
  if(matchMedia('(pointer: coarse)').matches)q('.molecule-stage-hint').textContent='左右拖曳旋轉 · 上下滑動捲頁';
  q('[data-speed]').value=String(speed);q('[data-show-hydrogens]').checked=hydrogens;q('[data-view-zoom]').value=camera.zoom*100;q('[data-spot]').textContent=`聚光燈：${spot?'開':'關'}`;q('[data-spot]').setAttribute('aria-pressed',String(spot));
  const initialBox=svg.getBoundingClientRect();if(initialBox.width>0&&initialBox.height>0)viewport={width:initialBox.width,height:initialBox.height};
- status(initialState?'已回到上次觀看位置，按播放動畫繼續。':'先逐段觀察，或播放完整示範。');show();
- return {destroy(){destroyed=true;stop();observer.disconnect();if(dialog.open){dialog.close();restore(false);}abort.abort();}};
+ status(initialState?'已回到上次觀看位置，按播放動畫繼續。':'每一步結構完成會自動暫停；可在下方切換連續播放。');show();display();
+ return {destroy(){destroyed=true;stop();observer.disconnect();paperObserver.disconnect();if(dialog.open){dialog.close();restore(false);}abort.abort();}};
 }

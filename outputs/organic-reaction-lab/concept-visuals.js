@@ -1,4 +1,39 @@
 // Teaching adaptations of the textbook sections linked beside each topic.
+export function degreeHTML(){
+ return `<section class="degree-diagram" aria-label="2-溴丁烷的碳級數與 α、β 位置圖解">
+ <h3>先找 Br，再往兩側找 β 碳</h3>
+ <figure><div class="degree-scroll" tabindex="0" role="region" aria-label="結構圖，窄螢幕可左右滑動"><svg viewBox="0 0 600 285" role="img" aria-label="2-溴丁烷：第二個碳連 Br，是 α 碳；相鄰第一、第三個碳都是 β 碳，第四個碳不是 β 碳。α 碳直接連兩個碳，所以是二級。">
+ <g stroke="#586b63" stroke-width="3"><path d="M116 154H202 M246 154H332 M376 154H468 M224 132V82" fill="none"/><path d="M94 132V88 M354 132V88" stroke="#315f87"/></g>
+ <g fill="#e3eef7" stroke="#315f87" stroke-width="2"><circle cx="94" cy="154" r="24"/><circle cx="354" cy="154" r="24"/></g>
+ <circle cx="224" cy="154" r="24" fill="#fff0d6" stroke="#95600e" stroke-width="2"/>
+ <g text-anchor="middle" font-size="23" font-weight="700" fill="#243d33">
+ <text x="94" y="162">C</text><text x="224" y="162">C</text><text x="354" y="162">C</text><text x="494" y="162">CH₃</text>
+ <text x="224" y="70" fill="#8b4929">Br</text><text x="94" y="76" fill="#315f87">H</text><text x="354" y="76" fill="#315f87">H</text></g>
+ <g text-anchor="middle" font-size="18" fill="#243d33">
+ <text x="94" y="36" fill="#315f87">β-H</text><text x="354" y="36" fill="#315f87">β-H</text>
+ <text x="94" y="204" fill="#315f87">β 碳（CH₃）</text><text x="224" y="204" fill="#80520e">α 碳（CH）</text><text x="354" y="204" fill="#315f87">β 碳（CH₂）</text>
+ <text x="494" y="204">不是 β 碳</text><text x="300" y="260">α 碳直接連到左、右兩個碳 → 二級（2°）</text></g>
+ </svg></div><figcaption><span class="degree-scroll-hint">結構圖可左右滑動。</span>圖上只展開各 β 碳的一個 H，其餘氫以括號標明總數。這張圖用來辨認位置；能否消去，還要檢查立體構形。</figcaption></figure>
+ <div class="degree-steps"><p><strong>① 找 α</strong>帶 Br 的碳就是本例的 α 碳。</p><p><strong>② 找 β 與 β-H</strong>與 α 碳直接相連的碳都是 β 碳；它們的氫就是 β-H。</p><p><strong>③ 數級數</strong>只數直接相連的碳，H 與 Br 都不計入。</p></div>
+ <div class="degree-comparison" aria-label="帶 Br 的碳之級數比較">
+ ${[['甲基','CH₃–Br','0 個碳'],['一級（1°）','CH₃–CH₂–Br','1 個碳'],['二級（2°）','(CH₃)₂CH–Br','2 個碳'],['三級（3°）','(CH₃)₃C–Br','3 個碳']].map(([name,formula,count])=>`<div><strong>${name}</strong><span>${formula}</span><small>帶 Br 的碳直連 ${count}</small></div>`).join('')}
+ </div></section>`;
+}
+
+// Same zigzag twice: as drawn, then with every hidden H and lone pair written back; the two panels stack on phones.
+export function skeletalHTML(){
+ const zig='M40 170L100 120L160 170L220 120M100 120V64';
+ const label=(x,y,t,fill='#243d33')=>`<text x="${x}" y="${y}" fill="${fill}" stroke="#fbfdfb" stroke-width="10" paint-order="stroke">${t}</text>`;
+ const dots=pts=>pts.map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3.5"/>`).join('');
+ const panel=(caption,aria,inner)=>`<figure><svg viewBox="0 0 260 230" role="img" aria-label="${aria}"><path d="${zig}" stroke="#586b63" stroke-width="3" fill="none" stroke-linejoin="round"/><g text-anchor="middle" font-size="22" font-weight="700">${inner}</g></svg><figcaption>${caption}</figcaption></figure>`;
+ return `<section class="degree-diagram" data-skeletal-diagram aria-label="2-溴丁烷骨架式與補回氫和孤對電子的對照圖">
+ <h3>先數線，再補回 H 與孤對電子</h3>
+ <div class="skeletal-pair">${panel('① 骨架式（照書上畫的）','2-溴丁烷的骨架式：四個碳的鋸齒線，第二個碳上接 Br。',label(100,56,'Br','#8b4929'))}
+ ${panel('② 補回 H 與孤對電子','同一個結構補回後：四個碳依序是 CH₃、CH、CH₂、CH₃，Br 上有三對孤對電子。',label(40,178,'CH₃')+label(100,128,'CH','#80520e')+label(160,178,'CH₂')+label(220,128,'CH₃')+label(100,56,'Br','#8b4929')+`<g fill="#8b4929" data-lone-pairs="3">${dots([[96,26],[104,26],[80,42],[80,50],[120,42],[120,50]])}</g>`)}</div>
+ <p class="skeletal-note">每個轉折點與末端都是碳：線數 1 → CH₃，線數 2 → CH₂，連著 Br 的碳有 3 條線 → CH。Br 只有一個鍵，補回三對孤對電子。</p>
+ </section>`;
+}
+
 export const CONCEPT_VISUALS={
  polarity:{pages:[194,199,375],title:'看圖理解：部分電荷與斷鍵有何不同？',note:'此圖 R 代表碳基團，以三級烷基溴的離解為例。鍵有極性，不表示所有 C–Br 都會先離解。',steps:['先找 C–Br 鍵：這對電子仍屬於同一條共價鍵。','電子分布偏向 Br；δ＋／δ− 是部分電荷，鍵仍存在。','不勻分裂時，這對鍵電子移到 Br，才得到 C⁺ 與 Br⁻。']},
  nucleophile:{pages:[73,74,375],title:'看圖理解：水的氧如何提供電子？',note:'此圖 R 代表碳基團。這是 SN1 中水進攻碳陽離子的觀察焦點。氧陽離子仍須去質子化，才得到中性醇。',steps:['先猜：中性的 H₂O，哪個原子可以提供電子對？','水的氧帶著孤對電子靠近 C⁺；接近尚未代表已成鍵。','氧的孤對電子形成 C–O 鍵；碳恢復四個鍵，氧成為 O⁺。']},

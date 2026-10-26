@@ -1,24 +1,65 @@
 {
-  "verified_at": "2026-10-26",
-  "scope": "漸進交錯學習路徑：暖身→SN2/SN1→E2→E1→三種加成→重排與脫水→總混合練習；對比觀察、隨階段長出的流程圖、分級提示箭頭、弱點加權混合練習；新增五種機構10例三維動畫；後測／延後測重寫；新版清除舊資料、移除PK入口",
+  "verified_at": "2026-10-26T07:42:52+08:00",
+  "scope": "六角群島美術：同一地面上的概念建築、共邊道路與角色轉彎；暖身十棟建築、各階段概念與活動建築、手機直向與桌機全景；舊進度承接、動態控制與原化學課程回歸。",
   "preview": "http://127.0.0.1:8768/academy.html",
   "core_tests": {
-    "passed": 63,
-    "command": "node --test tests/*.test.mjs"
+    "passed": 89,
+    "command": "node --test tests/*.test.mjs",
+    "evidence": "/private/tmp/organic-hex-node.log"
   },
   "server_tests": {
     "passed": 8,
-    "command": "python3 -m unittest discover -s tests -p 'test_*.py'"
+    "command": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "evidence": "/private/tmp/organic-art-python.log"
   },
   "browser": {
+    "checks": [
+      "舊課程／評量／PK 紀錄清除，其他資料保留；PK 入口已移除",
+      "清除只執行一次",
+      "取名後進入世界地圖：暖身開放、其餘在霧中，霧中島先提醒，引導可完全關閉",
+      "探險手冊：六項能力原地展開、先預覽再前往、來源列與麵包屑、連續跳轉記得來源、瀏覽器返回回到地圖",
+      "中途離開回到島上，再進來接續同一個畫面",
+      "讀結構式：骨架式與補回 H／孤對電子並排",
+      "檢查題未作答不能繼續，提示就在繼續按鈕上方",
+      "走完據點後小化學家走到下一站，前一站標成已走過",
+      "暖身答錯：引導者提醒、給回看連結；回看列與瀏覽器返回都回到原卡",
+      "「混成與形狀：四面體、平面與 π 鍵」三維可拖曳旋轉",
+      "「彎箭頭：追蹤電子對」三維可拖曳旋轉",
+      "「第一次畫箭頭：質子轉移」三維可拖曳旋轉",
+      "「親核劑與親電子劑：誰給電子、誰接受」三維可拖曳旋轉",
+      "脫離基圖解：鹵離子比較與 –OH 質子化對照",
+      "「好脫離基：離開後要穩定」三維可拖曳旋轉",
+      "暖身島：六個據點 30 個畫面依序走完，船開到下一座島、霧散開",
+      "「立體障礙：周圍越擠，越難靠近」三維可拖曳旋轉",
+      "碳陽離子電子雲：四格並排比較、空 p 軌域、超共軛計數、同步拖曳與轉動甲基",
+      "能量圖：一步一個過渡態；兩步兩個過渡態夾中間體",
+      "「R/S 與構形反轉」三維可拖曳旋轉",
+      "播放前先轉回建議視角，再開始播放",
+      "電子移動段落自動拉近（總覽段不拉近）",
+      "書面結構式與三維同步（同一段、彎箭頭、原子標示）",
+      "箭頭答錯：給彎箭頭／形式電荷／質子轉移回看，回來仍在本島箭頭",
+      "階段 1 的箭頭先錯：第一層只指出步驟，第二層才指出箭頭",
+      "紅旗：據點、島嶼與探險手冊都標出需回看，從手冊前往後一鍵回到地圖",
+      "階段 1：入口小暖身 14、概念 2、對比觀察 4、補流程圖 1、畫電子箭頭 2、混合練習 6",
+      "據點可以跳著走：先走概念，入口小暖身仍是下一站",
+      "「同一個試劑：進攻碳，還是拔氫？」三維可拖曳旋轉",
+      "「Newman 投影與 anti 構形」三維可拖曳旋轉",
+      "階段 2：入口小暖身 11、概念 2、對比觀察 3、補流程圖 1、畫電子箭頭 1、混合練習 6",
+      "混合練習答錯：依反應類型給回看連結，回看後回到同一題",
+      "階段 3：入口小暖身 2、概念 1、對比觀察 5、補流程圖 1、畫電子箭頭 1、混合練習 8",
+      "階段 4：概念 4、對比觀察 4、補流程圖 2、畫電子箭頭 3、混合練習 8",
+      "階段 5：入口小暖身 2、概念 3、對比觀察 4、補流程圖 2、畫電子箭頭 2、混合練習 8",
+      "總混合練習交錯、九類精熟度、重新整理回到同一個畫面",
+      "後測十題全對 100 分，逐題對照",
+      "延後測提早結束仍保存，未完成另列",
+      "320／1280px 地圖、島嶼與學習畫面無水平溢出",
+      "清空紀錄：確認前不刪除、可匯出、取消與 Esc 保留、只清本工具兩儲存區及舊 PK 資料庫、其他分頁同步回暖身、名字一併清除、重載不復活"
+    ],
+    "errors": [],
     "passed": true,
+    "at": "2026-10-25T23:41:45.106Z",
     "script": "tests/path-browser.mjs",
     "evidence": "/private/tmp/organic-path-verification/report.json",
-    "viewports": [
-      320,
-      390,
-      1280
-    ],
     "pageerror": 0
   },
   "not_verified": [
@@ -165,5 +206,194 @@
       ],
       "errors": []
     }
+  },
+  "visual_review": {
+    "reviewed": true,
+    "evidence_dir": "/private/tmp/organic-art-verification/",
+    "files": [
+      "name-1280.png",
+      "world-1280.png",
+      "world-390.png",
+      "island-390.png",
+      "stage1-390.png",
+      "book-390.png",
+      "learn-390.png"
+    ],
+    "notes": [
+      "已目視桌機群島全景、手機群島／概念建築、取名與學習畫面。",
+      "道路逐點採樣位於六角地面內；角色使用同一路徑與腳底基準。"
+    ]
+  },
+  "reset": {
+    "confirmation": true,
+    "export_before_reset": true,
+    "cancel_preserves_data": true,
+    "unrelated_storage_preserved": true,
+    "blocked_database_preserves_course": true,
+    "active_assessment_and_two_tabs": true,
+    "reload_starts_at_warmup": true,
+    "initial_view": "回到暖身後的播放器可能保存新的零進度視角；舊學習、評量及觀看紀錄已刪除。"
+  },
+  "publication": "僅本機試用；未 commit、push 或部署。既有公開網站與 Markdown 來源未修改。",
+  "orbital_browser": {
+    "passed": true,
+    "script": "tests/orbital-browser.mjs",
+    "evidence": "/private/tmp/organic-orbital-verification/report.json",
+    "checks": [
+      "真實暖身入口切換球棍／軌域，重載保留模式",
+      "α／β／β-H 與級數圖解可見；320–1280px 無頁面溢出",
+      "軌域跟隨旋轉；離解連續移動、彎箭頭跟隨；產物平面化並顯示空 p",
+      "SN2 親核劑連續靠近，100% 到產物段落不跳位",
+      "烯的兩個 p 軌域、放大內切換與 Esc 返回可用",
+      "全部例子／步驟／三個時間點／三種寬度書面式可繪製（2664 次）"
+    ],
+    "errors": [],
+    "renderedFrames": 2664,
+    "viewports": [
+      320,
+      390,
+      1280
+    ],
+    "checks_note": "另驗證 SN2 書面構形有向體積反轉、所有原子／電荷標籤位於圖框內。"
+  },
+  "interface_browser": {
+    "passed": true,
+    "script": "tests/interface-browser.mjs",
+    "evidence": "/private/tmp/organic-interface-verification/report.json",
+    "checks": [
+      "學生／教師共用位置；教師示範、提示、揭示與觀看不覆寫學生答案和書籤",
+      "教師評量入口不讀取學生答案；返回課程保留位置，學生恢復原觀看進度",
+      "320／390px 單圖分頁、上下對照、軌域切換與重載保留時間；無水平溢出",
+      "桌機並排大圖；放大及 Esc 返回焦點正常",
+      "SN1 在實際中間體暫停、書面三鍵 120°，繼續進入下一實際步驟",
+      "SN2 解說焦點不當中間體；連續播放可跨過真實結構端點",
+      "視角復位中拖動進度會取消播放；減少動態設定維持逐段閱讀"
+    ],
+    "errors": [],
+    "viewports": [
+      320,
+      390,
+      1280
+    ],
+    "checks_note": "學生答案與觀看書籤保持不變；教師只帶回導航位置；實際 SN1 書面夾角 120°；手機原子字級至少 14px，紙面單圖縮放後重算。"
+  },
+  "alignment_browser": {
+    "passed": true,
+    "script": "tests/alignment-browser.mjs",
+    "evidence": "/private/tmp/organic-alignment-verification/report.json",
+    "checks": [
+      "使用者的二級 SN2 案例：Br、Cβ、CH₃、親核劑與固定三維視角同向",
+      "自由旋轉保留固定書面視角，對齊視角按鈕恢復相對位置",
+      "SN2 反應進行中及產物端點仍同向，書面移動同步",
+      "SN1 平面中間體保留 120°，不因對照退回四面體"
+    ],
+    "errors": [],
+    "reference_view": {
+      "yaw": -0.85,
+      "pitch": -0.1,
+      "zoom": 1
+    },
+    "visual_evidence": [
+      "/private/tmp/organic-alignment-verification/sn2-aligned.png",
+      "/private/tmp/organic-alignment-verification/sn1-planar-aligned.png",
+      "/private/tmp/organic-alignment-verification/sheet-sn2.png",
+      "/private/tmp/organic-alignment-verification/sheet-addhx.png"
+    ],
+    "coverage": "二級 SN2 的 Br／Cβ／CH3／Nu 相對 Cα 方向；反應中與端點、自由旋轉不改紙面、回到固定視角、SN1 120°。另經全例寬度／時間矩陣及主要八類反應目視。"
+  },
+  "pre_art_revision": {
+    "verified_at": "2026-10-26T03:05:13+08:00",
+    "scope": "新版課程介面及固定視角對齊：三維與書面式共用投影基準、可返回對齊視角、保留 120° 平面及立體鍵；學生／教師與手機分頁保留，遊戲化延後。",
+    "core_tests": {
+      "passed": 80,
+      "command": "node --test tests/*.test.mjs"
+    }
+  },
+  "art": {
+    "checks": [
+      "七島與燈塔：320–1600px 無水平溢出、點擊區不重疊；900px 切換桌機全景並保留同一組按鈕",
+      "環境動態可暫停、重載保留偏好，重新開啟後正常動作",
+      "七島的每個概念／活動各有建築；320px 全部建築點擊區不重疊",
+      "概念建築、手冊、學習畫面可正常進出；閱讀保留環境動態，答題與位置資料未被換膚重設",
+      "系統減少動態時自動停用裝飾動畫，保留完整導航"
+    ],
+    "errors": [],
+    "passed": true,
+    "at": "2026-10-25T23:40:07.343Z",
+    "script": "tests/art-browser.mjs",
+    "evidence": "/private/tmp/organic-art-verification/report.json",
+    "asset": "hex-village-atlas.png",
+    "asset_bytes": 2389985,
+    "world_breakpoint": 900,
+    "island_names": "只使用課程階段，無自訂島名",
+    "progress": "保留 organic-path-v3 node/screen；新增 explore.buildings=1 與個別建築完成鍵；舊已讀卡與整組完成狀態保留"
+  },
+  "current_regressions": {
+    "interface": {
+      "checks": [
+        "學生／教師共用位置；教師示範、提示、揭示與觀看不覆寫學生答案和書籤",
+        "教師評量入口不讀取學生答案；返回課程保留位置，學生恢復原觀看進度",
+        "320／390px 單圖分頁、上下對照、軌域切換與重載保留時間；無水平溢出",
+        "桌機並排大圖；放大及 Esc 返回焦點正常",
+        "SN1 在實際中間體暫停、書面三鍵 120°，繼續進入下一實際步驟",
+        "SN2 解說焦點不當中間體；連續播放可跨過真實結構端點",
+        "視角復位中拖動進度會取消播放；減少動態設定維持逐段閱讀"
+      ],
+      "errors": [],
+      "script": "tests/interface-browser.mjs",
+      "evidence": "/private/tmp/organic-interface-verification/report.json"
+    },
+    "orbital": {
+      "checks": [
+        "真實暖身入口切換球棍／軌域，重載保留模式",
+        "α／β／β-H 與級數圖解可見；320–1280px 無頁面溢出",
+        "軌域跟隨旋轉；離解連續移動、彎箭頭跟隨；產物平面化並顯示空 p",
+        "SN2 親核劑連續靠近，100% 到產物段落不跳位",
+        "烯的兩個 p 軌域、放大內切換與 Esc 返回可用",
+        "全部例子／步驟／三個時間點／三種寬度書面式可繪製（2664 次）"
+      ],
+      "errors": [],
+      "renderedFrames": 2664,
+      "script": "tests/orbital-browser.mjs",
+      "evidence": "/private/tmp/organic-orbital-verification/report.json"
+    },
+    "alignment": {
+      "checks": [
+        "使用者的二級 SN2 案例：Br、Cβ、CH₃、親核劑與固定三維視角同向",
+        "自由旋轉保留固定書面視角，對齊視角按鈕恢復相對位置",
+        "SN2 反應進行中及產物端點仍同向，書面移動同步",
+        "SN1 平面中間體保留 120°，不因對照退回四面體"
+      ],
+      "errors": [],
+      "script": "tests/alignment-browser.mjs",
+      "evidence": "/private/tmp/organic-alignment-verification/report.json"
+    }
+  },
+  "health": {
+    "url": "http://127.0.0.1:8768/health",
+    "ok": true,
+    "assets_200": [
+      "academy.html",
+      "village-art.css",
+      "hex-village-atlas.png"
+    ]
+  },
+  "hex_road_edges": {
+    "at": "2026-10-26T11:45+08:00",
+    "agent": "Claude Code",
+    "change": "island-map.js walkingRoute 改沿六角接縫行走（內側接縫優先、海岸角內收 8、入口限左下／正下角），道路配色改近圖內土路",
+    "results": {
+      "node": "89/89",
+      "python": "8 OK",
+      "art-browser": "ALL PASSED（七島道路全程在地面、320px 點擊區不重疊）",
+      "path-browser": "ALL PASSED",
+      "interface-browser": "ALL PASSED",
+      "git_diff_check": "pass"
+    },
+    "visual": "已目視 1280 暖身島與 390 暖身／階段 1 截圖：道路不再穿過建築",
+    "not_run": [
+      "orbital-browser",
+      "alignment-browser（本次未改動三維與書面式）"
+    ]
   }
 }

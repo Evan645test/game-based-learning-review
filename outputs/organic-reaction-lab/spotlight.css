@@ -34,3 +34,55 @@
 .stage-pair{display:grid;grid-template-columns:minmax(0,1fr);gap:8px}.paper-stage{margin:0;position:relative;height:clamp(260px,36svh,360px);background:#fffdf8;border:1px solid #e3dccb;border-radius:12px;overflow:hidden}.paper-stage figcaption{position:absolute;top:8px;left:10px;font-size:13px;font-weight:700;color:#5b5140;background:#fffdf8e6;padding:2px 8px;border-radius:6px}.paper-canvas{width:100%;height:100%;display:block}
 @media(min-width:760px){.with-paper .stage-pair{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .spotlight-dialog .paper-stage{height:clamp(300px,55svh,600px)}
+.orbital-toolbar{display:flex;flex-wrap:wrap;gap:8px;padding:10px 12px;background:#f5f8f5;border-bottom:1px solid #cfddd3}
+.orbital-toolbar button{min-height:44px;padding:9px 16px;border:1px solid #91ac9b;background:#fff;border-radius:8px;color:#284b3b;font:inherit;font-weight:700;cursor:pointer}
+.orbital-toolbar button[aria-pressed=true]{background:#244f3b;color:#fff;border-color:#244f3b}
+.orbital-toolbar button:focus-visible{outline:3px solid #ae6e17;outline-offset:3px}
+.orbital-explanation{margin:0;padding:12px 16px;font-size:14px;line-height:1.65;background:#edf5f0;color:#294536}
+.paper-stereo-legend{margin:0;padding:8px 14px;border-top:1px solid #e6dfd1;font-size:13px;line-height:1.6;color:#655b49}
+.paper-stage,.spotlight-dialog .paper-stage{height:auto}
+.paper-stage .paper-canvas{height:clamp(260px,36svh,360px)}
+.spotlight-dialog .paper-stage .paper-canvas{height:clamp(300px,55svh,600px)}
+.spotlight-player .orbital-explanation{max-width:none}
+
+/* Give both representations the full workspace width; controls share one timeline. */
+.spotlight-layout{grid-template-columns:minmax(0,1fr)}
+.spotlight-side{height:auto;border-left:0;border-top:1px solid #d5e1d9;padding:18px 20px}
+.spotlight-meta{background:#eef3ee}.spotlight-player{border-radius:8px}
+.display-toolbar{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center;padding:10px 12px;border-bottom:1px solid #d5e1d9;background:#fafbf8}
+.orbital-toolbar{padding:0;border:0;background:transparent;gap:5px}
+.orbital-toolbar button{font-size:.85rem;padding:8px 12px;font-weight:550}
+.view-tabs{display:flex;gap:4px;flex-wrap:wrap}.view-tabs button{min-height:44px;font:inherit;font-size:.85rem;padding:8px 14px;border:1px solid transparent;background:transparent;border-radius:6px;color:#365447;cursor:pointer}
+.view-tabs button[aria-pressed=true]{background:#e5eee7;border-color:#9cb8a6;font-weight:700}
+.compare-mobile{display:none}
+.stage-pair{gap:0}.with-paper .stage-pair{grid-template-columns:repeat(2,minmax(0,1fr))}
+.molecule-stage{height:clamp(320px,43svh,460px);border-radius:0}
+.paper-stage{border:0;border-left:1px solid #d5e1d9;border-radius:0;background:#fffefb}
+.paper-stage .paper-canvas{height:clamp(320px,43svh,460px)}
+.paper-stage figcaption{font-size:12px;top:10px;left:8px}
+.paper-stereo-legend{font-size:12px;padding:8px 12px;background:#fcfbf7}
+.spotlight-player[data-view-mode=three] .stage-pair,.spotlight-player[data-view-mode=paper] .stage-pair{grid-template-columns:minmax(0,1fr)}
+.spotlight-player[data-view-mode=paper] .paper-stage{border-left:0}
+.continuous-control{display:flex;align-items:center;gap:9px;min-height:44px;font-size:.85rem;color:#4b6657;margin-top:4px;line-height:1.6}
+.continuous-control input{width:19px;height:19px;flex-shrink:0;accent-color:#29574c}
+.spotlight-controls{max-width:640px;margin:auto}.spotlight-controls button{font-size:.95rem}
+.mechanism-legend{flex-direction:row;background:#f8faf6;border-color:#dbe4da}
+.spotlight-player .player-feedback{flex-wrap:wrap}.player-status{max-width:none}
+[data-mode=teacher] .molecule-stage,[data-mode=teacher] .paper-stage .paper-canvas{height:clamp(360px,48svh,520px)}
+@media(max-width:760px){
+ .display-toolbar{gap:10px;padding:10px}.view-tabs{width:100%}.view-tabs button{flex:1;padding-inline:8px}.orbital-toolbar{width:100%}.orbital-toolbar button{flex:1}
+ .compare-desktop{display:none}.compare-mobile{display:inline}
+ .with-paper .stage-pair{grid-template-columns:minmax(0,1fr)}
+ .molecule-stage,.paper-stage .paper-canvas,[data-mode=teacher] .molecule-stage,[data-mode=teacher] .paper-stage .paper-canvas{height:320px}
+ .paper-stage{border-left:0;border-top:1px solid #d5e1d9}
+ .spotlight-side{padding:16px}.spotlight-transport{padding:12px 10px 6px}
+ .spotlight-controls button{font-size:.85rem;padding:9px 5px}.continuous-control{font-size:.8rem}
+ .spotlight-meta>div{min-width:100px}.spotlight-meta [data-expand]{font-size:.8rem}
+ .spotlight-dialog .molecule-stage,.spotlight-dialog .paper-stage .paper-canvas{height:clamp(300px,48svh,500px)}
+}
+.paper-step-description{font-size:13px;line-height:1.7;color:#655b49;padding:8px 12px;margin:0;overflow-wrap:anywhere}
+.spotlight-player[data-view-mode=paper] .orbital-toolbar,.spotlight-player[data-view-mode=paper] .orbital-explanation{display:none!important}
+@media(max-width:760px){.paper-step-description{font-size:14px}}
+.spotlight-meta .comparison-actions{display:flex;gap:8px;flex-wrap:wrap;min-width:0}
+.spotlight-meta [data-align-paper]{min-height:44px;font-size:.85rem}
+@media(max-width:520px){.spotlight-meta .comparison-actions{flex:1 1 100%}.comparison-actions button{flex:1}}
