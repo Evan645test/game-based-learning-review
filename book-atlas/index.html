@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8"><meta name="robots" content="noindex,nofollow">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>有機化學・全書星圖</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="overview.css">
+  <script src="data.js" defer></script>
+  <script src="overview.js" defer></script>
+  <script type="module" src="integration.js"></script>
+</head>
+<body>
+  <a class="skip" href="#map">前往星圖</a>
+  <header class="header">
+    <div class="identity"><span class="eyebrow">ORGANIC CHEMISTRY / TENTH EDITION</span><h1>有機化學<span>・</span>全書星圖</h1></div>
+    <div class="edition"><strong>9 <span>主題區</span>　31 <span>章星系</span>　306 <span>小節</span></strong><p>John McMurry · OpenStax</p></div>
+  </header>
+  <main>
+    <div class="toolbar">
+      <div class="search-wrap"><label for="search">定位章節或概念</label><div class="search-field"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24"><circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/></svg><input id="search" type="search" autocomplete="off" placeholder="搜尋：共振、23.1、NMR…" aria-controls="results" aria-expanded="false"></div><div id="results" class="results" hidden></div></div>
+      <label class="jump-label" for="chapter-jump">章節目錄<select id="chapter-jump"><option value="">選擇章節</option></select></label>
+      <div class="toggles"><button id="backbone" type="button" aria-pressed="false"><span class="line-sample core" aria-hidden="true"></span>概念主幹</button><button id="reading" type="button" aria-pressed="false"><span class="line-sample route" aria-hidden="true"></span>原書閱讀順序</button></div>
+    </div>
+    <div class="workspace" id="workspace">
+      <section class="canvas" aria-label="全書星空圖">
+        <svg id="map" tabindex="0" role="group" aria-label="全書星圖，可拖曳與縮放。Tab進入節點，方向鍵切換，Enter選取。"></svg>
+        <div id="tooltip" class="tooltip" hidden></div>
+        <div class="map-caption"><span class="live-dot" aria-hidden="true"></span><span id="view-label">全書概覽</span></div>
+        <div class="zoom-controls" aria-label="視角控制"><button type="button" id="zoom-out" aria-label="縮小">−</button><output id="zoom-label" aria-label="縮放比例">100%</output><button type="button" id="zoom-in" aria-label="放大">＋</button><button type="button" id="fit" class="fit">回全圖</button></div>
+        <div class="pan-controls" aria-label="平移視角"><button type="button" data-pan="up" aria-label="向上平移">↑</button><button type="button" data-pan="left" aria-label="向左平移">←</button><button type="button" data-pan="down" aria-label="向下平移">↓</button><button type="button" data-pan="right" aria-label="向右平移">→</button></div>
+        <div class="legend" id="legend" hidden><span><i class="core"></i>底層知識 → 本節</span><span><i class="support"></i>輔助基礎</span><span><i class="application"></i>相關反應基礎</span><span><i class="route"></i>原書順序</span></div>
+      </section>
+      <aside id="panel" class="panel" aria-label="選取資訊" hidden></aside>
+    </div>
+    <footer class="footer"><p id="scope"></p><details><summary>操作與連線範圍</summary><p>滾輪／按鈕縮放，拖曳或方向按鈕平移。點星系聚焦本章，點恆星查看小節；空白處或 Esc 取消選取。也可使用搜尋及章節目錄。</p><p>節點鍵盤操作：左右鍵按原書次序移動、上下鍵切換章節，Enter／空白選取；星圖背景方向鍵平移，＋／−縮放，Home回全圖。</p><p>選取小節或章節，只顯示理解它需要的直接底層知識；點底層節點，會再查看它自己的基礎，不列出它可用於哪些上層。全圖「概念主幹」與選取時的底層檢視分開。</p><p>306小節已逐節整理書內先備；核心與輔助基礎各有使用理由，入口小節明確標為起點。這是依本書小節粒度安排的閱讀基礎，不是原書宣告的唯一學習順序，也不作完成解鎖條件。</p><p>原書順序以章號串接；選取章節後另顯示該章小節順序，與概念先備不同。這是獨立桌機概覽，不顯示學生進度；有對應教材的小節可開啟既有反應入門內容。PDF頁碼含封面，可能與印刷頁碼不同。</p></details></footer>
+    <p id="announcement" class="sr-only" role="status" aria-live="polite"></p>
+    <noscript><p>此星圖需要啟用JavaScript；原始書籍與現有課程不受影響。</p></noscript>
+  </main>
+</body>
+</html>
